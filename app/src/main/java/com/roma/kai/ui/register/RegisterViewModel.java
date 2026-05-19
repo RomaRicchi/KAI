@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.roma.kai.model.RegisterRequest;
 import com.roma.kai.network.ApiService;
 import com.roma.kai.network.RetrofitClient;
 
@@ -19,10 +20,11 @@ public class RegisterViewModel extends AndroidViewModel {
         apiService = RetrofitClient.getService(application);
     }
 
-    public void registrar(String nombre, String email, String password) {
+    public void registrar(String nombre, String email, String password, String passwordConfirmed) {
         //validar
+        RegisterRequest loginRequest = new RegisterRequest(nombre, email, password);
 
-        Call<Void> call = apiService.register(nombre, email, password);
+        Call<Void> call = apiService.register(loginRequest);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

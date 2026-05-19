@@ -1,10 +1,13 @@
 package com.roma.kai.ui.login;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import com.roma.kai.model.LoginRequest;
+import com.roma.kai.model.RegisterRequest;
 import com.roma.kai.network.ApiService;
 import com.roma.kai.network.RetrofitClient;
 import com.roma.kai.session.SessionManager;
@@ -25,7 +28,8 @@ public class LoginViewModel extends AndroidViewModel {
     public void login(String email, String password) {
         //validar
 
-        Call<String> call = apiService.login(email, password);
+        LoginRequest loginRequest = new LoginRequest(email, password);
+        Call<String> call = apiService.login(loginRequest);
         call.enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {
@@ -40,6 +44,7 @@ public class LoginViewModel extends AndroidViewModel {
             @Override
             public void onFailure(Call<String> call, Throwable throwable) {
                 //mostrar msg de error
+                Log.d("ERRORR", throwable.getMessage());
             }
         });
     }

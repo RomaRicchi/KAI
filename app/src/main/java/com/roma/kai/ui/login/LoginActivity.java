@@ -27,23 +27,23 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         loginVM = new ViewModelProvider(this).get(LoginViewModel.class);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
         //desarrollar
-//        binding.btnLogin.setOnClickListener(v -> {
-//            loginVM.login(
-//                    binding.etEmail.getText().toString(),
-//                    binding.etPassword.getText().toString()
-//            );
-//        });
-//
-//        binding.btnRegister.setOnClickListener(v -> {
-//            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-//            startActivity(intent);
-//        });
+        binding.btnIniciarSesion.setOnClickListener(v -> {
+            loginVM.login(
+                    binding.etEmail.getText().toString(),
+                    binding.etPassword.getText().toString()
+            );
+        });
+
+        binding.btnRegistrarse.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
     }
 }

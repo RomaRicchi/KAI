@@ -2,6 +2,7 @@ package com.roma.kai.ui.inicio;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
+
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
@@ -51,13 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Ocultar AppBar y Drawer en el Login
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.nav_login) {
-                binding.appBarMain.toolbar.setVisibility(View.GONE);
-                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            } else {
-                binding.appBarMain.toolbar.setVisibility(View.VISIBLE);
-                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            }
+            binding.appBarMain.toolbar.setVisibility(View.VISIBLE);
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         });
 
         verificarPermisosUbicacion();

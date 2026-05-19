@@ -43,25 +43,23 @@ public class BaseViewModel extends AndroidViewModel {
             return;
         }
 
-        Call<Void> call = apiService.verificarSession();
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                if (response.isSuccessful()) {
-                    navigateToHome.setValue(true);
-                } else {
-                    sessionManager.clearSession();
-                    navigateToLogin.setValue(true);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable throwable) {
-                // En caso de error de red, podrías decidir si ir a login o reintentar
-                // Por ahora, asumimos que si falla la verificación, debe loguearse de nuevo
-                sessionManager.clearSession();
-                navigateToLogin.setValue(true);
-            }
-        });
+//        Call<Void> call = apiService.verificarSession();
+//        call.enqueue(new Callback<Void>() {
+//            @Override
+//            public void onResponse(Call<Void> call, Response<Void> response) {
+//                if (response.isSuccessful()) {
+//                    navigateToHome.setValue(true);
+//                } else {
+//                    sessionManager.clearSession();
+//                    navigateToLogin.setValue(true);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Void> call, Throwable throwable) {
+//                sessionManager.clearSession();
+//                navigateToLogin.setValue(true);
+//            }
+//        });
     }
 }

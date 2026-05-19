@@ -27,24 +27,25 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         registerVM = new ViewModelProvider(this).get(RegisterViewModel.class);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
         //desarrollar
-//        binding.btnRegistrar.setOnClickListener(v -> {
-//            registerVM.registrar(
-//                    binding.etNombre.getText().toString(),
-//                    binding.etEmail.getText().toString(),
-//                    binding.etPassword.getText().toString()
-//            );
-//        });
-//
-//        binding.btnRegresarLogin.setOnClickListener(v -> {
-//            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//        });
+        binding.btnCrearCuenta.setOnClickListener(v -> {
+            registerVM.registrar(
+                    binding.etNombre.getText().toString(),
+                    binding.etEmailRegister.getText().toString(),
+                    binding.etPasswordRegister.getText().toString(),
+                    binding.etConfirmPassword.getText().toString()
+            );
+        });
+
+        binding.btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+        });
     }
 }
