@@ -7,13 +7,9 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.roma.kai.network.ApiService;
-import com.roma.kai.network.RetrofitClient;
+import com.roma.kai.data.remote.ApiService;
+import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.session.SessionManager;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BaseViewModel extends AndroidViewModel {
     private SessionManager sessionManager;

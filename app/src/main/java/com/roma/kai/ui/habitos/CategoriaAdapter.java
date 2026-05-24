@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.roma.kai.databinding.ItemCategoriaBinding;
-import com.roma.kai.model.Categoria;
+import com.roma.kai.model.entity.Categoria;
 import java.util.List;
 
 public class CategoriaAdapter extends RecyclerView.Adapter<CategoriaAdapter.CategoriaViewHolder> {

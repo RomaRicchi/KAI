@@ -1,25 +1,15 @@
-package com.roma.kai.model;
+package com.roma.kai.model.request;
 
-public class RegisterRequest {
-    private String nombre;
+public class LoginRequest {
     private String email;
     private String password;
 
-    public RegisterRequest(String nombre, String email, String password) {
-        this.nombre = nombre;
+    public LoginRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public RegisterRequest() {}
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public LoginRequest() {}
 
     public String getEmail() {
         return email;

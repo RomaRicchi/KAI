@@ -1,4 +1,4 @@
-package com.roma.kai.ui.inicio;
+package com.roma.kai.ui.main;
 
 import android.app.Application;
 

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentInicioBinding;
-import com.roma.kai.model.Habito;
+import com.roma.kai.model.entity.Habito;
 import com.roma.kai.ui.habitos.HabitosAdapter;
 import java.util.ArrayList;
 import java.util.List;

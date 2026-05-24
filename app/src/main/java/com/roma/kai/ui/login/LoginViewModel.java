@@ -8,12 +8,11 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.roma.kai.model.AuthData;
-import com.roma.kai.model.LoginRequest;
-import com.roma.kai.model.RegisterRequest;
-import com.roma.kai.model.ResponseData;
-import com.roma.kai.network.ApiService;
-import com.roma.kai.network.RetrofitClient;
+import com.roma.kai.model.dto.TokenDto;
+import com.roma.kai.model.request.LoginRequest;
+import com.roma.kai.model.response.ResponseData;
+import com.roma.kai.data.remote.ApiService;
+import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.session.SessionManager;
 
 import retrofit2.Call;
@@ -38,19 +37,18 @@ public class LoginViewModel extends AndroidViewModel {
         //validar
 
         LoginRequest loginRequest = new LoginRequest(email, password);
-        Call<ResponseData<AuthData>> call = apiService.login(loginRequest);
-        call.enqueue(new Callback<ResponseData<AuthData>>() {
+        Call<ResponseData<TokenDto>> call = apiService.login(loginRequest);
+        call.enqueue(new Callback<ResponseData<TokenDto>>() {
             @Override
-            public void onResponse(Call<ResponseData<AuthData>> call, Response<ResponseData<AuthData>> response) {
+            public void onResponse(Call<ResponseData<TokenDto>> call, Response<ResponseData<TokenDto>> response) {
                 if(response.isSuccessful() && response.body() != null) {
                     sessionManager.saveToken(response.body().getData().getToken());
                     navigateToHome.postValue(true);
-                    // que hacemos con el usuario???
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseData<AuthData>> call, Throwable throwable) {
+            public void onFailure(Call<ResponseData<TokenDto>> call, Throwable throwable) {
                 Log.d("ERRORR", throwable.getMessage());
             }
         });

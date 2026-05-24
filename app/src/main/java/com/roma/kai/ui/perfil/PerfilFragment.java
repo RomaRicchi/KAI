@@ -7,11 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import com.roma.kai.R;
+
 import com.roma.kai.databinding.FragmentPerfilBinding;
-import com.roma.kai.model.Usuario;
-import com.roma.kai.utils.EstadoUI;
 
 public class PerfilFragment extends Fragment {
 

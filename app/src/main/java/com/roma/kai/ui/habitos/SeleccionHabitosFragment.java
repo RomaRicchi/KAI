@@ -11,7 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentSeleccionHabitosBinding;
-import com.roma.kai.model.Categoria;
+import com.roma.kai.model.entity.Categoria;
 import java.util.ArrayList;
 import java.util.List;
 

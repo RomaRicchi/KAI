@@ -10,9 +10,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.roma.kai.R;
 import com.roma.kai.databinding.ActivityRegisterBinding;
-import com.roma.kai.ui.inicio.MainActivity;
+import com.roma.kai.ui.main.MainActivity;
 import com.roma.kai.ui.login.LoginActivity;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -39,10 +38,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void setupObservers()  {
-        registerVM.getNavigateToHome().observe(this, navigate -> {
-            if(navigate) {
+        registerVM.getUiState().observe(this, uiState -> {
+            binding.btnCrearCuenta.setEnabled(!uiState.isLoading());
+
+            if(uiState.isSuccess()) {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
+                //mostrar msg
+                finish();
             }
         });
     }
@@ -60,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 }

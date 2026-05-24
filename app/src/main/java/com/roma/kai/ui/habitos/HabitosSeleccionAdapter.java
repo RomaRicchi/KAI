@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.roma.kai.databinding.ItemHabitoSeleccionBinding;
-import com.roma.kai.model.Habito;
+import com.roma.kai.model.entity.Habito;
 import java.util.List;
 
 public class HabitosSeleccionAdapter extends RecyclerView.Adapter<HabitosSeleccionAdapter.ViewHolder> {

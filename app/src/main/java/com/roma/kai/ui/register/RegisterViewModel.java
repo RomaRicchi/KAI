@@ -8,50 +8,56 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.roma.kai.model.AuthData;
-import com.roma.kai.model.RegisterRequest;
-import com.roma.kai.model.ResponseData;
-import com.roma.kai.network.ApiService;
-import com.roma.kai.network.RetrofitClient;
+import com.roma.kai.data.callback.RepositoryCallback;
+import com.roma.kai.data.repository.AuthRepository;
+import com.roma.kai.model.dto.TokenDto;
+import com.roma.kai.model.request.RegisterRequest;
+import com.roma.kai.model.response.ResponseData;
+import com.roma.kai.data.remote.ApiService;
+import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.session.SessionManager;
+import com.roma.kai.utils.Event;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterViewModel extends AndroidViewModel {
-    private final ApiService apiService;
-    private final SessionManager sessionManager;
-    private final MutableLiveData<Boolean> navigateToHome = new MutableLiveData<>();
+    private final AuthRepository authRepository;
+    private final MutableLiveData<RegisterUiState> uiState = new MutableLiveData<>();
 
     public RegisterViewModel(@NonNull Application application) {
         super(application);
-        apiService = RetrofitClient.getService(application);
-        sessionManager = SessionManager.getInstance(application);
+        authRepository = new AuthRepository(
+                SessionManager.getInstance(application),
+                RetrofitClient.getService(application)
+        );
     }
 
-    public LiveData<Boolean> getNavigateToHome() {
-        return navigateToHome;
-    }
+    public LiveData<RegisterUiState> getUiState() { return uiState; }
 
     public void registrar(String nombre, String email, String password, String passwordConfirmed) {
         //validar
 
-        RegisterRequest loginRequest = new RegisterRequest(nombre, email, password);
-        Call<ResponseData<AuthData>> call = apiService.register(loginRequest);
-        call.enqueue(new Callback<ResponseData<AuthData>>() {
+        RegisterRequest registerRequest = new RegisterRequest(nombre, email, password);
+        uiState.setValue(new RegisterUiState(true, false, null));
+        authRepository.register(registerRequest, new RepositoryCallback<TokenDto>() {
             @Override
-            public void onResponse(Call<ResponseData<AuthData>> call, Response<ResponseData<AuthData>> response) {
-                if(response.isSuccessful() && response.body() != null) {
-                    sessionManager.saveToken(response.body().getData().getToken());
-                    navigateToHome.postValue(true);
-                    // que hacemos con el usuario???
-                }
+            public void onSuccess(TokenDto data) {
+                uiState.setValue(new RegisterUiState(
+                        true, // para que no desactive el boton antes de enviar al home
+                        true,
+                        new Event<>("SOLICITUD CORRECTA"))
+                );
             }
 
             @Override
-            public void onFailure(Call<ResponseData<AuthData>> call, Throwable throwable) {
-                Log.d("ERRORR", throwable.getMessage());
+            public void onError(String error) {
+                uiState.setValue(new RegisterUiState(
+                        false,
+                        false,
+                        new Event<>(error))
+                );
             }
         });
     }

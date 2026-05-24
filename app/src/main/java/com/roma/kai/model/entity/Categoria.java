@@ -1,4 +1,4 @@
-package com.roma.kai.model;
+package com.roma.kai.model.entity;
 
 public class Categoria {
     private String nombre;

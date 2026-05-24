@@ -10,9 +10,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.roma.kai.R;
 import com.roma.kai.databinding.ActivityLoginBinding;
-import com.roma.kai.ui.inicio.MainActivity;
+import com.roma.kai.ui.main.MainActivity;
 import com.roma.kai.ui.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {

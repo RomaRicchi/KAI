@@ -11,7 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentListaHabitosCategoriaBinding;
-import com.roma.kai.model.Habito;
+import com.roma.kai.model.entity.Habito;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.roma.kai.model;
+package com.roma.kai.model.response;
 
 public class ResponseData<T> {
     private String status;

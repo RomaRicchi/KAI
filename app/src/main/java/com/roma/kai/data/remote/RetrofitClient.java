@@ -1,4 +1,4 @@
-package com.roma.kai.network;
+package com.roma.kai.data.remote;
 
 import android.content.Context;
 

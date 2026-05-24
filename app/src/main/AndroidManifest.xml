@@ -14,7 +14,7 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.KAI">
         <activity
-            android:name=".ui.inicio.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:theme="@style/Theme.KAI.NoActionBar"
             android:exported="false" />
         <activity

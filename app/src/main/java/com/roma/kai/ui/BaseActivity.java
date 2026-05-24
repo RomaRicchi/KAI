@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.roma.kai.R;
 import com.roma.kai.databinding.ActivityBaseBinding;
-import com.roma.kai.ui.inicio.MainActivity;
+import com.roma.kai.ui.main.MainActivity;
 import com.roma.kai.ui.login.LoginActivity;
 
 public class BaseActivity extends AppCompatActivity {
