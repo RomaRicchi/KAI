@@ -23,6 +23,26 @@ public class AuthRepository {
         this.apiService = apiService;
     }
 
+    public void login(LoginRequest loginRequest, RepositoryCallback<TokenDto> callback) {
+        Call<ResponseData<TokenDto>> call = apiService.login(loginRequest);
+        call.enqueue(new Callback<ResponseData<TokenDto>>() {
+            @Override
+            public void onResponse(Call<ResponseData<TokenDto>> call, Response<ResponseData<TokenDto>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    sessionManager.saveToken(response.body().getData().getToken());
+                    callback.onSuccess(response.body().getData());
+                } else {
+                    callback.onError(response.body().getErrorMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<TokenDto>> call, Throwable throwable) {
+                callback.onError("MSG DE ERROR GENERICO PARA EL SISTEMA");
+            }
+        });
+    }
+
     public void register(RegisterRequest registerRequest, RepositoryCallback<TokenDto> callback) {
         Call<ResponseData<TokenDto>> call = apiService.register(registerRequest);
         call.enqueue(new Callback<ResponseData<TokenDto>>() {

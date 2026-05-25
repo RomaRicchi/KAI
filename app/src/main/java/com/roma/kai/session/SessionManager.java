@@ -6,13 +6,22 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.gson.Gson;
+import com.roma.kai.model.entity.ConfiguracionUsuarioEntity;
+import com.roma.kai.model.entity.UsuarioEntity;
+
 public class SessionManager {
     private static SessionManager instance;
     private final MutableLiveData<Boolean> sessionExpired = new MutableLiveData<>();
-    private SharedPreferences prefs;
+    private final SharedPreferences prefs;
+    private final Gson gson = new Gson();
+    private UsuarioEntity currentUser;
+    private ConfiguracionUsuarioEntity currentConfig;
 
     private SessionManager(Context context) {
         prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE);
+
+        loadSession();
     }
 
     public static synchronized SessionManager getInstance(Context context) {
@@ -31,16 +40,54 @@ public class SessionManager {
         return prefs.getString("token", null);
     }
 
+    public void saveUser(UsuarioEntity user) {
+        currentUser = user;
+
+        prefs.edit() .putString("user", gson.toJson(user)).apply();
+    }
+
+    public UsuarioEntity getUser() {
+        return currentUser;
+    }
+
+    public void saveConfig(ConfiguracionUsuarioEntity config) {
+        currentConfig = config;
+
+        prefs.edit().putString("config", gson.toJson(config)).apply();
+    }
+
+    public ConfiguracionUsuarioEntity getConfig() {
+        return currentConfig;
+    }
+
+    private void loadSession() {
+
+        String userJson = prefs.getString("user", null);
+
+        if(userJson != null) {
+            currentUser = gson.fromJson(userJson, UsuarioEntity.class);
+        }
+
+        String configJson = prefs.getString("config", null);
+
+        if(configJson != null) {
+            currentConfig = gson.fromJson(configJson, ConfiguracionUsuarioEntity.class);
+        }
+    }
+
     public LiveData<Boolean> getSessionExpired() {
         return sessionExpired;
     }
 
     public void logout() {
-        prefs.edit().clear().apply();
+        clearSession();
         sessionExpired.postValue(true);
     }
 
     public void clearSession() {
+        currentUser = null;
+        currentConfig = null;
+
         prefs.edit().clear().apply();
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentInicioBinding;
@@ -16,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InicioFragment extends Fragment {
-
     private FragmentInicioBinding binding;
+    private InicioViewModel inicioVM;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,7 +29,27 @@ public class InicioFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        inicioVM = new ViewModelProvider(this).get(InicioViewModel.class);
+
         setupHabitosHoy();
+        setupObservers();
+        setupListeners();
+
+        inicioVM.loadHome();
+    }
+
+    private void setupObservers() {
+        inicioVM.getInicioUiState().observe(getViewLifecycleOwner(), inicioUiState -> {
+            //desarrollar
+        });
+
+        inicioVM.getEventUiMessage().observe(getViewLifecycleOwner(), eventUiMessage -> {
+            //desarrollar
+        });
+    }
+
+    private void setupListeners() {
+
     }
 
     private void setupHabitosHoy() {

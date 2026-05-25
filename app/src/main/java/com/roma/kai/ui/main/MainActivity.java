@@ -27,6 +27,7 @@ import com.roma.kai.ui.login.LoginActivity;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private SessionManager sessionManager;
     private ActivityMainBinding binding;
     private MainViewModel mainVM;
     private static final int PERMISO_UBICACION_CODE = 100;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         mainVM = new ViewModelProvider(this).get(MainViewModel.class);
+        sessionManager = SessionManager.getInstance(this);
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
@@ -88,10 +90,11 @@ public class MainActivity extends AppCompatActivity {
 
         verificarPermisosUbicacion();
         setupObservers();
+        mainVM.loadMe();
     }
 
     private void setupObservers() {
-        SessionManager.getInstance(this).getSessionExpired().observe(this, expired -> {
+        sessionManager.getSessionExpired().observe(this, expired -> {
             if(Boolean.TRUE.equals(expired)) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -103,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLogoutConfirmation() {
         Snackbar.make(binding.getRoot(), "¿Desea cerrar la sesión?", Snackbar.LENGTH_LONG)
-                .setAction("Cerrar Sesión", v -> mainVM.logout())
+                .setAction("Cerrar Sesión", v -> sessionManager.logout())
                 .show();
     }
 

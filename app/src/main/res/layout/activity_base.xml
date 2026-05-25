@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_gradient_light_green"
-    tools:context=".ui.BaseActivity">
+    tools:context=".ui.base.BaseActivity">
 
     <ImageView
         android:id="@+id/img_kai_logo"

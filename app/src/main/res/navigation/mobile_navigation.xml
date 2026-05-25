@@ -8,7 +8,7 @@
 
     <activity
         android:id="@+id/nav_base"
-        android:name="com.roma.kai.ui.BaseActivity"
+        android:name="com.roma.kai.ui.base.BaseActivity"
         android:label="activity_base"
         tools:layout="@layout/activity_base" />
 

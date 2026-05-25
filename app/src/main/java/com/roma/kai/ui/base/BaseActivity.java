@@ -1,4 +1,4 @@
-package com.roma.kai.ui;
+package com.roma.kai.ui.base;
 
 import android.content.Intent;
 import android.os.Bundle;

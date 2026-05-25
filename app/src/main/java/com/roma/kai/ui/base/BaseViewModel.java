@@ -1,4 +1,4 @@
-package com.roma.kai.ui;
+package com.roma.kai.ui.base;
 
 import android.app.Application;
 
@@ -7,21 +7,21 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.roma.kai.data.remote.ApiService;
 import com.roma.kai.data.remote.RetrofitClient;
+import com.roma.kai.data.repository.MainRepository;
 import com.roma.kai.session.SessionManager;
 
 public class BaseViewModel extends AndroidViewModel {
-    private SessionManager sessionManager;
-    private ApiService apiService;
+    private final SessionManager sessionManager;
+    private final MainRepository mainRepository;
 
     private MutableLiveData<Boolean> navigateToHome = new MutableLiveData<>();
     private MutableLiveData<Boolean> navigateToLogin = new MutableLiveData<>();
 
     public BaseViewModel(@NonNull Application application) {
         super(application);
-        apiService = RetrofitClient.getService(application);
         sessionManager = SessionManager.getInstance(application);
+        mainRepository = new MainRepository(sessionManager, RetrofitClient.getService(application));
     }
 
     public LiveData<Boolean> getNavigateToHome() {
@@ -41,22 +41,15 @@ public class BaseViewModel extends AndroidViewModel {
             //quitar esto hasta cuando tengas una api para verificar la session
             navigateToHome.setValue(true);
         }
-
-//        Call<Void> call = apiService.verificarSession();
-//        call.enqueue(new Callback<Void>() {
+        // quitar el else cuando la api /login devuelva lo mismo que /me
+//        mainRepository.loadInitialData(new RepositoryCallback<BulkDataDto>() {
 //            @Override
-//            public void onResponse(Call<Void> call, Response<Void> response) {
-//                if (response.isSuccessful()) {
-//                    navigateToHome.setValue(true);
-//                } else {
-//                    sessionManager.clearSession();
-//                    navigateToLogin.setValue(true);
-//                }
+//            public void onSuccess(BulkDataDto data) {
+//                navigateToHome.setValue(true);
 //            }
 //
 //            @Override
-//            public void onFailure(Call<Void> call, Throwable throwable) {
-//                sessionManager.clearSession();
+//            public void onError(String error) {
 //                navigateToLogin.setValue(true);
 //            }
 //        });

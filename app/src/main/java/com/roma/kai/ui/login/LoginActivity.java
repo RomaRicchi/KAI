@@ -38,9 +38,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-        loginVM.getNavigateToHome().observe(this, navigate -> {
-            if(navigate) {
+        loginVM.getUiState().observe(this, loginUiState -> {
+            binding.btnIniciarSesion.setEnabled(!loginUiState.isLoading());
+
+            if(loginUiState.isSuccess()) {
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                //mostrar mensage de login loginUiState.getMessageEvent().verContenido();
                 finish();
             }
         });

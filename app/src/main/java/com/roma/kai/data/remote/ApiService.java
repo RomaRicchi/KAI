@@ -1,6 +1,7 @@
 package com.roma.kai.data.remote;
 
-import com.roma.kai.model.dto.BulkDataDto;
+import com.roma.kai.model.dto.HomeResponse;
+import com.roma.kai.model.dto.MeResponse;
 import com.roma.kai.model.dto.TokenDto;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
@@ -20,7 +21,11 @@ public interface ApiService {
     @POST("api/v1/auth/register")
     Call<ResponseData<TokenDto>> register(@Body RegisterRequest registerRequest);
 
-    // PETICION PARA CARGA MASIVA
+    // Usuario y config del sistema
     @GET("api/v1/users/me")
-    Call<ResponseData<BulkDataDto>> fetchBulkData();
+    Call<ResponseData<MeResponse>> getMe();
+
+    //api para la vista home "InicioFragment"
+    @GET("api/v1/home")
+    Call<ResponseData<HomeResponse>> getHome();
 }

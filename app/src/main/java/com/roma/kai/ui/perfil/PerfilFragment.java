@@ -7,13 +7,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.roma.kai.databinding.FragmentPerfilBinding;
 
 public class PerfilFragment extends Fragment {
 
     private FragmentPerfilBinding binding;
-//    private PerfilViewModel viewModel;
+    private PerfilViewModel perfilVM;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,22 +25,19 @@ public class PerfilFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
+        perfilVM = new ViewModelProvider(this).get(PerfilViewModel.class);
 
-//        observarPerfil();
-//        viewModel.cargarPerfil();
+        setupObservers();
     }
 
-//    private void observarPerfil() {
-//        viewModel.getEstadoPerfil().observe(getViewLifecycleOwner(), estado -> {
-//            if (estado instanceof EstadoUI.EstadoExito) {
-//                Usuario user = (Usuario) ((EstadoUI.EstadoExito<?>) estado).getDatos();
-//                binding.tvPerfilNombre.setText(getString(R.string.perfil_nombre, user.getNombre()));
-//                binding.tvPerfilEmail.setText(getString(R.string.perfil_email, user.getEmail()));
-//                binding.tvPerfilNivel.setText(getString(R.string.perfil_nivel, user.getNivel()));
-//            }
-//        });
-//    }
+    private void setupObservers() {
+        perfilVM.getPerfilUiState().observe(getViewLifecycleOwner(), state -> {
+            if(state.isSuccess() && state.getUsuario() != null) {
+                binding.tvPerfilNombre.setText(state.getUsuario().getNombre());
+                binding.tvPerfilEmail.setText(state.getUsuario().getEmail());
+            }
+        });
+    }
 
     @Override
     public void onDestroyView() {
