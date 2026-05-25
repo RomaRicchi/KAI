@@ -90,6 +90,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tvHomeXp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/valor_xp_default"
@@ -123,6 +124,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/tvHomeRacha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/valor_racha_default"

@@ -69,7 +69,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:text="ejemplo@kai.com"
                     android:textColor="#757575" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,7 +94,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:text="********"
                     android:textColor="#757575" />
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -3,6 +3,7 @@ package com.roma.kai.data.remote;
 import com.roma.kai.model.dto.HomeResponse;
 import com.roma.kai.model.dto.MeResponse;
 import com.roma.kai.model.dto.TokenDto;
+import com.roma.kai.model.dto.ValidateTokenResponse;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
 import com.roma.kai.model.response.ResponseData;
@@ -20,6 +21,9 @@ public interface ApiService {
 
     @POST("api/v1/auth/register")
     Call<ResponseData<TokenDto>> register(@Body RegisterRequest registerRequest);
+
+    @GET("api/v1/auth/validate")
+    Call<ResponseData<ValidateTokenResponse>> validate();
 
     // Usuario y config del sistema
     @GET("api/v1/users/me")

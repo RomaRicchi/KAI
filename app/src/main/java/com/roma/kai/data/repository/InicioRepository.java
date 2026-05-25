@@ -2,6 +2,7 @@ package com.roma.kai.data.repository;
 
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.ApiService;
+import com.roma.kai.data.remote.error.ApiErrorParser;
 import com.roma.kai.model.dto.HomeResponse;
 import com.roma.kai.model.response.ResponseData;
 
@@ -24,7 +25,7 @@ public class InicioRepository {
                 if(response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().getData());
                 } else {
-                    callback.onError(response.body().getErrorMessage());
+                    callback.onError(ApiErrorParser.parseError(response));
                 }
             }
 

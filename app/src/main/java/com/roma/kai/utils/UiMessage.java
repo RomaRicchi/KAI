@@ -1,6 +1,8 @@
 package com.roma.kai.utils;
 
-public class UiMessage {
+import java.io.Serializable;
+
+public class UiMessage implements Serializable {
     public enum Type {
         SUCCESS,
         ERROR,

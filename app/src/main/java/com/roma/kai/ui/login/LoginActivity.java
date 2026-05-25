@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.roma.kai.databinding.ActivityLoginBinding;
 import com.roma.kai.ui.main.MainActivity;
 import com.roma.kai.ui.register.RegisterActivity;
+import com.roma.kai.utils.UiMessage;
+import com.roma.kai.utils.UiMessageHelper;
 
 public class LoginActivity extends AppCompatActivity {
     private ActivityLoginBinding binding;
@@ -42,10 +44,17 @@ public class LoginActivity extends AppCompatActivity {
             binding.btnIniciarSesion.setEnabled(!loginUiState.isLoading());
 
             if(loginUiState.isSuccess()) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                //mostrar mensage de login loginUiState.getMessageEvent().verContenido();
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.putExtra("messageTo", new UiMessage("Bienvenido", UiMessage.Type.SUCCESS));
+                startActivity(intent);
                 finish();
             }
+        });
+
+        loginVM.getEventUiMessage().observe(this, eventUiMessage -> {
+            UiMessage uiMessage = eventUiMessage.obtenerContenidoSiNoManejado();
+            if(uiMessage == null) return;
+            UiMessageHelper.showMessage(binding.getRoot(), LoginActivity.this, uiMessage);
         });
     }
 

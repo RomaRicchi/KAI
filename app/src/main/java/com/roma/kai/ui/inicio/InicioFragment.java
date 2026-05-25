@@ -13,12 +13,16 @@ import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentInicioBinding;
 import com.roma.kai.model.entity.Habito;
 import com.roma.kai.ui.habitos.HabitosAdapter;
+import com.roma.kai.utils.UiMessage;
+import com.roma.kai.utils.UiMessageHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class InicioFragment extends Fragment {
     private FragmentInicioBinding binding;
     private InicioViewModel inicioVM;
+    private InicioHabitosAdapter habitosAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,7 +35,7 @@ public class InicioFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         inicioVM = new ViewModelProvider(this).get(InicioViewModel.class);
 
-        setupHabitosHoy();
+        setupRecyclerView();
         setupObservers();
         setupListeners();
 
@@ -40,16 +44,31 @@ public class InicioFragment extends Fragment {
 
     private void setupObservers() {
         inicioVM.getInicioUiState().observe(getViewLifecycleOwner(), inicioUiState -> {
+            if(inicioUiState == null) return;
+
             //desarrollar
+            if(inicioUiState.isSuccess()) {
+                habitosAdapter.setHabitos(inicioUiState.getHabitosDiarios());
+                binding.tvHomeXp.setText(inicioUiState.getXpTotal() + " XP");
+                binding.tvHomeRacha.setText(inicioUiState.getRachaActual() + " Días");
+            }
         });
 
         inicioVM.getEventUiMessage().observe(getViewLifecycleOwner(), eventUiMessage -> {
-            //desarrollar
+            UiMessage uiMessage = eventUiMessage.obtenerContenidoSiNoManejado();
+            if(uiMessage == null) return;
+            UiMessageHelper.showMessage(binding.getRoot(), requireContext(), uiMessage);
         });
     }
 
     private void setupListeners() {
 
+    }
+
+    private void setupRecyclerView() {
+        habitosAdapter = new InicioHabitosAdapter();
+        binding.rvHabitosHoy.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvHabitosHoy.setAdapter(habitosAdapter);
     }
 
     private void setupHabitosHoy() {

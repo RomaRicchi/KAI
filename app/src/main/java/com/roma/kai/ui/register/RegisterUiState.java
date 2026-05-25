@@ -5,12 +5,10 @@ import com.roma.kai.utils.Event;
 public class RegisterUiState {
     private final boolean loading;
     private final boolean success;
-    private final Event<String> messageEvent;
 
-    public RegisterUiState(boolean loading, boolean success, Event<String> messageEvent) {
+    public RegisterUiState(boolean loading, boolean success) {
         this.loading = loading;
         this.success = success;
-        this.messageEvent = messageEvent;
     }
 
     public boolean isLoading() {
@@ -19,9 +17,5 @@ public class RegisterUiState {
 
     public boolean isSuccess() {
         return success;
-    }
-
-    public Event<String> getMessageEvent() {
-        return messageEvent;
     }
 }

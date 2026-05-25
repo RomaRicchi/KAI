@@ -2,6 +2,7 @@ package com.roma.kai.data.repository;
 
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.ApiService;
+import com.roma.kai.data.remote.error.ApiErrorParser;
 import com.roma.kai.model.dto.MeResponse;
 import com.roma.kai.model.response.ResponseData;
 import com.roma.kai.session.SessionManager;
@@ -29,7 +30,7 @@ public class MainRepository {
                     sessionManager.saveUser(response.body().getData().getUsuario());
                     sessionManager.saveConfig(response.body().getData().getConfiguracionUsuario());
                 } else {
-                    callback.onError(response.body().getErrorMessage());
+                    callback.onError(ApiErrorParser.parseError(response));
                 }
             }
 

@@ -9,10 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
 import com.roma.kai.model.entity.ConfiguracionUsuarioEntity;
 import com.roma.kai.model.entity.UsuarioEntity;
+import com.roma.kai.utils.Event;
 
 public class SessionManager {
     private static SessionManager instance;
-    private final MutableLiveData<Boolean> sessionExpired = new MutableLiveData<>();
+    private final MutableLiveData<Event<Boolean>> sessionExpired = new MutableLiveData<>();
     private final SharedPreferences prefs;
     private final Gson gson = new Gson();
     private UsuarioEntity currentUser;
@@ -75,13 +76,13 @@ public class SessionManager {
         }
     }
 
-    public LiveData<Boolean> getSessionExpired() {
+    public LiveData<Event<Boolean>> getSessionExpired() {
         return sessionExpired;
     }
 
     public void logout() {
         clearSession();
-        sessionExpired.postValue(true);
+        sessionExpired.postValue(new Event<>(true));
     }
 
     public void clearSession() {

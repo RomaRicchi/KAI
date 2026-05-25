@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.roma.kai.databinding.ActivityRegisterBinding;
 import com.roma.kai.ui.main.MainActivity;
 import com.roma.kai.ui.login.LoginActivity;
+import com.roma.kai.utils.UiMessage;
+import com.roma.kai.utils.UiMessageHelper;
 
 public class RegisterActivity extends AppCompatActivity {
     private ActivityRegisterBinding binding;
@@ -43,10 +45,16 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(uiState.isSuccess()) {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                intent.putExtra("messageTo", new UiMessage("Bienvenido", UiMessage.Type.SUCCESS));
                 startActivity(intent);
-                //mostrar msg
                 finish();
             }
+        });
+
+        registerVM.getEventUiMessage().observe(this, eventUiMessage -> {
+            UiMessage uiMessage = eventUiMessage.obtenerContenidoSiNoManejado();
+            if(uiMessage == null) return;
+            UiMessageHelper.showMessage(binding.getRoot(), RegisterActivity.this, uiMessage);
         });
     }
 

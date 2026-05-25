@@ -17,6 +17,7 @@ import com.roma.kai.data.remote.ApiService;
 import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.session.SessionManager;
 import com.roma.kai.utils.Event;
+import com.roma.kai.utils.UiMessage;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +26,8 @@ import retrofit2.Response;
 public class LoginViewModel extends AndroidViewModel {
     private final AuthRepository authRepository;
     private final MutableLiveData<LoginUiState> uiState = new MutableLiveData<>();
+    private final MutableLiveData<Event<UiMessage>> eventUiMessage = new MutableLiveData<>();
+
     public LoginViewModel(@NonNull Application application) {
         super(application);
         authRepository = new AuthRepository(
@@ -35,18 +38,20 @@ public class LoginViewModel extends AndroidViewModel {
 
     public LiveData<LoginUiState> getUiState() { return uiState; }
 
+    public LiveData<Event<UiMessage>> getEventUiMessage() { return eventUiMessage; }
+
     public void login(String email, String password) {
         //validar
 
         LoginRequest loginRequest = new LoginRequest(email, password);
-        uiState.setValue(new LoginUiState(true, false, null));
+        uiState.setValue(new LoginUiState(true, false));
+
         authRepository.login(loginRequest, new RepositoryCallback<TokenDto>() {
             @Override
             public void onSuccess(TokenDto data) {
                 uiState.setValue(new LoginUiState(
-                        true,
-                        true,
-                        new Event<>("SOLICITUD CORRECTA")
+                        true, // para que no desactive el boton antes de enviar al home
+                        true
                 ));
             }
 
@@ -54,9 +59,9 @@ public class LoginViewModel extends AndroidViewModel {
             public void onError(String error) {
                 uiState.setValue(new LoginUiState(
                         false,
-                        false,
-                        new Event<>(error)
+                        false
                 ));
+                eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
             }
         });
     }

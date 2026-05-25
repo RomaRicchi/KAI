@@ -7,13 +7,11 @@ public class PerfilUiState {
     private final boolean loading;
     private final boolean success;
     private final UsuarioEntity usuario;
-    private final Event<String> messageEvent;
 
-    public PerfilUiState(boolean loading, boolean success, UsuarioEntity usuario, Event<String> messageEvent) {
+    public PerfilUiState(boolean loading, boolean success, UsuarioEntity usuario) {
         this.loading = loading;
         this.success = success;
         this.usuario = usuario;
-        this.messageEvent = messageEvent;
     }
 
     public boolean isLoading() {
@@ -26,9 +24,5 @@ public class PerfilUiState {
 
     public UsuarioEntity getUsuario() {
         return usuario;
-    }
-
-    public Event<String> getMessageEvent() {
-        return messageEvent;
     }
 }

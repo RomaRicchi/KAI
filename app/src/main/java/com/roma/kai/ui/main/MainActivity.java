@@ -23,6 +23,8 @@ import com.roma.kai.R;
 import com.roma.kai.databinding.ActivityMainBinding;
 import com.roma.kai.session.SessionManager;
 import com.roma.kai.ui.login.LoginActivity;
+import com.roma.kai.utils.UiMessage;
+import com.roma.kai.utils.UiMessageHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -58,23 +60,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // Ocultar AppBar y Drawer en el Login y personalizar icono de retroceso
-        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.nav_login) {
-                binding.appBarMain.toolbar.setVisibility(View.GONE);
-                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-            } else {
-                binding.appBarMain.toolbar.setVisibility(View.VISIBLE);
-                drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-                // Personalizar el icono de retroceso si no es un destino de nivel superior
-                boolean isTopLevel = mAppBarConfiguration.getTopLevelDestinations().contains(destination.getId());
-                if (!isTopLevel) {
-                    binding.appBarMain.toolbar.setNavigationIcon(R.drawable.volver_ico);
-                }
-            }
-        });
-
         navigationView.setNavigationItemSelectedListener(item -> {
             if(item.getItemId() == R.id.nav_logout) {
                 showLogoutConfirmation();
@@ -90,18 +75,41 @@ public class MainActivity extends AppCompatActivity {
 
         verificarPermisosUbicacion();
         setupObservers();
+        setupIntent();
+
         mainVM.loadMe();
     }
 
     private void setupObservers() {
-        sessionManager.getSessionExpired().observe(this, expired -> {
-            if(Boolean.TRUE.equals(expired)) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-            }
+        sessionManager.getSessionExpired().observe(this, event -> {
+            Boolean expired = event.obtenerContenidoSiNoManejado();
+            if(expired == null)  return;
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
+
+        //USAR CUANDO SE NECESITE!!
+//        mainVM.getMainUiState().observe(this, mainUiState -> {
+//            desarrollar  cuando se necesite
+//        });
+//
+        mainVM.getEventUiMessage().observe(this, eventUiMessage -> {
+            UiMessage uiMessage = eventUiMessage.obtenerContenidoSiNoManejado();
+            if(uiMessage == null) return;
+            UiMessageHelper.showMessage(binding.getRoot(), MainActivity.this, uiMessage);
+        });
+    }
+
+    public void setupIntent() {
+        Intent intent = getIntent();
+        if(intent == null) return;
+
+        UiMessage uiMessage = (UiMessage) intent.getSerializableExtra("messageTo");
+        if(uiMessage != null) {
+            UiMessageHelper.showMessage(binding.getRoot(), MainActivity.this, uiMessage);
+        }
     }
 
     private void showLogoutConfirmation() {

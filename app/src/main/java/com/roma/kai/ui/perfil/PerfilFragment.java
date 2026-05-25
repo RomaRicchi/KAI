@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.roma.kai.databinding.FragmentPerfilBinding;
+import com.roma.kai.utils.UiMessage;
+import com.roma.kai.utils.UiMessageHelper;
 
 public class PerfilFragment extends Fragment {
 
@@ -31,11 +33,17 @@ public class PerfilFragment extends Fragment {
     }
 
     private void setupObservers() {
-        perfilVM.getPerfilUiState().observe(getViewLifecycleOwner(), state -> {
-            if(state.isSuccess() && state.getUsuario() != null) {
-                binding.tvPerfilNombre.setText(state.getUsuario().getNombre());
-                binding.tvPerfilEmail.setText(state.getUsuario().getEmail());
+        perfilVM.getPerfilUiState().observe(getViewLifecycleOwner(), perfilUiState -> {
+            if(perfilUiState.isSuccess() && perfilUiState.getUsuario() != null) {
+                binding.tvPerfilNombre.setText(perfilUiState.getUsuario().getNombre());
+                binding.tvPerfilEmail.setText(perfilUiState.getUsuario().getEmail());
             }
+        });
+
+        perfilVM.getEventUiMessage().observe(getViewLifecycleOwner(), eventUiMessage -> {
+            UiMessage uiMessage = eventUiMessage.obtenerContenidoSiNoManejado();
+            if(uiMessage == null) return;
+            UiMessageHelper.showMessage(binding.getRoot(), requireContext(), uiMessage);
         });
     }
 

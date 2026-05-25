@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.ApiService;
+import com.roma.kai.data.remote.error.ApiErrorParser;
 import com.roma.kai.model.dto.TokenDto;
+import com.roma.kai.model.dto.ValidateTokenResponse;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
 import com.roma.kai.model.response.ResponseData;
@@ -32,7 +34,8 @@ public class AuthRepository {
                     sessionManager.saveToken(response.body().getData().getToken());
                     callback.onSuccess(response.body().getData());
                 } else {
-                    callback.onError(response.body().getErrorMessage());
+
+                    callback.onError(ApiErrorParser.parseError(response));
                 }
             }
 
@@ -52,7 +55,7 @@ public class AuthRepository {
                     sessionManager.saveToken(response.body().getData().getToken());
                     callback.onSuccess(response.body().getData());
                 } else {
-                    callback.onError(response.body().getErrorMessage());
+                    callback.onError(ApiErrorParser.parseError(response));
                 }
             }
 
@@ -60,6 +63,26 @@ public class AuthRepository {
             public void onFailure(Call<ResponseData<TokenDto>> call, Throwable throwable) {
                 //agregar log correcto
                callback.onError("MSG DE ERROR GENERICO PARA EL SISTEMA");
+            }
+        });
+    }
+
+    public void validate(RepositoryCallback<ValidateTokenResponse> callback) {
+        Call<ResponseData<ValidateTokenResponse>> call = apiService.validate();
+        call.enqueue(new Callback<ResponseData<ValidateTokenResponse>>() {
+            @Override
+            public void onResponse(Call<ResponseData<ValidateTokenResponse>> call, Response<ResponseData<ValidateTokenResponse>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    sessionManager.saveToken(response.body().getData().getToken());
+                    callback.onSuccess(response.body().getData());
+                } else {
+                    callback.onError(ApiErrorParser.parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<ValidateTokenResponse>> call, Throwable throwable) {
+                callback.onError("MSG DE ERROR GENERICO PARA EL SISTEMA");
             }
         });
     }

@@ -41,15 +41,19 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-        baseVM.getNavigateToHome().observe(this, navigate -> {
-            if (navigate) {
+        baseVM.getNavigateToHome().observe(this, event -> {
+            Boolean boo = event.obtenerContenidoSiNoManejado();
+            if(boo == null) return;
+            if (boo) {
                 startActivity(new Intent(BaseActivity.this, MainActivity.class));
-                finish(); // Cerramos la pantalla base para que no pueda volver atrás
+                finish();
             }
         });
 
-        baseVM.getNavigateToLogin().observe(this, navigate -> {
-            if (navigate) {
+        baseVM.getNavigateToLogin().observe(this, event -> {
+            Boolean boo = event.obtenerContenidoSiNoManejado();
+            if(boo == null) return;
+            if (boo) {
                 startActivity(new Intent(BaseActivity.this, LoginActivity.class));
                 finish();
             }
