@@ -8,9 +8,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentInicioBinding;
 import com.roma.kai.utils.ImageUi;
 import com.roma.kai.utils.UiMessage;
@@ -54,7 +56,7 @@ public class InicioFragment extends Fragment {
             }
 
             if(inicioUiState.isSuccess()) {
-                habitosAdapter.setHabitos(inicioUiState.getHabitosDiarios());
+                habitosAdapter.submitList(inicioUiState.getHabitosDiarios());
                 binding.tvHomeXp.setText(inicioUiState.getXpTotal() + " XP");
                 binding.tvHomeRacha.setText(inicioUiState.getRachaActual() + " Días");
                 
@@ -93,7 +95,19 @@ public class InicioFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        habitosAdapter = new InicioHabitosAdapter();
+        habitosAdapter = new InicioHabitosAdapter(habito -> {
+            Bundle bundle = new Bundle();
+
+            bundle.putString(
+                    "habitoId",
+                    habito.getId()
+            );
+
+            Navigation.findNavController(requireView()).navigate(
+                    R.id.action_nav_inicio_to_nav_detalle_habito,
+                    bundle
+            );
+        });
         binding.rvHabitosHoy.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvHabitosHoy.setAdapter(habitosAdapter);
     }

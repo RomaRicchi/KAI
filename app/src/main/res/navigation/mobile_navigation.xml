@@ -36,6 +36,9 @@
         android:label="@string/menu_inicio"
         tools:layout="@layout/fragment_inicio">
         <!-- Independiente de Detalle Hábito -->
+        <action
+            android:id="@+id/action_nav_inicio_to_nav_detalle_habito"
+            app:destination="@id/nav_detalle_habito" />
     </fragment>
 
     <fragment
