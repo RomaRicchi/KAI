@@ -4,71 +4,118 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.roma.kai.R;
 import com.roma.kai.databinding.ItemHabitoBinding;
+import com.roma.kai.databinding.ItemInicioHabitoBinding;
 import com.roma.kai.model.dto.DailyHabitSummary;
+import com.roma.kai.model.dto.UserHabitResponse;
+import com.roma.kai.ui.habitos.HabitosAdapter;
 import com.roma.kai.utils.ImageUi;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class InicioHabitosAdapter extends RecyclerView.Adapter<InicioHabitosAdapter.InicioHabitoViewHolder>{
+public class InicioHabitosAdapter extends ListAdapter<DailyHabitSummary, InicioHabitosAdapter.InicioHabitoViewHolder> {
     private List<DailyHabitSummary> habitos = new ArrayList<>();
 
+    private final OnInicioHabitoClickListener listener;
+
+    public interface OnInicioHabitoClickListener {
+        void onHabitoClick(DailyHabitSummary habito);
+    }
+
+    public InicioHabitosAdapter(OnInicioHabitoClickListener listener) {
+        super(DIFF_CALLBACK);
+        this.listener = listener;
+    }
+
+    private static final DiffUtil.ItemCallback<DailyHabitSummary> DIFF_CALLBACK = new DiffUtil.ItemCallback<DailyHabitSummary>() {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull DailyHabitSummary oldItem, @NonNull DailyHabitSummary newItem) {
+            // Comparás IDs únicos
+            return Objects.equals(oldItem.getId(), newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull DailyHabitSummary oldItem, @NonNull DailyHabitSummary newItem) {
+            // Comparás contenido
+            return oldItem.equals(newItem);
+        }
+    };
 
     @NonNull
     @Override
     public InicioHabitoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemHabitoBinding binding = ItemHabitoBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new InicioHabitosAdapter.InicioHabitoViewHolder(binding);
+        ItemInicioHabitoBinding binding = ItemInicioHabitoBinding.inflate(
+                LayoutInflater.from(parent.getContext()),
+                parent,
+                false
+        );
+        return new InicioHabitoViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull InicioHabitoViewHolder holder, int position) {
-        DailyHabitSummary habito = habitos.get(position);
-
-        holder.binding.txtHabitoNombre.setText(habito.getNombre());
-        holder.binding.txtHabitoCategoria.setText(habito.getCategoria());
-        
-        // Centralización de imágenes con ImageUi
-        String imgData = habito.getImagenHabito();
-        
-        if (imgData == null || !imgData.startsWith("http")) {
-            // Usamos el nombre de la categoria como clave secundaria
-            String key = (imgData != null && !imgData.isEmpty()) ? imgData : habito.getCategoria();
-            
-            Glide.with(holder.itemView.getContext())
-                    .load(ImageUi.getDrawable(key))
-                    .into(holder.binding.imgHabitoIcon);
-        } else {
-            // Es URL remota
-            Glide.with(holder.itemView.getContext())
-                    .load(imgData)
-                    .placeholder(com.roma.kai.R.drawable.ic_gallery_black_24dp)
-                    .into(holder.binding.imgHabitoIcon);
-        }
-
-        // agregar si fue completado o no
-        holder.binding.getRoot().setAlpha(habito.isCompletado() ? 0.5f : 1.0f);
+        holder.bind(getItem(position), listener);
     }
 
-    @Override
-    public int getItemCount() { return habitos.size(); }
 
-    public void setHabitos(List<DailyHabitSummary> habitos) {
-        this.habitos = habitos;
-
-        notifyDataSetChanged();
-    }
 
     static class InicioHabitoViewHolder extends RecyclerView.ViewHolder {
-        ItemHabitoBinding binding;
+        ItemInicioHabitoBinding binding;
 
-        public InicioHabitoViewHolder(ItemHabitoBinding binding) {
+        public InicioHabitoViewHolder(ItemInicioHabitoBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+        }
+
+        public void bind(DailyHabitSummary habito, OnInicioHabitoClickListener listener) {
+
+            binding.tvHabitoNombre.setText(habito.getNombre());
+            binding.tvHabitoCategoria.setText(habito.getCategoria());
+
+            if(habito.isCompletado()) {
+                binding.tvHabitoEstado.setText("Completado");
+                binding.tvHabitoEstado.setTextColor(ContextCompat.getColor(
+                        binding.getRoot().getContext(),
+                        R.color.success
+                ));
+            } else {
+                binding.tvHabitoEstado.setText("Incompleto");
+                binding.tvHabitoEstado.setTextColor(ContextCompat.getColor(
+                        binding.getRoot().getContext(),
+                        R.color.warning
+                ));
+            }
+
+            // Icono con arquitectura centralizada ImageUi
+            String imgData = habito.getImagenHabito();
+            if (imgData == null || !imgData.startsWith("http")) {
+                // Si no hay imagen o es clave local, usamos el nombre de la categoria como clave secundaria
+                String key = (imgData != null && !imgData.isEmpty()) ? imgData : habito.getCategoria();
+
+                Glide.with(itemView.getContext())
+                        .load(ImageUi.getDrawable(key))
+                        .into(binding.ivHabitoIcon);
+            } else {
+                // Es URL remota
+                Glide.with(itemView.getContext())
+                        .load(imgData)
+                        .placeholder(com.roma.kai.R.drawable.ic_gallery_black_24dp)
+                        .into(binding.ivHabitoIcon);
+            }
+
+            itemView.setOnClickListener(v ->
+                    listener.onHabitoClick(habito)
+            );
         }
     }
 }
