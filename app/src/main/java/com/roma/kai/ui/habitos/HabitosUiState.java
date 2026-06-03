@@ -6,31 +6,37 @@ import com.roma.kai.model.dto.UserHabitResponse;
 import java.util.List;
 
 public class HabitosUiState {
-    private boolean loading;
-    private boolean success;
-    private DailyProgress progresoDiario;
-    private List<UserHabitResponse> habitosUsuario;
+    private final boolean isLoading;
+    private final boolean isSuccess;
+    private final String formattedProgress;
+    private final List<UserHabitResponse> habitosUsuario;
+    private final boolean isEmpty;
 
-    public HabitosUiState(boolean loading, boolean success, DailyProgress progresoDiario, List<UserHabitResponse> habitosUsuario) {
-        this.loading = loading;
-        this.success = success;
-        this.progresoDiario = progresoDiario;
+    public HabitosUiState(
+            boolean isLoading,
+            boolean isSuccess,
+            String formattedProgress,
+            List<UserHabitResponse> habitosUsuario,
+            boolean isEmpty
+    ) {
+        this.isLoading = isLoading;
+        this.isSuccess = isSuccess;
+        this.formattedProgress = formattedProgress;
         this.habitosUsuario = habitosUsuario;
+        this.isEmpty = isEmpty;
     }
 
-    public boolean isLoading() {
-        return loading;
+    public boolean isLoading() { return isLoading; }
+    public boolean isSuccess() { return isSuccess; }
+    public String getFormattedProgress() { return formattedProgress; }
+    public List<UserHabitResponse> getHabitosUsuario() { return habitosUsuario; }
+    public boolean isEmpty() { return isEmpty; }
+
+    public static HabitosUiState loading() {
+        return new HabitosUiState(true, false, "", null, false);
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public DailyProgress getProgresoDiario() {
-        return progresoDiario;
-    }
-
-    public List<UserHabitResponse> getHabitosUsuario() {
-        return habitosUsuario;
+    public static HabitosUiState error() {
+        return new HabitosUiState(false, false, "", null, false);
     }
 }

@@ -12,13 +12,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentHabitosBinding;
-import com.roma.kai.model.entity.Habito;
 import com.roma.kai.utils.UiMessage;
 import com.roma.kai.utils.UiMessageHelper;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class HabitosFragment extends Fragment {
 
@@ -47,9 +42,37 @@ public class HabitosFragment extends Fragment {
         habitosVM.loadHabitosView();
     }
 
+    private void setupObservers() {
+        habitosVM.getHabitosUiState().observe(getViewLifecycleOwner(), state -> {
+            if (state == null) return;
+
+            // Loading state
+            binding.progressBarHabitos.setVisibility(state.isLoading() ? View.VISIBLE : View.GONE);
+            binding.layoutHabitosContent.setVisibility(state.isLoading() ? View.INVISIBLE : View.VISIBLE);
+
+            if (state.isSuccess()) {
+                binding.rvMisHabitos.setVisibility(state.isEmpty() ? View.GONE : View.VISIBLE);
+                binding.layoutEmptyHabitos.setVisibility(state.isEmpty() ? View.VISIBLE : View.GONE);
+                
+                if (!state.isEmpty()) {
+                    habitosAdapter.submitList(state.getHabitosUsuario());
+                }
+                
+                // Aquí podrías mostrar el progreso si tuvieras un TextView para ello
+                // binding.txtProgreso.setText(state.getFormattedProgress());
+            }
+        });
+
+        habitosVM.getEventUiMessage().observe(getViewLifecycleOwner(), event -> {
+            UiMessage message = event.obtenerContenidoSiNoManejado();
+            if (message != null) {
+                UiMessageHelper.showMessage(binding.getRoot(), requireContext(), message);
+            }
+        });
+    }
+
     private void setupRecyclerView() {
         habitosAdapter = new HabitosAdapter(habito -> {
-            // Al hacer clic en un hábito, navegamos al detalle
             Bundle bundle = new Bundle();
             bundle.putString("habitoId", habito.getHabitoUsuarioId());
             Navigation.findNavController(requireView()).navigate(R.id.action_nav_habitos_to_nav_detalle_habito, bundle);
@@ -57,51 +80,6 @@ public class HabitosFragment extends Fragment {
 
         binding.rvMisHabitos.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvMisHabitos.setAdapter(habitosAdapter);
-    }
-
-    private void setupObservers() {
-        habitosVM.getHabitosUiState().observe(getViewLifecycleOwner(), habitosUiState -> {
-            if(habitosUiState == null) return;
-
-            // Mostrar u ocultar ProgressBar y Contenido
-            if (habitosUiState.isLoading()) {
-                binding.progressBarHabitos.setVisibility(View.VISIBLE);
-                binding.layoutHabitosContent.setVisibility(View.INVISIBLE);
-            } else {
-                binding.progressBarHabitos.setVisibility(View.GONE);
-                binding.layoutHabitosContent.setVisibility(View.VISIBLE);
-            }
-
-            if(habitosUiState.isSuccess()) {
-                if (habitosUiState.getHabitosUsuario() != null && !habitosUiState.getHabitosUsuario().isEmpty()) {
-                    binding.rvMisHabitos.setVisibility(View.VISIBLE);
-                    binding.layoutEmptyHabitos.setVisibility(View.GONE);
-                    habitosAdapter.submitList(habitosUiState.getHabitosUsuario());
-                } else {
-                    binding.rvMisHabitos.setVisibility(View.GONE);
-                    binding.layoutEmptyHabitos.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        habitosVM.getEventUiMessage().observe(
-                getViewLifecycleOwner(),
-                event -> {
-
-                    if(event == null) return;
-
-                    UiMessage message =
-                            event.obtenerContenidoSiNoManejado();
-
-                    if(message != null) {
-
-                        UiMessageHelper.showMessage(
-                                binding.getRoot(),
-                                requireContext(),
-                                message
-                        );
-                    }
-                }
-        );
     }
 
     @Override
