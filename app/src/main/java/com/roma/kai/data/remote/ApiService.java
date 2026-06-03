@@ -52,5 +52,21 @@ public interface ApiService {
     Call<ResponseData<List<HabitoCatalogoDto>>> getCatalog(@Query("category_id") String categoryId);
 
     @POST("api/v1/habits/select")
-    Call<ResponseData<Void>> selectHabit(@Body SelectHabitRequest request);
+    Call<ResponseData<Object>> selectHabit(@Body SelectHabitRequest request);
+
+    @GET("api/v1/habits/{habitUserId}")
+    Call<ResponseData<com.roma.kai.model.dto.HabitDetailResponse>> getHabitDetail(
+            @retrofit2.http.Path("habitUserId") String habitUserId
+    );
+
+    @retrofit2.http.DELETE("api/v1/habits/{habitUserId}/deactivate")
+    Call<ResponseData<Object>> deactivateHabit(
+            @retrofit2.http.Path("habitUserId") String habitUserId
+    );
+
+    @POST("api/v1/habits/{habitUserId}/complete")
+    Call<ResponseData<Object>> completeHabit(
+            @retrofit2.http.Path("habitUserId") String habitUserId,
+            @retrofit2.http.Body com.roma.kai.model.request.CompleteHabitRequest request
+    );
 }

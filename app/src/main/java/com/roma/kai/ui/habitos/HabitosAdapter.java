@@ -82,19 +82,20 @@ public class HabitosAdapter extends ListAdapter<UserHabitResponse, HabitosAdapte
             binding.txtHabitoRacha.setText("Racha: " + habito.getRachaActual() + " días");
 
             // Icono con arquitectura centralizada ImageUi
+            // Priorizamos la categoría para que todos los hábitos de la misma categoría tengan la misma imagen
+            String categoryKey = habito.getCategoria();
             String imgData = habito.getImagenHabito();
-            if (imgData == null || !imgData.startsWith("http")) {
-                // Si no hay imagen o es clave local, usamos el nombre de la categoria como clave secundaria
-                String key = (imgData != null && !imgData.isEmpty()) ? imgData : habito.getCategoria();
-                
-                Glide.with(itemView.getContext())
-                        .load(ImageUi.getDrawable(key))
-                        .into(binding.imgHabitoIcon);
-            } else {
+            
+            if (imgData != null && imgData.startsWith("http")) {
                 // Es URL remota
                 Glide.with(itemView.getContext())
                         .load(imgData)
                         .placeholder(com.roma.kai.R.drawable.ic_gallery_black_24dp)
+                        .into(binding.imgHabitoIcon);
+            } else {
+                // Usamos el resolver con el nombre de la categoria para consistencia
+                Glide.with(itemView.getContext())
+                        .load(ImageUi.getDrawable(categoryKey))
                         .into(binding.imgHabitoIcon);
             }
 

@@ -63,16 +63,18 @@ public class CategoriaAdapter extends ListAdapter<CategoriaDto, CategoriaAdapter
         public void bind(CategoriaDto categoria, OnCategoriaClickListener listener) {
             binding.txtCategoriaNombre.setText(categoria.getNombre());
 
+            String categoryKey = categoria.getNombre();
             String imgData = categoria.getImagenCategoria();
 
-            if (imgData == null || !imgData.startsWith("http")) {
-                String key = (imgData != null && !imgData.isEmpty()) ? imgData : categoria.getNombre();
-                Glide.with(itemView.getContext())
-                        .load(ImageUi.getDrawable(key))
-                        .into(binding.imgCategoriaIcon);
-            } else {
+            if (imgData != null && imgData.startsWith("http")) {
+                // Es URL remota
                 Glide.with(itemView.getContext())
                         .load(imgData)
+                        .into(binding.imgCategoriaIcon);
+            } else {
+                // Usamos el resolver con el nombre de la categoria para consistencia total
+                Glide.with(itemView.getContext())
+                        .load(ImageUi.getDrawable(categoryKey))
                         .into(binding.imgCategoriaIcon);
             }
 

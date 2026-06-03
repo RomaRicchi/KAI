@@ -50,7 +50,9 @@ public class HabitosFragment extends Fragment {
     private void setupRecyclerView() {
         habitosAdapter = new HabitosAdapter(habito -> {
             // Al hacer clic en un hábito, navegamos al detalle
-            Navigation.findNavController(requireView()).navigate(R.id.action_nav_habitos_to_nav_detalle_habito);
+            Bundle bundle = new Bundle();
+            bundle.putString("habitoId", habito.getHabitoUsuarioId());
+            Navigation.findNavController(requireView()).navigate(R.id.action_nav_habitos_to_nav_detalle_habito, bundle);
         });
 
         binding.rvMisHabitos.setLayoutManager(new LinearLayoutManager(getContext()));

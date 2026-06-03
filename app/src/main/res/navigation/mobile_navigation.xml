@@ -86,7 +86,14 @@
         android:id="@+id/nav_detalle_habito"
         android:name="com.roma.kai.ui.habitos.detalleHabito.DetalleHabitoFragment"
         android:label="Detalle de Hábito"
-        tools:layout="@layout/fragment_detalle_habito" />
+        tools:layout="@layout/fragment_detalle_habito">
+        <argument
+            android:name="habitoId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_nav_detalle_habito_to_nav_seleccion_habitos"
+            app:destination="@id/nav_seleccion_habitos" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_kai"

@@ -9,8 +9,8 @@ public class ImageUi {
 
     static {
         // Mapeo de Categorías
-        resourceMap.put("vitalidad", R.drawable.vitalidad);
-        resourceMap.put("sabiduria", R.drawable.sabiduria);
+        resourceMap.put("vitalidad", R.drawable.sabiduria); // Swap: Vitalidad usa el runner
+        resourceMap.put("sabiduria", R.drawable.vitalidad); // Swap: Sabiduría usa el libro
         resourceMap.put("coraje", R.drawable.coraje);
         resourceMap.put("disciplina", R.drawable.disciplina);
         resourceMap.put("constancia", R.drawable.constancia);

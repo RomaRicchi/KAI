@@ -107,4 +107,5 @@
     <string name="subtitulo_kai">La App de tu Amigo Virtual</string>
     <string name="verificando_sesion">Verificando sesión…</string>
     <string name="back_button_desc">Volver</string>
+    <string name="formato_dias">%1$d Días</string>
 </resources>

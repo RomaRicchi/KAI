@@ -37,20 +37,19 @@ public class HabitosSeleccionAdapter extends RecyclerView.Adapter<HabitosSelecci
         HabitoCatalogoDto habito = habitos.get(position);
         holder.binding.txtHabitoNombreSeleccion.setText(habito.getNombre());
         
+        String categoryKey = habito.getCategoria();
         String imgData = habito.getImagenHabito();
-        if (imgData == null || !imgData.startsWith("http")) {
-            // Usamos el Resolver centralizado ImageUi
-            // Si imgData es nulo, usamos el nombre de la categoria o la dificultad
-            String key = (imgData != null && !imgData.isEmpty()) ? imgData : habito.getDificultad();
-            
-            Glide.with(holder.itemView.getContext())
-                    .load(ImageUi.getDrawable(key))
-                    .into(holder.binding.imgHabitoSeleccionIcon);
-        } else {
+        
+        if (imgData != null && imgData.startsWith("http")) {
             // Es URL remota
             Glide.with(holder.itemView.getContext())
                     .load(imgData)
                     .placeholder(com.roma.kai.R.drawable.ic_gallery_black_24dp)
+                    .into(holder.binding.imgHabitoSeleccionIcon);
+        } else {
+            // Usamos el resolver con el nombre de la categoria para consistencia
+            Glide.with(holder.itemView.getContext())
+                    .load(ImageUi.getDrawable(categoryKey))
                     .into(holder.binding.imgHabitoSeleccionIcon);
         }
 

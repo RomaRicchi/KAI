@@ -7,7 +7,9 @@ import com.roma.kai.data.remote.ApiService;
 import com.roma.kai.data.remote.error.ApiErrorParser;
 import com.roma.kai.model.dto.CategoriaDto;
 import com.roma.kai.model.dto.HabitoCatalogoDto;
+import com.roma.kai.model.dto.HabitDetailResponse;
 import com.roma.kai.model.dto.HabitsViewResponse;
+import com.roma.kai.model.request.CompleteHabitRequest;
 import com.roma.kai.model.request.SelectHabitRequest;
 import com.roma.kai.model.response.ResponseData;
 import com.google.gson.Gson;
@@ -87,10 +89,10 @@ public class HabitosRepository {
     }
 
     public void selectHabit(String habitId, RepositoryCallback<Void> callback) {
-        Call<ResponseData<Void>> call = apiService.selectHabit(new SelectHabitRequest(habitId));
-        call.enqueue(new Callback<ResponseData<Void>>() {
+        Call<ResponseData<Object>> call = apiService.selectHabit(new SelectHabitRequest(habitId));
+        call.enqueue(new Callback<ResponseData<Object>>() {
             @Override
-            public void onResponse(Call<ResponseData<Void>> call, Response<ResponseData<Void>> response) {
+            public void onResponse(Call<ResponseData<Object>> call, Response<ResponseData<Object>> response) {
                 Log.d("API_RESPONSE", "SelectHabit: " + gson.toJson(response.body()));
                 if(response.isSuccessful()) {
                     callback.onSuccess(null);
@@ -100,7 +102,65 @@ public class HabitosRepository {
             }
 
             @Override
-            public void onFailure(Call<ResponseData<Void>> call, Throwable throwable) {
+            public void onFailure(Call<ResponseData<Object>> call, Throwable throwable) {
+                callback.onError("Error de conexión: " + throwable.getMessage());
+            }
+        });
+    }
+
+    public void getHabitDetail(String habitUserId, RepositoryCallback<HabitDetailResponse> callback) {
+        Call<ResponseData<HabitDetailResponse>> call = apiService.getHabitDetail(habitUserId);
+        call.enqueue(new Callback<ResponseData<HabitDetailResponse>>() {
+            @Override
+            public void onResponse(Call<ResponseData<HabitDetailResponse>> call, Response<ResponseData<HabitDetailResponse>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body().getData());
+                } else {
+                    callback.onError(ApiErrorParser.parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<HabitDetailResponse>> call, Throwable throwable) {
+                callback.onError("Error de conexión: " + throwable.getMessage());
+            }
+        });
+    }
+
+    public void deactivateHabit(String habitUserId, RepositoryCallback<Void> callback) {
+        Call<ResponseData<Object>> call = apiService.deactivateHabit(habitUserId);
+        call.enqueue(new Callback<ResponseData<Object>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Object>> call, Response<ResponseData<Object>> response) {
+                if(response.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onError(ApiErrorParser.parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Object>> call, Throwable throwable) {
+                callback.onError("Error de conexión: " + throwable.getMessage());
+            }
+        });
+    }
+
+    public void completeHabit(String habitUserId, RepositoryCallback<Void> callback) {
+        // Enviamos "" en lugar de null por si el backend de Go espera un string y no un puntero
+        Call<ResponseData<Object>> call = apiService.completeHabit(habitUserId, new CompleteHabitRequest(""));
+        call.enqueue(new Callback<ResponseData<Object>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Object>> call, Response<ResponseData<Object>> response) {
+                if(response.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onError(ApiErrorParser.parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Object>> call, Throwable throwable) {
                 callback.onError("Error de conexión: " + throwable.getMessage());
             }
         });
