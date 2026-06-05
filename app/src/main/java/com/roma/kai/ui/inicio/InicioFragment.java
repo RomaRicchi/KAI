@@ -1,5 +1,6 @@
 package com.roma.kai.ui.inicio;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +25,7 @@ public class InicioFragment extends Fragment {
     private FragmentInicioBinding binding;
     private InicioViewModel inicioVM;
     private InicioHabitosAdapter habitosAdapter;
+    private MediaPlayer mediaPlayer;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable kaiAnimationRunnable = new Runnable() {
@@ -59,7 +61,6 @@ public class InicioFragment extends Fragment {
     private void playKaiAnimation() {
         if (binding == null || inicioVM.getInicioUiState().getValue() == null) return;
 
-        // No animar si todavía está cargando o si no hubo éxito
         if (inicioVM.getInicioUiState().getValue().isLoading() || !inicioVM.getInicioUiState().getValue().isSuccess()) {
             return;
         }
@@ -69,20 +70,22 @@ public class InicioFragment extends Fragment {
         int eyesOpenMouthOpen = R.drawable.boca_frente;
 
         long blinkDuration = 200;
-        long talkDuration = 150;
+        long talkDuration = 250; // Aumentado para que se note más
 
-        // --- INICIO SECUENCIA ---
-        
         // 1. Primer parpadeo
         binding.imgKaiHome.setImageResource(eyesClosedMouthClosed);
-
         binding.imgKaiHome.postDelayed(() -> {
             if (binding == null) return;
             binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
         }, blinkDuration);
 
-        // 2. Hablar (Abre/Cierra 1)
-        long startTalk1 = blinkDuration + 300;
+        // --- INICIO HABLA ---
+        long startTalk1 = blinkDuration + 400;
+        
+        // Lanzamos el sonido un poco antes (50ms) para compensar el lag del MediaPlayer
+        binding.imgKaiHome.postDelayed(this::playSound, startTalk1 - 50);
+
+        // Boca 1
         binding.imgKaiHome.postDelayed(() -> {
             if (binding == null) return;
             binding.imgKaiHome.setImageResource(eyesOpenMouthOpen);
@@ -93,7 +96,7 @@ public class InicioFragment extends Fragment {
             binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
         }, startTalk1 + talkDuration);
 
-        // 3. Hablar (Abre/Cierra 2)
+        // Boca 2
         long startTalk2 = startTalk1 + (talkDuration * 2);
         binding.imgKaiHome.postDelayed(() -> {
             if (binding == null) return;
@@ -105,22 +108,44 @@ public class InicioFragment extends Fragment {
             binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
         }, startTalk2 + talkDuration);
 
-        // 4. Segundo parpadeo
-        long startBlink2 = startTalk2 + (talkDuration * 2) + 200;
+        // Boca 3 (NUEVA REPETICIÓN)
+        long startTalk3 = startTalk2 + (talkDuration * 2);
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesOpenMouthOpen);
+        }, startTalk3);
+
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
+        }, startTalk3 + talkDuration);
+
+        // 4. Segundo parpadeo final
+        long startBlink2 = startTalk3 + (talkDuration * 2) + 200;
         binding.imgKaiHome.postDelayed(() -> {
             if (binding == null) return;
             binding.imgKaiHome.setImageResource(eyesClosedMouthClosed);
         }, startBlink2);
 
-        // 5. Volver al estado original del servidor
+        // 5. Restaurar imagen original
         binding.imgKaiHome.postDelayed(() -> {
             if (binding != null && inicioVM.getInicioUiState().getValue() != null) {
                 String key = inicioVM.getInicioUiState().getValue().getKaiImageKey();
-                if (key != null) {
-                    binding.imgKaiHome.setImageResource(ImageUi.getDrawable(key));
-                }
+                if (key != null) binding.imgKaiHome.setImageResource(ImageUi.getDrawable(key));
             }
         }, startBlink2 + blinkDuration);
+    }
+
+    private void playSound() {
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
+            }
+            mediaPlayer = MediaPlayer.create(getContext(), R.raw.prueba1);
+            mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setupObservers() {
@@ -176,7 +201,11 @@ public class InicioFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        handler.removeCallbacks(kaiAnimationRunnable); // Detener el bucle para evitar fugas de memoria
+        handler.removeCallbacks(kaiAnimationRunnable);
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         binding = null;
     }
 }
