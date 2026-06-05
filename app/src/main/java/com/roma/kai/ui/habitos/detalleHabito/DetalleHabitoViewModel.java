@@ -42,7 +42,13 @@ public class DetalleHabitoViewModel extends AndroidViewModel {
     public LiveData<Event<UiMessage>> getEventUiMessage() { return eventUiMessage; }
 
     public void loadHabitDetail(String habitUserId) {
-        uiState.setValue(DetalleHabitoUiState.loading());
+        // Si no hay datos, es la carga inicial
+        if (uiState.getValue() == null || uiState.getValue().getHabitName() == null || uiState.getValue().getHabitName().isEmpty()) {
+            uiState.setValue(DetalleHabitoUiState.loading());
+        } else {
+            // Si ya hay datos, mantenemos los actuales y marcamos loading
+            uiState.setValue(copyStateWithLoading(true));
+        }
 
         habitosRepository.getHabitDetail(habitUserId, new RepositoryCallback<HabitDetailResponse>() {
             @Override
@@ -53,7 +59,19 @@ public class DetalleHabitoViewModel extends AndroidViewModel {
 
             @Override
             public void onError(String error) {
-                uiState.setValue(new DetalleHabitoUiState(false, "", "", "", "", "", "", null, false, false, error));
+                // En caso de error, intentamos mantener lo que había o mostrar error
+                DetalleHabitoUiState current = uiState.getValue();
+                if (current != null) {
+                    uiState.setValue(new DetalleHabitoUiState(
+                            false, current.getHabitName(), current.getCategoryName(),
+                            current.getCurrentStreak(), current.getSuccessfulDaysCount(),
+                            current.getCategoryImageKey(), current.getMonthYearHeader(),
+                            current.getCalendarDays(), current.isTodayCompleted(),
+                            current.isDeactivated(), error
+                    ));
+                } else {
+                    uiState.setValue(new DetalleHabitoUiState(false, "", "", "", "", "", "", null, false, false, error));
+                }
                 eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
             }
         });

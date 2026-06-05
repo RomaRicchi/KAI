@@ -26,6 +26,7 @@ public class InicioFragment extends Fragment {
     private InicioViewModel inicioVM;
     private InicioHabitosAdapter habitosAdapter;
     private MediaPlayer mediaPlayer;
+    private boolean isFirstAnimation = true;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private final Runnable kaiAnimationRunnable = new Runnable() {
@@ -49,6 +50,9 @@ public class InicioFragment extends Fragment {
 
         setupRecyclerView();
         setupObservers();
+
+        // Limpiar el estado de "primera animación" cada vez que se crea la vista
+        isFirstAnimation = true;
 
         inicioVM.loadHomeView();
         startKaiAnimationLoop();
@@ -83,7 +87,10 @@ public class InicioFragment extends Fragment {
         long startTalk1 = blinkDuration + 400;
         
         // Lanzamos el sonido un poco antes (50ms) para compensar el lag del MediaPlayer
-        binding.imgKaiHome.postDelayed(this::playSound, startTalk1 - 50);
+        if (isFirstAnimation) {
+            binding.imgKaiHome.postDelayed(this::playSound, startTalk1 - 50);
+            isFirstAnimation = false;
+        }
 
         // Boca 1
         binding.imgKaiHome.postDelayed(() -> {

@@ -60,11 +60,20 @@ public class DetalleHabitoFragment extends Fragment {
         viewModel.getUiState().observe(getViewLifecycleOwner(), state -> {
             if (state == null) return;
 
-            // Loading state
-            binding.progressDetalle.setVisibility(state.isLoading() ? View.VISIBLE : View.GONE);
-            binding.scrollDetalleHabito.setVisibility(state.isLoading() ? View.INVISIBLE : View.VISIBLE);
+            // 1. Carga inicial (Pantalla vacía)
+            boolean isInitialLoading = state.isLoading() && (state.getHabitName() == null || state.getHabitName().isEmpty());
+            binding.progressDetalle.setVisibility(isInitialLoading ? View.VISIBLE : View.GONE);
+            binding.scrollDetalleHabito.setVisibility(isInitialLoading ? View.INVISIBLE : View.VISIBLE);
 
-            if (!state.isLoading()) {
+            // 2. Feedback en el botón (Carga de acción)
+            boolean isActionLoading = state.isLoading() && !isInitialLoading;
+            binding.progressBtnCompletar.setVisibility(isActionLoading ? View.VISIBLE : View.GONE);
+            binding.btnCompletarHoyDetalle.setEnabled(!state.isLoading() && !state.isTodayCompleted());
+            
+            // Ocultar texto/icono del botón mientras carga para que se vea el spinner
+            binding.btnCompletarHoyDetalle.setAlpha(isActionLoading ? 0f : 1.0f);
+
+            if (!isInitialLoading) {
                 bindStateToUi(state);
             }
 

@@ -213,24 +213,37 @@
                         android:layout_marginTop="8dp">
                     </GridLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_completar_hoy_detalle"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                    <FrameLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:layout_gravity="center"
-                        android:text="Completar hoy"
-                        android:textColor="#0D332B"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        android:backgroundTint="@color/white"
-                        app:icon="@drawable/circle_dot"
-                        app:iconTint="#E0E0E0"
-                        app:iconSize="24dp"
-                        app:cornerRadius="12dp"
-                        app:strokeColor="#E0E0E0"
-                        app:strokeWidth="1dp" />
+                        android:layout_marginTop="16dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_completar_hoy_detalle"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Completar hoy"
+                            android:textColor="#0D332B"
+                            android:textAllCaps="false"
+                            android:textSize="16sp"
+                            android:backgroundTint="@color/white"
+                            app:icon="@drawable/circle_dot"
+                            app:iconTint="#E0E0E0"
+                            app:iconSize="24dp"
+                            app:cornerRadius="12dp"
+                            app:strokeColor="#E0E0E0"
+                            app:strokeWidth="1dp" />
+
+                        <ProgressBar
+                            android:id="@+id/progress_btn_completar"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:visibility="gone"
+                            android:indeterminateTint="@color/kai_primary" />
+                    </FrameLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
