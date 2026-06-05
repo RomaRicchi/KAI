@@ -1,6 +1,8 @@
 package com.roma.kai.ui.inicio;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,15 @@ public class InicioFragment extends Fragment {
     private InicioViewModel inicioVM;
     private InicioHabitosAdapter habitosAdapter;
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Runnable kaiAnimationRunnable = new Runnable() {
+        @Override
+        public void run() {
+            playKaiAnimation();
+            handler.postDelayed(this, 10000); // Repetir cada 10 segundos
+        }
+    };
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInicioBinding.inflate(inflater, container, false);
@@ -38,6 +49,44 @@ public class InicioFragment extends Fragment {
         setupObservers();
 
         inicioVM.loadHomeView();
+        startKaiAnimationLoop();
+    }
+
+    private void startKaiAnimationLoop() {
+        handler.postDelayed(kaiAnimationRunnable, 5000); // Empezar tras 5 segundos
+    }
+
+    private void playKaiAnimation() {
+        if (binding == null || inicioVM.getInicioUiState().getValue() == null) return;
+
+        // No animar si todavía está cargando o si no hubo éxito
+        if (inicioVM.getInicioUiState().getValue().isLoading() || !inicioVM.getInicioUiState().getValue().isSuccess()) {
+            return;
+        }
+
+        int openMouth = R.drawable.kai1;
+        int closedMouth = R.drawable.cerrado_frente;
+        long frameDuration = 300; // milisegundos
+
+        // 1. Forzamos estado ABIERTO (kai1)
+        binding.imgKaiHome.setImageResource(openMouth);
+        
+        // 2. Tras 300ms, forzamos estado CERRADO (cerrado_frente) para que se vea el movimiento
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding != null) {
+                binding.imgKaiHome.setImageResource(closedMouth);
+            }
+        }, frameDuration);
+
+        // 3. Tras otros 300ms, volvemos al estado original que dicte el servidor
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding != null && inicioVM.getInicioUiState().getValue() != null) {
+                String key = inicioVM.getInicioUiState().getValue().getKaiImageKey();
+                if (key != null) {
+                    binding.imgKaiHome.setImageResource(ImageUi.getDrawable(key));
+                }
+            }
+        }, frameDuration * 2);
     }
 
     private void setupObservers() {
@@ -93,6 +142,7 @@ public class InicioFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        handler.removeCallbacks(kaiAnimationRunnable); // Detener el bucle para evitar fugas de memoria
         binding = null;
     }
 }

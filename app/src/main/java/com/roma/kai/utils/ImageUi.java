@@ -9,8 +9,8 @@ public class ImageUi {
 
     static {
         // Mapeo de Categorías
-        resourceMap.put("vitalidad", R.drawable.sabiduria); // Swap: Vitalidad usa el runner
-        resourceMap.put("sabiduria", R.drawable.vitalidad); // Swap: Sabiduría usa el libro
+        resourceMap.put("vitalidad", R.drawable.vitalidad); // Swap: Vitalidad usa el runner
+        resourceMap.put("sabiduria", R.drawable.sabiduria); // Swap: Sabiduría usa el libro
         resourceMap.put("coraje", R.drawable.coraje);
         resourceMap.put("disciplina", R.drawable.disciplina);
         resourceMap.put("constancia", R.drawable.constancia);
@@ -23,14 +23,14 @@ public class ImageUi {
         resourceMap.put("medio", R.drawable.medio);
         resourceMap.put("dificil", R.drawable.dificil);
         
-        // Mapeo de Estados de Kai (ejemplos basados en tus drawables)
+        // Mapeo de Estados de Kai (Usando versiones frontales para evitar saltos)
         resourceMap.put("dormido", R.drawable.bb_dormido);
         resourceMap.put("enojado", R.drawable.bb_enojado);
-        resourceMap.put("feliz", R.drawable.bb_feliz_lateral);
-        resourceMap.put("atento", R.drawable.bb_atento_lateral);
-        resourceMap.put("curioso", R.drawable.bb_curioso_lateral);
-        resourceMap.put("divertido", R.drawable.bb_divertido_boca_arriba);
-        resourceMap.put("jugueton", R.drawable.bb_jugueton_boca_arriba);
+        resourceMap.put("feliz", R.drawable.kai1);
+        resourceMap.put("atento", R.drawable.cerrado_frente);
+        resourceMap.put("curioso", R.drawable.cerrado_frente);
+        resourceMap.put("divertido", R.drawable.kai1);
+        resourceMap.put("jugueton", R.drawable.kai1);
     }
 
     /**

@@ -83,9 +83,10 @@ public class InicioHabitosAdapter extends ListAdapter<DailyHabitSummary, InicioH
             binding.tvHabitoCategoria.setText(habito.getCategoria());
 
             if(habito.isCompletado()) {
+                binding.ivHabitoEstadoIcon.setVisibility(android.view.View.VISIBLE);
                 binding.ivHabitoEstadoIcon.setImageResource(R.drawable.ic_check_circle_green_24dp);
             } else {
-                binding.ivHabitoEstadoIcon.setImageResource(R.drawable.ic_circle_outline_orange_24dp);
+                binding.ivHabitoEstadoIcon.setVisibility(android.view.View.GONE);
             }
 
             // Icono con arquitectura centralizada ImageUi
