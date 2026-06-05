@@ -72,9 +72,9 @@ public interface ApiService {
 
     // --- Perfil e Imagen ---
     @retrofit2.http.Multipart
-    @POST("api/v1/users/profile/image")
+    @retrofit2.http.PUT("api/v1/users/me/profile-photo")
     Call<ResponseData<com.roma.kai.model.dto.ImageResponse>> uploadProfileImage(
-            @retrofit2.http.Part okhttp3.MultipartBody.Part image
+            @retrofit2.http.Part okhttp3.MultipartBody.Part foto
     );
 
     @retrofit2.http.DELETE("api/v1/users/profile/image")

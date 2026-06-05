@@ -14,9 +14,10 @@ public class TuKaiUiState {
     private final List<String> attributeLabels;
     private final List<Float> attributeValues;
     private final String categoryPredominante;
+    private final String categoryPredominanteKey;
     private final String categoryMenosAvanzada;
 
-    public TuKaiUiState(boolean isLoading, boolean isSuccess, String stage, int energy, String energyDesc, String personalityTitle, String emotionalMessage, String kaiImageKey, List<String> attributeLabels, List<Float> attributeValues, String categoryPredominante, String categoryMenosAvanzada) {
+    public TuKaiUiState(boolean isLoading, boolean isSuccess, String stage, int energy, String energyDesc, String personalityTitle, String emotionalMessage, String kaiImageKey, List<String> attributeLabels, List<Float> attributeValues, String categoryPredominante, String categoryPredominanteKey, String categoryMenosAvanzada) {
         this.isLoading = isLoading;
         this.isSuccess = isSuccess;
         this.stage = stage;
@@ -28,15 +29,16 @@ public class TuKaiUiState {
         this.attributeLabels = attributeLabels;
         this.attributeValues = attributeValues;
         this.categoryPredominante = categoryPredominante;
+        this.categoryPredominanteKey = categoryPredominanteKey;
         this.categoryMenosAvanzada = categoryMenosAvanzada;
     }
 
     public static TuKaiUiState loading() {
-        return new TuKaiUiState(true, false, "", 0, "", "", "", null, null, null, "", "");
+        return new TuKaiUiState(true, false, "", 0, "", "", "", null, null, null, "", "", "");
     }
 
     public static TuKaiUiState error() {
-        return new TuKaiUiState(false, false, "", 0, "", "", "", null, null, null, "", "");
+        return new TuKaiUiState(false, false, "", 0, "", "", "", null, null, null, "", "", "");
     }
 
     public boolean isLoading() { return isLoading; }
@@ -50,5 +52,6 @@ public class TuKaiUiState {
     public List<String> getAttributeLabels() { return attributeLabels; }
     public List<Float> getAttributeValues() { return attributeValues; }
     public String getCategoryPredominante() { return categoryPredominante; }
+    public String getCategoryPredominanteKey() { return categoryPredominanteKey; }
     public String getCategoryMenosAvanzada() { return categoryMenosAvanzada; }
 }

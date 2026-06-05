@@ -40,33 +40,58 @@ public class TuKaiFragment extends Fragment {
             if (state == null) return;
 
             if (state.isSuccess()) {
+                binding.cardKaiStage.setVisibility(View.VISIBLE);
+                binding.cardVigor.setVisibility(View.VISIBLE);
+                binding.cardPersonality.setVisibility(View.VISIBLE);
+                binding.txtRadarTitle.setVisibility(View.VISIBLE);
+                binding.radarChart.setVisibility(View.VISIBLE);
+                binding.layoutRadarFooter.setVisibility(View.VISIBLE);
+
                 binding.txtKaiStage.setText(state.getStage());
                 
-                // Vigor/Energía
+                // Energía
                 binding.progressVigorCircle.setProgress(state.getEnergy());
                 binding.progressVigorHorizontal.setProgress(state.getEnergy());
                 binding.txtVigorPercent.setText(state.getEnergy() + "%");
                 binding.txtVigorDesc.setText(state.getEnergyDesc());
 
                 // Personalidad
-                binding.txtPersonalityTitle.setText(state.getPersonalityTitle());
+                binding.txtPersonalityTitle.setText("Personalidad Principal: " + state.getCategoryPredominante());
                 binding.txtEmotionalMessage.setText(state.getEmotionalMessage());
+                
+                // Imagen de personalidad dinámica
+                if (state.getCategoryPredominanteKey() != null) {
+                    int iconResId = ImageUi.getDrawable(state.getCategoryPredominanteKey());
+                    if (iconResId != 0) {
+                        binding.imgPersonalityIcon.setImageResource(iconResId);
+                        // Aseguramos que no tenga tinte que lo tape
+                        binding.imgPersonalityIcon.setImageTintList(null);
+                    }
+                }
 
                 // Radar Chart
                 if (state.getAttributeLabels() != null && state.getAttributeValues() != null) {
                     binding.radarChart.setData(state.getAttributeLabels(), state.getAttributeValues());
                 }
-                binding.txtPredominante.setText(state.getCategoryPredominante());
                 binding.txtMenosAvanzada.setText(state.getCategoryMenosAvanzada());
 
                 // Imagen de Kai
                 if (state.getKaiImageKey() != null) {
+                    binding.imgKaiBig.setVisibility(View.VISIBLE);
                     if (state.getKaiImageKey().startsWith("http")) {
                         Glide.with(this).load(state.getKaiImageKey()).into(binding.imgKaiBig);
                     } else {
                         Glide.with(this).load(ImageUi.getDrawable(state.getKaiImageKey())).into(binding.imgKaiBig);
                     }
                 }
+            } else {
+                binding.imgKaiBig.setVisibility(View.INVISIBLE);
+                binding.cardKaiStage.setVisibility(View.GONE);
+                binding.cardVigor.setVisibility(View.GONE);
+                binding.cardPersonality.setVisibility(View.GONE);
+                binding.txtRadarTitle.setVisibility(View.GONE);
+                binding.radarChart.setVisibility(View.GONE);
+                binding.layoutRadarFooter.setVisibility(View.GONE);
             }
         });
 

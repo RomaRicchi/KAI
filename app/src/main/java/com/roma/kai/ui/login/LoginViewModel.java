@@ -50,7 +50,7 @@ public class LoginViewModel extends AndroidViewModel {
             @Override
             public void onSuccess(TokenDto data) {
                 uiState.setValue(new LoginUiState(
-                        true, // para que no desactive el boton antes de enviar al home
+                        false,
                         true
                 ));
             }

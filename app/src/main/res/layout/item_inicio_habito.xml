@@ -48,18 +48,18 @@
             android:layout_marginEnd="8dp"
             android:text="Salud"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvHabitoEstado"
+            app:layout_constraintEnd_toStartOf="@+id/ivHabitoEstadoIcon"
             app:layout_constraintStart_toEndOf="@+id/ivHabitoIcon"
             app:layout_constraintTop_toBottomOf="@+id/tvHabitoNombre" />
 
-        <TextView
-            android:id="@+id/tvHabitoEstado"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Incompleto"
+        <ImageView
+            android:id="@+id/ivHabitoEstadoIcon"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvHabitoNombre" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/icons8_check" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

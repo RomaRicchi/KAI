@@ -83,17 +83,9 @@ public class InicioHabitosAdapter extends ListAdapter<DailyHabitSummary, InicioH
             binding.tvHabitoCategoria.setText(habito.getCategoria());
 
             if(habito.isCompletado()) {
-                binding.tvHabitoEstado.setText("Completado");
-                binding.tvHabitoEstado.setTextColor(ContextCompat.getColor(
-                        binding.getRoot().getContext(),
-                        R.color.success
-                ));
+                binding.ivHabitoEstadoIcon.setImageResource(R.drawable.ic_check_circle_green_24dp);
             } else {
-                binding.tvHabitoEstado.setText("Incompleto");
-                binding.tvHabitoEstado.setTextColor(ContextCompat.getColor(
-                        binding.getRoot().getContext(),
-                        R.color.warning
-                ));
+                binding.ivHabitoEstadoIcon.setImageResource(R.drawable.ic_circle_outline_orange_24dp);
             }
 
             // Icono con arquitectura centralizada ImageUi

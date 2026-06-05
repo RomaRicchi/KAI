@@ -40,22 +40,25 @@ public class RadarChartView extends View {
 
     private void init() {
         webPaint = new Paint();
-        webPaint.setColor(Color.LTGRAY);
+        webPaint.setColor(Color.WHITE); // Blanco para que resalte sobre el fondo oscuro
+        webPaint.setAlpha(100);
         webPaint.setAntiAlias(true);
         webPaint.setStyle(Paint.Style.STROKE);
         webPaint.setStrokeWidth(2f);
 
         dataPaint = new Paint();
-        dataPaint.setColor(Color.parseColor("#39A18E")); // Color KAI
-        dataPaint.setAlpha(150);
+        dataPaint.setColor(Color.parseColor("#00BFFF")); // Azul (DeepSkyBlue) para resaltar
+        dataPaint.setAlpha(180); // Más opaco
         dataPaint.setAntiAlias(true);
         dataPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        dataPaint.setStrokeWidth(4f);
 
         labelPaint = new Paint();
-        labelPaint.setColor(Color.parseColor("#1B5E50"));
-        labelPaint.setTextSize(28f);
+        labelPaint.setColor(Color.WHITE); // Blanco para legibilidad
+        labelPaint.setTextSize(36f); // Aumentado
         labelPaint.setAntiAlias(true);
         labelPaint.setTextAlign(Paint.Align.CENTER);
+        labelPaint.setFakeBoldText(true); // Negrita para que se vea mejor
     }
 
     @Override

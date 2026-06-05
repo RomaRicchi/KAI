@@ -65,8 +65,10 @@ public class PerfilFragment extends Fragment {
         binding.btnLogout.setOnClickListener(v -> perfilVM.logout());
         
         binding.cardAvatar.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            imagePickerLauncher.launch(intent);
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            imagePickerLauncher.launch(Intent.createChooser(intent, "Selecciona una foto"));
         });
 
         // Opcional: Click largo para borrar
@@ -82,24 +84,23 @@ public class PerfilFragment extends Fragment {
                 binding.tvPerfilNombre.setText(perfilUiState.getUsuario().getNombre());
                 binding.tvPerfilEmail.setText(perfilUiState.getUsuario().getEmail());
                 
-                // Carga de imagen con Glide
-                String imageUrl = perfilUiState.getUsuario().getImagenPerfil();
+                // Carga de imagen con Glide según especificación del backend
+                String fotoPerfil = perfilUiState.getUsuario().getFotoPerfil(); 
 
-                if (imageUrl != null && !imageUrl.isEmpty()) {
-                    if (imageUrl.startsWith("http")) {
-                        Glide.with(this)
-                                .load(imageUrl)
-                                .circleCrop()
-                                .placeholder(R.drawable.ic_camera_black_24dp)
-                                .into(binding.imgPerfilAvatar);
-                    } else {
-                        // Si es un recurso local o nombre de drawable
-                        Glide.with(this)
-                                .load(com.roma.kai.utils.ImageUi.getDrawable(imageUrl))
-                                .circleCrop()
-                                .placeholder(R.drawable.ic_camera_black_24dp)
-                                .into(binding.imgPerfilAvatar);
+                if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+                    String baseUrl = com.roma.kai.data.remote.RetrofitClient.BASE_URL;
+                    if (baseUrl.endsWith("/")) {
+                        baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
                     }
+                    String imageUrl = baseUrl + fotoPerfil;
+
+                    Glide.with(this)
+                            .load(imageUrl)
+                            .circleCrop()
+                            .placeholder(R.drawable.ic_camera_black_24dp)
+                            .error(R.drawable.ic_camera_black_24dp)
+                            .into(binding.imgPerfilAvatar);
+
                     binding.imgPerfilAvatar.setPadding(0, 0, 0, 0);
                     binding.imgPerfilAvatar.setImageTintList(null);
                 } else {
@@ -120,8 +121,19 @@ public class PerfilFragment extends Fragment {
         try {
             File file = getFileFromUri(uri);
             if (file != null) {
-                RequestBody requestFile = RequestBody.create(MediaType.parse(requireContext().getContentResolver().getType(uri)), file);
-                MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+                // Crear el RequestBody según la especificación
+                RequestBody requestFile = RequestBody.create(
+                        file,
+                        MediaType.parse("image/*")
+                );
+
+                // Crear el MultipartBody.Part con la clave "foto"
+                MultipartBody.Part body = MultipartBody.Part.createFormData(
+                        "foto",
+                        file.getName(),
+                        requestFile
+                );
+
                 perfilVM.uploadProfileImage(body);
             }
         } catch (Exception e) {

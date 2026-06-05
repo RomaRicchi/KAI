@@ -51,7 +51,7 @@ public class PerfilViewModel extends AndroidViewModel {
             public void onSuccess(ImageResponse data) {
                 UsuarioEntity user = sessionManager.getUser();
                 if (user != null) {
-                    user.setImagenPerfil(data.getImageUrl());
+                    user.setFotoPerfil(data.getFotoPerfil());
                     sessionManager.saveUser(user);
                 }
                 loadPerfil();
@@ -74,7 +74,7 @@ public class PerfilViewModel extends AndroidViewModel {
             public void onSuccess(Object data) {
                 UsuarioEntity user = sessionManager.getUser();
                 if (user != null) {
-                    user.setImagenPerfil(null);
+                    user.setFotoPerfil(null);
                     sessionManager.saveUser(user);
                 }
                 loadPerfil();

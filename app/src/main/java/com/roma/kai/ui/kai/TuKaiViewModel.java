@@ -86,22 +86,51 @@ public class TuKaiViewModel extends AndroidViewModel {
                     }
                 });
 
-                String pred = filteredAttributes.isEmpty() ? "Ninguna" : filteredAttributes.get(0).getNombre() + " (" + filteredAttributes.get(0).getXp() + " XP)";
-                String menos = filteredAttributes.isEmpty() ? "Ninguna" : filteredAttributes.get(filteredAttributes.size() - 1).getNombre() + " (" + filteredAttributes.get(filteredAttributes.size() - 1).getXp() + " XP)";
+                String predName = filteredAttributes.isEmpty() ? "Ninguna" : filteredAttributes.get(0).getNombre();
+                String menosName = filteredAttributes.isEmpty() ? "Vitalidad" : filteredAttributes.get(filteredAttributes.size() - 1).getNombre();
+                String menosMsg = "Recuerda trabajar en tu " + menosName;
+
+                // Mapeo lógico de Atributo -> Imagen de Personalidad (Drawable) corregido
+                String predKey;
+                switch (predName) {
+                    case "Fuerza": predKey = "movimiento"; break;
+                    case "Conciencia": predKey = "sabiduria"; break;
+                    case "Resistencia": predKey = "constancia"; break;
+                    case "Vínculo": predKey = "conexion"; break;
+                    case "Disciplina": predKey = "disciplina"; break;
+                    case "Equilibrio": predKey = "equilibrio"; break;
+                    case "Vitalidad": predKey = "vitalidad"; break;
+                    case "Sabiduria":
+                    case "Sabiduría": predKey = "sabiduria"; break;
+                    default:
+                        predKey = predName.toLowerCase()
+                                .replace("í", "i")
+                                .replace("ú", "u")
+                                .replace("ó", "o")
+                                .replace("á", "a")
+                                .replace("é", "e");
+                        break;
+                }
+
+                String stage = kai.getEtapaActual() != null ? kai.getEtapaActual() : "Cachorro";
+                if (stage.equalsIgnoreCase("bebé") || stage.equalsIgnoreCase("bebe")) {
+                    stage = "Cachorro";
+                }
 
                 tuKaiUiState.setValue(new TuKaiUiState(
                         false,
                         true,
-                        kai.getEtapaActual() != null ? kai.getEtapaActual() : "Cachorro",
+                        stage,
                         kai.getEnergia(),
                         kai.getEnergia() + "/100 - Enérgico (Mejora con hábitos)",
-                        "Personalidad Sabiduría",
+                        "Personalidad " + predName,
                         "¡Me siento curioso y listo para aprender contigo!",
                         kai.getImageKai() != null ? kai.getImageKai() : kai.getEstadoActual(),
                         labels,
                         values,
-                        "Categoría Predominante: " + pred,
-                        "Categoría Menos Avanzada: " + menos
+                        predName, // categoryPredominante ahora es solo el nombre
+                        predKey,
+                        menosMsg // Mensaje amigable
                 ));
             }
 

@@ -7,8 +7,6 @@
     android:background="@drawable/bg_gradient_light_green"
     tools:context=".ui.kai.TuKaiFragment">
 
-    <!-- Header Section -->
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -27,6 +25,7 @@
 
             <!-- Stage Badge -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_kai_stage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="#F5FDFB"
@@ -48,14 +47,17 @@
             <!-- Kai Big Image -->
             <ImageView
                 android:id="@+id/img_kai_big"
-                android:layout_width="250dp"
-                android:layout_height="250dp"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/kai1"
-                android:contentDescription="@string/menu_kai" />
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/menu_kai"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
 
-            <!-- Vigor Meter Card -->
+            <!-- Energy Meter Card -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_vigor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -87,7 +89,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="72%"
-                            android:textColor="#1B5E50"
+                            android:textColor="#E64A19"
                             android:textSize="14sp"
                             android:textStyle="bold" />
                     </FrameLayout>
@@ -101,7 +103,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_medidor_vigor"
+                            android:text="Medidor de Energía"
                             android:textColor="#0D332B"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -110,11 +112,11 @@
                             android:id="@+id/progress_vigor_horizontal"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="12dp"
+                            android:layout_height="16dp"
                             android:layout_marginTop="8dp"
                             android:max="100"
                             android:progress="72"
-                            android:progressTint="#1B5E50" />
+                            android:progressTint="#FF5722" />
 
                         <TextView
                             android:id="@+id/txt_vigor_desc"
@@ -130,6 +132,7 @@
 
             <!-- Personality Info -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_personality"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -148,7 +151,6 @@
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:src="@drawable/ic_gallery_black_24dp"
-                        app:tint="#1B5E50"
                         android:contentDescription="@string/label_personalidad" />
 
                     <LinearLayout
@@ -161,7 +163,7 @@
                             android:id="@+id/txt_personality_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Personalidad Sabiduría"
+                            android:text="Personalidad Principal: "
                             android:textColor="#0D332B"
                             android:textSize="17sp"
                             android:textStyle="bold" />
@@ -171,7 +173,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Mensaje Emocional:\n¡Me siento curioso y listo para aprender contigo!"
+                            android:text="¡Me siento curioso y listo para aprender contigo!"
                             android:textColor="#0D332B"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -180,10 +182,11 @@
 
             <!-- Radar Chart Section -->
             <TextView
+                android:id="@+id/txt_radar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/titulo_radar"
+                android:text="Gráfico de Personalidad"
                 android:textColor="#0D332B"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -195,27 +198,22 @@
                 android:layout_marginTop="8dp" />
 
             <LinearLayout
+                android:id="@+id/layout_radar_footer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_predominante"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Categoría Predominante: Sabiduría (78 XP)"
-                    android:textColor="#0D332B"
-                    android:textSize="14sp" />
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:id="@+id/txt_menos_avanzada"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:text="Categoría Menos Avanzada: Cuidado Físico (12 XP)"
+                    android:text=""
                     android:textColor="#0D332B"
-                    android:textSize="14sp" />
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>
