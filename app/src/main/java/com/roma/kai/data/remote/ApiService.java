@@ -69,4 +69,14 @@ public interface ApiService {
             @retrofit2.http.Path("habitUserId") String habitUserId,
             @retrofit2.http.Body com.roma.kai.model.request.CompleteHabitRequest request
     );
+
+    // --- Perfil e Imagen ---
+    @retrofit2.http.Multipart
+    @POST("api/v1/users/profile/image")
+    Call<ResponseData<com.roma.kai.model.dto.ImageResponse>> uploadProfileImage(
+            @retrofit2.http.Part okhttp3.MultipartBody.Part image
+    );
+
+    @retrofit2.http.DELETE("api/v1/users/profile/image")
+    Call<ResponseData<Object>> deleteProfileImage();
 }

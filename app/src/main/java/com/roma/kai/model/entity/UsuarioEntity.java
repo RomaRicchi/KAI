@@ -16,8 +16,10 @@ public class UsuarioEntity {
     private int rachaGlobal;
     @SerializedName("dias_inactivo")
     private int diasInactivo;
+    @SerializedName("imagen_perfil")
+    private String imagenPerfil;
 
-    public UsuarioEntity(String id, String nombre, String email, String fechaRegistro, String perfilBase, String etapaKai, int rachaGlobal, int diasInactivo) {
+    public UsuarioEntity(String id, String nombre, String email, String fechaRegistro, String perfilBase, String etapaKai, int rachaGlobal, int diasInactivo, String imagenPerfil) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
@@ -26,9 +28,18 @@ public class UsuarioEntity {
         this.etapaKai = etapaKai;
         this.rachaGlobal = rachaGlobal;
         this.diasInactivo = diasInactivo;
+        this.imagenPerfil = imagenPerfil;
     }
 
     public UsuarioEntity() {}
+
+    public String getImagenPerfil() {
+        return imagenPerfil;
+    }
+
+    public void setImagenPerfil(String imagenPerfil) {
+        this.imagenPerfil = imagenPerfil;
+    }
 
     public String getId() {
         return id;
