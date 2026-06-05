@@ -64,21 +64,55 @@ public class InicioFragment extends Fragment {
             return;
         }
 
-        int openMouth = R.drawable.kai1;
-        int closedMouth = R.drawable.cerrado_frente;
-        long frameDuration = 300; // milisegundos
+        int eyesOpenMouthClosed = R.drawable.kai1;
+        int eyesClosedMouthClosed = R.drawable.cerrado_frente;
+        int eyesOpenMouthOpen = R.drawable.boca_frente;
 
-        // 1. Forzamos estado ABIERTO (kai1)
-        binding.imgKaiHome.setImageResource(openMouth);
+        long blinkDuration = 200;
+        long talkDuration = 150;
+
+        // --- INICIO SECUENCIA ---
         
-        // 2. Tras 300ms, forzamos estado CERRADO (cerrado_frente) para que se vea el movimiento
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding != null) {
-                binding.imgKaiHome.setImageResource(closedMouth);
-            }
-        }, frameDuration);
+        // 1. Primer parpadeo
+        binding.imgKaiHome.setImageResource(eyesClosedMouthClosed);
 
-        // 3. Tras otros 300ms, volvemos al estado original que dicte el servidor
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
+        }, blinkDuration);
+
+        // 2. Hablar (Abre/Cierra 1)
+        long startTalk1 = blinkDuration + 300;
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesOpenMouthOpen);
+        }, startTalk1);
+
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
+        }, startTalk1 + talkDuration);
+
+        // 3. Hablar (Abre/Cierra 2)
+        long startTalk2 = startTalk1 + (talkDuration * 2);
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesOpenMouthOpen);
+        }, startTalk2);
+
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
+        }, startTalk2 + talkDuration);
+
+        // 4. Segundo parpadeo
+        long startBlink2 = startTalk2 + (talkDuration * 2) + 200;
+        binding.imgKaiHome.postDelayed(() -> {
+            if (binding == null) return;
+            binding.imgKaiHome.setImageResource(eyesClosedMouthClosed);
+        }, startBlink2);
+
+        // 5. Volver al estado original del servidor
         binding.imgKaiHome.postDelayed(() -> {
             if (binding != null && inicioVM.getInicioUiState().getValue() != null) {
                 String key = inicioVM.getInicioUiState().getValue().getKaiImageKey();
@@ -86,7 +120,7 @@ public class InicioFragment extends Fragment {
                     binding.imgKaiHome.setImageResource(ImageUi.getDrawable(key));
                 }
             }
-        }, frameDuration * 2);
+        }, startBlink2 + blinkDuration);
     }
 
     private void setupObservers() {
