@@ -1,21 +1,27 @@
 package com.roma.kai.model.dto;
 
-import com.google.gson.annotations.SerializedName;
-
 public class KaiAttributeDto {
-    private String nombre;
-    private int xp;
+    private String atributo;
+    private int valor;
 
-    public KaiAttributeDto(String nombre, int xp) {
-        this.nombre = nombre;
-        this.xp = xp;
+    public KaiAttributeDto(String atributo, int valor) {
+        this.atributo = atributo;
+        this.valor = valor;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getAtributo() {
+        return atributo;
     }
 
-    public int getXp() {
-        return xp;
+    public void setAtributo(String atributo) {
+        this.atributo = atributo;
+    }
+
+    public int getValor() {
+        return valor;
+    }
+
+    public void setValor(int valor) {
+        this.valor = valor;
     }
 }

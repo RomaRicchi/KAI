@@ -11,9 +11,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.roma.kai.databinding.FragmentTuKaiBinding;
+import com.roma.kai.model.dto.KaiAttributeDto;
+import com.roma.kai.utils.AppMapper;
 import com.roma.kai.utils.ImageUi;
 import com.roma.kai.utils.UiMessage;
 import com.roma.kai.utils.UiMessageHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TuKaiFragment extends Fragment {
 
@@ -47,21 +52,21 @@ public class TuKaiFragment extends Fragment {
                 binding.radarChart.setVisibility(View.VISIBLE);
                 binding.layoutRadarFooter.setVisibility(View.VISIBLE);
 
-                binding.txtKaiStage.setText(state.getStage());
+                binding.txtKaiStage.setText(state.getEstadoKai().getEtapaActual());
                 
                 // Energía
-                binding.progressVigorCircle.setProgress(state.getEnergy());
-                binding.progressVigorHorizontal.setProgress(state.getEnergy());
-                binding.txtVigorPercent.setText(state.getEnergy() + "%");
-                binding.txtVigorDesc.setText(state.getEnergyDesc());
+                binding.progressVigorCircle.setProgress(state.getEstadoKai().getEnergia());
+                binding.progressVigorHorizontal.setProgress(state.getEstadoKai().getEnergia());
+                binding.txtVigorPercent.setText(state.getEstadoKai().getEnergia() + "%");
+                binding.txtVigorDesc.setText(state.getEstadoKai().getEnergia() + "/100 - Enérgico (Mejora con hábitos)");
 
                 // Personalidad
-                binding.txtPersonalityTitle.setText("Personalidad Principal: " + state.getCategoryPredominante());
-                binding.txtEmotionalMessage.setText(state.getEmotionalMessage());
+                binding.txtPersonalityTitle.setText("Personalidad Principal: " + state.getCategoriaDominante().getNombre());
+                binding.txtEmotionalMessage.setText(state.getMensajeEmocional());
                 
                 // Imagen de personalidad dinámica
-                if (state.getCategoryPredominanteKey() != null) {
-                    int iconResId = ImageUi.getDrawable(state.getCategoryPredominanteKey());
+                if (state.getCategoriaDominante() != null) {
+                    int iconResId = ImageUi.getDrawable(state.getCategoriaDominante().getNombre());
                     if (iconResId != 0) {
                         binding.imgPersonalityIcon.setImageResource(iconResId);
                         // Aseguramos que no tenga tinte que lo tape
@@ -69,19 +74,27 @@ public class TuKaiFragment extends Fragment {
                     }
                 }
 
-                // Radar Chart
-                if (state.getAttributeLabels() != null && state.getAttributeValues() != null) {
-                    binding.radarChart.setData(state.getAttributeLabels(), state.getAttributeValues());
+                List<String> labels = new ArrayList<>();
+                List<Float> values = new ArrayList<>();
+
+                for (KaiAttributeDto attr : state.getAtributos()) {
+                    labels.add(AppMapper.getCategoryByAttribute(attr.getAtributo()));
+                    values.add((float) attr.getValor());
                 }
-                binding.txtMenosAvanzada.setText(state.getCategoryMenosAvanzada());
+
+                // Radar Chart
+                if (labels != null && values != null) {
+                    binding.radarChart.setData(labels, values);
+                }
+                binding.txtMenosAvanzada.setText("Recuerda trabajar en tu " + state.getCategoriaMenosDominante().getNombre());
 
                 // Imagen de Kai
-                if (state.getKaiImageKey() != null) {
+                if (state.getEstadoKai() != null) {
                     binding.imgKaiBig.setVisibility(View.VISIBLE);
-                    if (state.getKaiImageKey().startsWith("http")) {
-                        Glide.with(this).load(state.getKaiImageKey()).into(binding.imgKaiBig);
+                    if (state.getEstadoKai().getImageKai() != null && state.getEstadoKai().getImageKai().startsWith("http")) {
+                        Glide.with(this).load(state.getEstadoKai().getImageKai()).into(binding.imgKaiBig);
                     } else {
-                        Glide.with(this).load(ImageUi.getDrawable(state.getKaiImageKey())).into(binding.imgKaiBig);
+                        Glide.with(this).load(ImageUi.getDrawable(state.getEstadoKai().getEstadoActual())).into(binding.imgKaiBig);
                     }
                 }
             } else {

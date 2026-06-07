@@ -4,6 +4,7 @@ import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.ApiService;
 import com.roma.kai.data.remote.error.ApiErrorParser;
 import com.roma.kai.model.dto.HomeResponse;
+import com.roma.kai.model.dto.KaiDashboarResponse;
 import com.roma.kai.model.response.ResponseData;
 
 import retrofit2.Call;
@@ -17,19 +18,21 @@ public class KaiRepository {
         this.apiService = apiService;
     }
 
-    public void getKaiStatus(RepositoryCallback<HomeResponse> callback) {
-        apiService.getHomeView().enqueue(new Callback<ResponseData<HomeResponse>>() {
+    public void loadTuKaiView(RepositoryCallback<KaiDashboarResponse> callback) {
+        Call<ResponseData<KaiDashboarResponse>> call = apiService.getTuKaiView();
+        call.enqueue(new Callback<ResponseData<KaiDashboarResponse>>() {
             @Override
-            public void onResponse(Call<ResponseData<HomeResponse>> call, Response<ResponseData<HomeResponse>> response) {
-                if (response.isSuccessful() && response.body() != null) {
+            public void onResponse(Call<ResponseData<KaiDashboarResponse>> call, Response<ResponseData<KaiDashboarResponse>> response) {
+                if(response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().getData());
                 } else {
                     callback.onError(ApiErrorParser.parseError(response));
+
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseData<HomeResponse>> call, Throwable t) {
+            public void onFailure(Call<ResponseData<KaiDashboarResponse>> call, Throwable throwable) {
                 callback.onError("Error de conexión");
             }
         });

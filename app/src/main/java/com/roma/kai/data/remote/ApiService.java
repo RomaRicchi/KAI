@@ -4,6 +4,7 @@ import com.roma.kai.model.dto.CategoriaDto;
 import com.roma.kai.model.dto.HabitoCatalogoDto;
 import com.roma.kai.model.dto.HabitsViewResponse;
 import com.roma.kai.model.dto.HomeResponse;
+import com.roma.kai.model.dto.KaiDashboarResponse;
 import com.roma.kai.model.dto.MeResponse;
 import com.roma.kai.model.dto.TokenDto;
 import com.roma.kai.model.dto.ValidateTokenResponse;
@@ -79,4 +80,8 @@ public interface ApiService {
 
     @retrofit2.http.DELETE("api/v1/users/profile/image")
     Call<ResponseData<Object>> deleteProfileImage();
+
+    //api para la vista Kai
+    @GET("api/v1/kai")
+    Call<ResponseData<KaiDashboarResponse>> getTuKaiView();
 }
