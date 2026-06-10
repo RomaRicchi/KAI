@@ -69,9 +69,6 @@ public class DetalleHabitoFragment extends Fragment {
             boolean isActionLoading = state.isLoading() && !isInitialLoading;
             binding.progressBtnCompletar.setVisibility(isActionLoading ? View.VISIBLE : View.GONE);
             binding.btnCompletarHoyDetalle.setEnabled(!state.isLoading() && !state.isTodayCompleted());
-            
-            // Ocultar texto/icono del botón mientras carga para que se vea el spinner
-            binding.btnCompletarHoyDetalle.setAlpha(isActionLoading ? 0f : 1.0f);
 
             if (!isInitialLoading) {
                 bindStateToUi(state);
@@ -106,8 +103,14 @@ public class DetalleHabitoFragment extends Fragment {
         // Calendario Grid
         renderCalendarGrid(state.getCalendarDays());
 
-        // Botón Completar Hoy
-        if (state.isTodayCompleted()) {
+        // Botón Completar Hoy - Solo si NO está cargando la acción
+        boolean isActionLoading = state.isLoading() && (state.getHabitName() != null && !state.getHabitName().isEmpty());
+        
+        if (isActionLoading) {
+            binding.btnCompletarHoyDetalle.setText("");
+            binding.btnCompletarHoyDetalle.setIcon(null);
+            binding.btnCompletarHoyDetalle.setStrokeColor(null);
+        } else if (state.isTodayCompleted()) {
             binding.btnCompletarHoyDetalle.setIconResource(R.drawable.icons8_check);
             binding.btnCompletarHoyDetalle.setIconTint(ContextCompat.getColorStateList(requireContext(), R.color.kai_primary));
             binding.btnCompletarHoyDetalle.setEnabled(false);

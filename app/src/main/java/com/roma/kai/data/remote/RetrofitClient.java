@@ -25,9 +25,9 @@ public class RetrofitClient {
             OkHttpClient client = new OkHttpClient.Builder()
                     .addInterceptor(new AuthInterceptor(sessionManager))
                     .addInterceptor(logging)
-                    .connectTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                    .readTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
-                    .writeTimeout(30, java.util.concurrent.TimeUnit.SECONDS)
+                    .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+                    .writeTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
                     .build();
 
             retrofit = new Retrofit.Builder()

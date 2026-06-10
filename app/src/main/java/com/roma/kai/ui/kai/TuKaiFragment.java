@@ -1,5 +1,6 @@
 package com.roma.kai.ui.kai;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentTuKaiBinding;
 import com.roma.kai.model.dto.KaiAttributeDto;
 import com.roma.kai.utils.AppMapper;
@@ -24,6 +26,7 @@ public class TuKaiFragment extends Fragment {
 
     private FragmentTuKaiBinding binding;
     private TuKaiViewModel tuKaiVM;
+    private MediaPlayer mediaPlayer;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +44,36 @@ public class TuKaiFragment extends Fragment {
     }
 
     private void setupObservers() {
+        // Observadores de Animación
+        tuKaiVM.getKaiImageResource().observe(getViewLifecycleOwner(), resId -> {
+            if (resId != null) {
+                binding.imgKaiBig.setVisibility(View.VISIBLE);
+                binding.imgKaiBig.setImageResource(resId);
+            }
+        });
+
+        tuKaiVM.getFireflyImageResource().observe(getViewLifecycleOwner(), resId -> {
+            if (resId != null) binding.imgFirefly.setImageResource(resId);
+        });
+
+        tuKaiVM.getFireflyVisibility().observe(getViewLifecycleOwner(), visibility -> {
+            if (visibility != null) binding.imgFirefly.setVisibility(visibility);
+        });
+
+        tuKaiVM.getFireflyTranslationX().observe(getViewLifecycleOwner(), x -> {
+            if (x != null) binding.imgFirefly.setTranslationX(x * getResources().getDisplayMetrics().density);
+        });
+
+        tuKaiVM.getFireflyTranslationY().observe(getViewLifecycleOwner(), y -> {
+            if (y != null) binding.imgFirefly.setTranslationY(y * getResources().getDisplayMetrics().density);
+        });
+
+        tuKaiVM.getPlaySoundEvent().observe(getViewLifecycleOwner(), event -> {
+            if (event.obtenerContenidoSiNoManejado() != null) {
+                playSound();
+            }
+        });
+
         tuKaiVM.getTuKaiUiState().observe(getViewLifecycleOwner(), state -> {
             if (state == null) return;
 
@@ -88,14 +121,13 @@ public class TuKaiFragment extends Fragment {
                 }
                 binding.txtMenosAvanzada.setText("Recuerda trabajar en tu " + state.getCategoriaMenosDominante().getNombre());
 
-                // Imagen de Kai
+                // Imagen de Kai (Base - solo si no hay animación o carga inicial)
                 if (state.getEstadoKai() != null) {
-                    binding.imgKaiBig.setVisibility(View.VISIBLE);
                     if (state.getEstadoKai().getImageKai() != null && state.getEstadoKai().getImageKai().startsWith("http")) {
+                        binding.imgKaiBig.setVisibility(View.VISIBLE);
                         Glide.with(this).load(state.getEstadoKai().getImageKai()).into(binding.imgKaiBig);
-                    } else {
-                        Glide.with(this).load(ImageUi.getDrawable(state.getEstadoKai().getEstadoActual())).into(binding.imgKaiBig);
                     }
+                    // Si es local, lo maneja el observador de kaiImageResource via animationKai
                 }
             } else {
                 binding.imgKaiBig.setVisibility(View.INVISIBLE);
@@ -116,9 +148,25 @@ public class TuKaiFragment extends Fragment {
         });
     }
 
+    private void playSound() {
+        try {
+            if (mediaPlayer != null) {
+                mediaPlayer.release();
+            }
+            mediaPlayer = MediaPlayer.create(getContext(), R.raw.prueba1);
+            mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         binding = null;
     }
 }

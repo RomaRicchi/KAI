@@ -2,8 +2,6 @@ package com.roma.kai.ui.inicio;
 
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentInicioBinding;
 import com.roma.kai.utils.ImageUi;
@@ -26,16 +23,6 @@ public class InicioFragment extends Fragment {
     private InicioViewModel inicioVM;
     private InicioHabitosAdapter habitosAdapter;
     private MediaPlayer mediaPlayer;
-    private boolean isFirstAnimation = true;
-
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private final Runnable kaiAnimationRunnable = new Runnable() {
-        @Override
-        public void run() {
-            playKaiAnimation();
-            handler.postDelayed(this, 10000); // Repetir cada 10 segundos
-        }
-    };
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,96 +38,7 @@ public class InicioFragment extends Fragment {
         setupRecyclerView();
         setupObservers();
 
-        // Limpiar el estado de "primera animación" cada vez que se crea la vista
-        isFirstAnimation = true;
-
         inicioVM.loadHomeView();
-        startKaiAnimationLoop();
-    }
-
-    private void startKaiAnimationLoop() {
-        handler.postDelayed(kaiAnimationRunnable, 5000); // Empezar tras 5 segundos
-    }
-
-    private void playKaiAnimation() {
-        if (binding == null || inicioVM.getInicioUiState().getValue() == null) return;
-
-        if (inicioVM.getInicioUiState().getValue().isLoading() || !inicioVM.getInicioUiState().getValue().isSuccess()) {
-            return;
-        }
-
-        int eyesOpenMouthClosed = R.drawable.kai1;
-        int eyesClosedMouthClosed = R.drawable.cerrado_frente;
-        int eyesOpenMouthOpen = R.drawable.boca_frente;
-
-        long blinkDuration = 200;
-        long talkDuration = 250; // Aumentado para que se note más
-
-        // 1. Primer parpadeo
-        binding.imgKaiHome.setImageResource(eyesClosedMouthClosed);
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
-        }, blinkDuration);
-
-        // --- INICIO HABLA ---
-        long startTalk1 = blinkDuration + 400;
-        
-        // Lanzamos el sonido un poco antes (50ms) para compensar el lag del MediaPlayer
-        if (isFirstAnimation) {
-            binding.imgKaiHome.postDelayed(this::playSound, startTalk1 - 50);
-            isFirstAnimation = false;
-        }
-
-        // Boca 1
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesOpenMouthOpen);
-        }, startTalk1);
-
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
-        }, startTalk1 + talkDuration);
-
-        // Boca 2
-        long startTalk2 = startTalk1 + (talkDuration * 2);
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesOpenMouthOpen);
-        }, startTalk2);
-
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
-        }, startTalk2 + talkDuration);
-
-        // Boca 3 (NUEVA REPETICIÓN)
-        long startTalk3 = startTalk2 + (talkDuration * 2);
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesOpenMouthOpen);
-        }, startTalk3);
-
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesOpenMouthClosed);
-        }, startTalk3 + talkDuration);
-
-        // 4. Segundo parpadeo final
-        long startBlink2 = startTalk3 + (talkDuration * 2) + 200;
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding == null) return;
-            binding.imgKaiHome.setImageResource(eyesClosedMouthClosed);
-        }, startBlink2);
-
-        // 5. Restaurar imagen original
-        binding.imgKaiHome.postDelayed(() -> {
-            if (binding != null && inicioVM.getInicioUiState().getValue() != null) {
-                String key = inicioVM.getInicioUiState().getValue().getKaiImageKey();
-                if (key != null) binding.imgKaiHome.setImageResource(ImageUi.getDrawable(key));
-            }
-        }, startBlink2 + blinkDuration);
     }
 
     private void playSound() {
@@ -156,10 +54,10 @@ public class InicioFragment extends Fragment {
     }
 
     private void setupObservers() {
+        // Observamos el estado general de la UI
         inicioVM.getInicioUiState().observe(getViewLifecycleOwner(), state -> {
             if (state == null) return;
 
-            // Loading state
             binding.progressBarHome.setVisibility(state.isLoading() ? View.VISIBLE : View.GONE);
             binding.layoutHomeContent.setVisibility(state.isLoading() ? View.INVISIBLE : View.VISIBLE);
 
@@ -168,22 +66,27 @@ public class InicioFragment extends Fragment {
                 binding.tvHomeXp.setText(state.getFormattedXp());
                 binding.tvHomeRacha.setText(state.getFormattedRacha());
                 
-                // Mensaje motivacional
                 if (state.getMensajeMotivacional() != null && !state.getMensajeMotivacional().isEmpty()) {
                     binding.cardMessage.setVisibility(View.VISIBLE);
                     binding.tvMotivationalMessage.setText(state.getMensajeMotivacional());
                 } else {
                     binding.cardMessage.setVisibility(View.GONE);
                 }
+            }
+        });
 
-                // Imagen de Kai
-                if (state.getKaiImageKey() != null) {
-                    if (state.getKaiImageKey().startsWith("http")) {
-                        Glide.with(this).load(state.getKaiImageKey()).into(binding.imgKaiHome);
-                    } else {
-                        Glide.with(this).load(ImageUi.getDrawable(state.getKaiImageKey())).into(binding.imgKaiHome);
-                    }
-                }
+        // Observamos el cambio de frames de la animación (Lógica en el ViewModel)
+        inicioVM.getKaiImageResource().observe(getViewLifecycleOwner(), resourceId -> {
+            if (binding != null && resourceId != null) {
+                binding.imgKaiHome.setImageResource(resourceId);
+            }
+        });
+
+        // Observamos el evento para disparar el sonido
+        inicioVM.getPlaySoundEvent().observe(getViewLifecycleOwner(), event -> {
+            Boolean shouldPlay = event.obtenerContenidoSiNoManejado();
+            if (shouldPlay != null && shouldPlay) {
+                playSound();
             }
         });
 
@@ -208,7 +111,6 @@ public class InicioFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        handler.removeCallbacks(kaiAnimationRunnable);
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;

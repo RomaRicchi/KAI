@@ -1,13 +1,16 @@
 package com.roma.kai.data.remote;
 
 import com.roma.kai.model.dto.CategoriaDto;
+import com.roma.kai.model.dto.HabitDetailResponse;
 import com.roma.kai.model.dto.HabitoCatalogoDto;
 import com.roma.kai.model.dto.HabitsViewResponse;
 import com.roma.kai.model.dto.HomeResponse;
+import com.roma.kai.model.dto.ImageResponse;
 import com.roma.kai.model.dto.KaiDashboarResponse;
 import com.roma.kai.model.dto.MeResponse;
 import com.roma.kai.model.dto.TokenDto;
 import com.roma.kai.model.dto.ValidateTokenResponse;
+import com.roma.kai.model.request.CompleteHabitRequest;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
 import com.roma.kai.model.request.SelectHabitRequest;
@@ -15,10 +18,16 @@ import com.roma.kai.model.response.ResponseData;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiService {
@@ -56,29 +65,20 @@ public interface ApiService {
     Call<ResponseData<Object>> selectHabit(@Body SelectHabitRequest request);
 
     @GET("api/v1/habits/{habitUserId}")
-    Call<ResponseData<com.roma.kai.model.dto.HabitDetailResponse>> getHabitDetail(
-            @retrofit2.http.Path("habitUserId") String habitUserId
-    );
+    Call<ResponseData<HabitDetailResponse>> getHabitDetail(@Path("habitUserId") String habitUserId);
 
-    @retrofit2.http.DELETE("api/v1/habits/{habitUserId}/deactivate")
-    Call<ResponseData<Object>> deactivateHabit(
-            @retrofit2.http.Path("habitUserId") String habitUserId
-    );
+    @DELETE("api/v1/habits/{habitUserId}/deactivate")
+    Call<ResponseData<Object>> deactivateHabit(@Path("habitUserId") String habitUserId);
 
     @POST("api/v1/habits/{habitUserId}/complete")
-    Call<ResponseData<Object>> completeHabit(
-            @retrofit2.http.Path("habitUserId") String habitUserId,
-            @retrofit2.http.Body com.roma.kai.model.request.CompleteHabitRequest request
-    );
+    Call<ResponseData<Object>> completeHabit(@Path("habitUserId") String habitUserId, @Body CompleteHabitRequest request);
 
     // --- Perfil e Imagen ---
-    @retrofit2.http.Multipart
-    @retrofit2.http.PUT("api/v1/users/me/profile-photo")
-    Call<ResponseData<com.roma.kai.model.dto.ImageResponse>> uploadProfileImage(
-            @retrofit2.http.Part okhttp3.MultipartBody.Part foto
-    );
+    @Multipart
+    @PUT("api/v1/users/me/profile-photo")
+    Call<ResponseData<ImageResponse>> uploadProfileImage(@Part MultipartBody.Part foto);
 
-    @retrofit2.http.DELETE("api/v1/users/profile/image")
+    @DELETE("api/v1/users/profile/image")
     Call<ResponseData<Object>> deleteProfileImage();
 
     //api para la vista Kai
