@@ -9,42 +9,29 @@ public class ImageUi {
 
     static {
         // Mapeo de Categorías
-        resourceMap.put("vitalidad", R.drawable.vitalidad); // Swap: Vitalidad usa el runner
-        resourceMap.put("sabiduria", R.drawable.sabiduria); // Swap: Sabiduría usa el libro
-        resourceMap.put("coraje", R.drawable.coraje);
-        resourceMap.put("disciplina", R.drawable.disciplina);
-        resourceMap.put("constancia", R.drawable.constancia);
-        resourceMap.put("equilibrio", R.drawable.equilibrio);
-        resourceMap.put("movimiento", R.drawable.movimiento);
-        resourceMap.put("conexion", R.drawable.conexion);
+        resourceMap.put("vitalidad", R.drawable.categoria_vitalidad); // Swap: Vitalidad usa el runner
+        resourceMap.put("sabiduria", R.drawable.categoria_sabiduria); // Swap: Sabiduría usa el libro
+        resourceMap.put("coraje", R.drawable.categoria_coraje);
+        resourceMap.put("disciplina", R.drawable.categoria_disciplina);
+        resourceMap.put("constancia", R.drawable.categoria_constancia);
+        resourceMap.put("equilibrio", R.drawable.categoria_equilibrio);
+        resourceMap.put("movimiento", R.drawable.categoria_movimiento);
+        resourceMap.put("conexion", R.drawable.categoria_conexion);
 
         // Mapeo de Dificultades
-        resourceMap.put("facil", R.drawable.facil);
-        resourceMap.put("medio", R.drawable.medio);
-        resourceMap.put("dificil", R.drawable.dificil);
+        resourceMap.put("facil", R.drawable.nivel_facil);
+        resourceMap.put("medio", R.drawable.nivel_medio);
+        resourceMap.put("dificil", R.drawable.nivel_dificil);
         
         // Mapeo de Estados de Kai (Usando versiones frontales para evitar saltos)
-        resourceMap.put("dormido", R.drawable.bb_dormido);
-        resourceMap.put("enojado", R.drawable.bb_enojado);
-        resourceMap.put("feliz", R.drawable.kai1);
-        resourceMap.put("atento", R.drawable.kai1);
-        resourceMap.put("curioso", R.drawable.kai1);
-        resourceMap.put("divertido", R.drawable.kai1);
-        resourceMap.put("jugueton", R.drawable.kai1);
+        resourceMap.put("kai_bebe_dormido", R.drawable.kai_bebe_dormido_1);
+        resourceMap.put("kai_bebe_enojado", R.drawable.kai_bebe_enojado_1);
+        resourceMap.put("kai_bebe_feliz", R.drawable.kai_bebe_feliz_1);
+        resourceMap.put("kai_bebe_atento", R.drawable.kai_bebe_feliz_1);
+        resourceMap.put("kai_bebe_curioso", R.drawable.kai_bebe_curioso_7);
+        resourceMap.put("kai_bebe_divertido", R.drawable.kai_bebe_feliz_1);
+        resourceMap.put("kai_bebe_jugueton", R.drawable.kai_bebe_feliz_1);
 
-        // Claves específicas para la animación de AnimationKai
-        resourceMap.put("kai_base", R.drawable.kai1);
-        resourceMap.put("kai_ojos_cerrados", R.drawable.cerrado_frente);
-        resourceMap.put("kai_boca_abierta", R.drawable.boca_frente);
-
-        // --- Animación #2: Kai y la Luciérnaga ---
-        resourceMap.put("anim1", R.drawable.anim1);
-        resourceMap.put("anim2", R.drawable.anim2);
-        resourceMap.put("anim3", R.drawable.anim3);
-        resourceMap.put("anim4", R.drawable.anim4);
-        resourceMap.put("anim5", R.drawable.anim5);
-        resourceMap.put("anim6", R.drawable.anim6);
-        resourceMap.put("anim7", R.drawable.anim7);
         resourceMap.put("firefly_a", R.drawable.firefly_a);
         resourceMap.put("firefly_b", R.drawable.firefly_b);
     }

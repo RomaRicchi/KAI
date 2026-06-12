@@ -24,7 +24,7 @@
         android:layout_width="457dp"
         android:layout_height="392dp"
         android:layout_marginTop="20dp"
-        android:contentDescription="@string/app_name"        android:src="@drawable/kai1"
+        android:contentDescription="@string/app_name"        android:src="@drawable/kai_bebe_feliz_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_kai_logo" />

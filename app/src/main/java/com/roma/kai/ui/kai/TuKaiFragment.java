@@ -44,35 +44,6 @@ public class TuKaiFragment extends Fragment {
     }
 
     private void setupObservers() {
-        // Observadores de Animación
-        tuKaiVM.getKaiImageResource().observe(getViewLifecycleOwner(), resId -> {
-            if (resId != null) {
-                binding.imgKaiBig.setVisibility(View.VISIBLE);
-                binding.imgKaiBig.setImageResource(resId);
-            }
-        });
-
-        tuKaiVM.getFireflyImageResource().observe(getViewLifecycleOwner(), resId -> {
-            if (resId != null) binding.imgFirefly.setImageResource(resId);
-        });
-
-        tuKaiVM.getFireflyVisibility().observe(getViewLifecycleOwner(), visibility -> {
-            if (visibility != null) binding.imgFirefly.setVisibility(visibility);
-        });
-
-        tuKaiVM.getFireflyTranslationX().observe(getViewLifecycleOwner(), x -> {
-            if (x != null) binding.imgFirefly.setTranslationX(x * getResources().getDisplayMetrics().density);
-        });
-
-        tuKaiVM.getFireflyTranslationY().observe(getViewLifecycleOwner(), y -> {
-            if (y != null) binding.imgFirefly.setTranslationY(y * getResources().getDisplayMetrics().density);
-        });
-
-        tuKaiVM.getPlaySoundEvent().observe(getViewLifecycleOwner(), event -> {
-            if (event.obtenerContenidoSiNoManejado() != null) {
-                playSound();
-            }
-        });
 
         tuKaiVM.getTuKaiUiState().observe(getViewLifecycleOwner(), state -> {
             if (state == null) return;
@@ -121,16 +92,13 @@ public class TuKaiFragment extends Fragment {
                 }
                 binding.txtMenosAvanzada.setText("Recuerda trabajar en tu " + state.getCategoriaMenosDominante().getNombre());
 
-                // Imagen de Kai (Base - solo si no hay animación o carga inicial)
                 if (state.getEstadoKai() != null) {
-                    if (state.getEstadoKai().getImageKai() != null && state.getEstadoKai().getImageKai().startsWith("http")) {
-                        binding.imgKaiBig.setVisibility(View.VISIBLE);
-                        Glide.with(this).load(state.getEstadoKai().getImageKai()).into(binding.imgKaiBig);
-                    }
-                    // Si es local, lo maneja el observador de kaiImageResource via animationKai
+                    binding.kaiView.setVisibility(View.VISIBLE);
+                    binding.kaiView.setAnimation(state.getEstadoKai().getEtapaActual(), state.getEstadoKai().getEstadoActual());
+                    binding.kaiView.startAnimation();
                 }
             } else {
-                binding.imgKaiBig.setVisibility(View.INVISIBLE);
+                binding.kaiView.setVisibility(View.INVISIBLE);
                 binding.cardKaiStage.setVisibility(View.GONE);
                 binding.cardVigor.setVisibility(View.GONE);
                 binding.cardPersonality.setVisibility(View.GONE);

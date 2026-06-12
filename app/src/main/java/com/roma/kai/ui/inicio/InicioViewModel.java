@@ -7,13 +7,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.roma.kai.R;
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.data.repository.InicioRepository;
 import com.roma.kai.model.dto.HomeResponse;
-import com.roma.kai.model.dto.KaiHomeSummary;
-import com.roma.kai.utils.AnimationKai;
 import com.roma.kai.utils.Event;
 import com.roma.kai.utils.UiMessage;
 
@@ -22,8 +19,6 @@ public class InicioViewModel extends AndroidViewModel {
     private final MutableLiveData<InicioUiState> inicioUiState = new MutableLiveData<>();
     private final MutableLiveData<Event<UiMessage>> eventUiMessage = new MutableLiveData<>();
     
-    // Instancia de la nueva clase encargada de la animación
-    private final AnimationKai animationKai = new AnimationKai();
 
     public InicioViewModel(@NonNull Application application) {
         super(application);
@@ -33,14 +28,6 @@ public class InicioViewModel extends AndroidViewModel {
     public LiveData<InicioUiState> getInicioUiState() { return inicioUiState; }
     public LiveData<Event<UiMessage>> getEventUiMessage() { return eventUiMessage; }
     
-    // Exponemos los LiveData de la clase AnimationKai
-    public LiveData<Integer> getKaiImageResource() { return animationKai.getKaiImageResource(); }
-    public LiveData<Event<Boolean>> getPlaySoundEvent() { return animationKai.getPlaySoundEvent(); }
-    public LiveData<Integer> getFireflyImageResource() { return animationKai.getFireflyImageResource(); }
-    public LiveData<Float> getFireflyTranslationX() { return animationKai.getFireflyTranslationX(); }
-    public LiveData<Float> getFireflyTranslationY() { return animationKai.getFireflyTranslationY(); }
-    public LiveData<Integer> getFireflyVisibility() { return animationKai.getFireflyVisibility(); }
-
     public void loadHomeView() {
         inicioUiState.setValue(InicioUiState.loading());
 
@@ -49,25 +36,18 @@ public class InicioViewModel extends AndroidViewModel {
             public void onSuccess(HomeResponse data) {
                 String xp = data.getXpTotal() + " XP";
                 String racha = data.getRachaActual() + " Días";
-                
-                String kaiKey = null;
-                KaiHomeSummary kai = data.getEstadoKai();
-                if (kai != null) {
-                    kaiKey = (kai.getImageKai() != null) ? kai.getImageKai() : kai.getEstadoActual();
-                }
+
 
                 inicioUiState.setValue(new InicioUiState(
                         false,
                         true,
+                        data.getEstadoKai(),
+                        data.getMensajeMotivacional(),
                         xp,
                         racha,
-                        data.getMensajeMotivacional(),
-                        kaiKey,
                         data.getHabitosDiarios()
                 ));
                 
-                // Iniciamos la animación delegando en AnimationKai
-                animationKai.startAnimation(kaiKey);
             }
 
             @Override
@@ -81,6 +61,5 @@ public class InicioViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        animationKai.stopAnimation();
     }
 }

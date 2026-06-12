@@ -10,22 +10,14 @@ import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.data.repository.KaiRepository;
 import com.roma.kai.model.dto.KaiDashboarResponse;
-import com.roma.kai.model.dto.KaiAttributeDto;
-import com.roma.kai.utils.AnimationKai;
-import com.roma.kai.utils.AppMapper;
 import com.roma.kai.utils.Event;
 import com.roma.kai.utils.UiMessage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TuKaiViewModel extends AndroidViewModel {
     private final KaiRepository kaiRepository;
     private final MutableLiveData<TuKaiUiState> tuKaiUiState = new MutableLiveData<>();
     private final MutableLiveData<Event<UiMessage>> eventUiMessage = new MutableLiveData<>();
-    
-    // Instancia de AnimationKai para manejar las animaciones en esta vista
-    private final AnimationKai animationKai = new AnimationKai();
+
 
     public TuKaiViewModel(@NonNull Application application) {
         super(application);
@@ -34,14 +26,6 @@ public class TuKaiViewModel extends AndroidViewModel {
 
     public LiveData<TuKaiUiState> getTuKaiUiState() { return tuKaiUiState; }
     public LiveData<Event<UiMessage>> getEventUiMessage() { return eventUiMessage; }
-
-    // Getters delegados para AnimationKai
-    public LiveData<Integer> getKaiImageResource() { return animationKai.getKaiImageResource(); }
-    public LiveData<Event<Boolean>> getPlaySoundEvent() { return animationKai.getPlaySoundEvent(); }
-    public LiveData<Integer> getFireflyImageResource() { return animationKai.getFireflyImageResource(); }
-    public LiveData<Float> getFireflyTranslationX() { return animationKai.getFireflyTranslationX(); }
-    public LiveData<Float> getFireflyTranslationY() { return animationKai.getFireflyTranslationY(); }
-    public LiveData<Integer> getFireflyVisibility() { return animationKai.getFireflyVisibility(); }
 
     public void loadTuKaiData() {
         tuKaiUiState.setValue(TuKaiUiState.loading());
@@ -60,10 +44,6 @@ public class TuKaiViewModel extends AndroidViewModel {
                         data.getProgresoDiario()
                 ));
 
-                // Iniciar animación de Kai (Incluyendo luciérnaga para esta vista)
-                if (data.getEstadoKai() != null) {
-                    animationKai.startAnimation(data.getEstadoKai().getEstadoActual(), true);
-                }
             }
 
             @Override
@@ -77,6 +57,5 @@ public class TuKaiViewModel extends AndroidViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        animationKai.stopAnimation();
     }
 }

@@ -72,21 +72,9 @@ public class InicioFragment extends Fragment {
                 } else {
                     binding.cardMessage.setVisibility(View.GONE);
                 }
-            }
-        });
 
-        // Observamos el cambio de frames de la animación (Lógica en el ViewModel)
-        inicioVM.getKaiImageResource().observe(getViewLifecycleOwner(), resourceId -> {
-            if (binding != null && resourceId != null) {
-                binding.imgKaiHome.setImageResource(resourceId);
-            }
-        });
-
-        // Observamos el evento para disparar el sonido
-        inicioVM.getPlaySoundEvent().observe(getViewLifecycleOwner(), event -> {
-            Boolean shouldPlay = event.obtenerContenidoSiNoManejado();
-            if (shouldPlay != null && shouldPlay) {
-                playSound();
+                binding.kaiView.setAnimation(state.getEstadoKai().getEtapaActual(), "enojado");
+                binding.kaiView.startAnimation();
             }
         });
 

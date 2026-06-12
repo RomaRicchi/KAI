@@ -45,32 +45,14 @@
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Kai Big Image Container to stack Firefly -->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_marginTop="8dp">
-
-                <ImageView
-                    android:id="@+id/img_kai_big"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/menu_kai"
-                    android:scaleType="fitCenter"
-                    android:visibility="invisible" />
-
-                <!-- Luciérnaga (Animación #2) -->
-                <ImageView
-                    android:id="@+id/img_firefly"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_gravity="center"
-                    android:translationX="0dp"
-                    android:translationY="0dp"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/firefly_a"
-                    tools:visibility="visible" />
-            </FrameLayout>
+            <com.roma.kai.ui.custom.AnimatedKaiView
+                android:id="@+id/kaiView"
+                android:layout_width="250dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:scaleType="centerInside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <!-- Energy Meter Card -->
             <com.google.android.material.card.MaterialCardView
