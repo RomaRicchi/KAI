@@ -73,7 +73,7 @@ public class InicioFragment extends Fragment {
                     binding.cardMessage.setVisibility(View.GONE);
                 }
 
-                binding.kaiView.setAnimation(state.getEstadoKai().getEtapaActual(), "enojado");
+                binding.kaiView.setAnimation(state.getEstadoKai().getEtapaActual(), state.getEstadoKai().getEstadoActual());
                 binding.kaiView.startAnimation();
             }
         });
