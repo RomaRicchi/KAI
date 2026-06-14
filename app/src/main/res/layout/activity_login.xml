@@ -114,6 +114,11 @@
                 android:text="@string/olvido_password"
                 android:textColor="#546E7A" />
 
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/btnGoogle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

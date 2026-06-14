@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.repository.AuthRepository;
 import com.roma.kai.model.dto.TokenDto;
+import com.roma.kai.model.request.GoogleLoginRequest;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.response.ResponseData;
 import com.roma.kai.data.remote.ApiService;
@@ -47,6 +48,29 @@ public class LoginViewModel extends AndroidViewModel {
         uiState.setValue(new LoginUiState(true, false));
 
         authRepository.login(loginRequest, new RepositoryCallback<TokenDto>() {
+            @Override
+            public void onSuccess(TokenDto data) {
+                uiState.setValue(new LoginUiState(
+                        false,
+                        true
+                ));
+            }
+
+            @Override
+            public void onError(String error) {
+                uiState.setValue(new LoginUiState(
+                        false,
+                        false
+                ));
+                eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
+            }
+        });
+    }
+
+    public void googleLogin(String idToken) {
+
+        GoogleLoginRequest googleLoginRequest = new GoogleLoginRequest(idToken);
+        authRepository.googleLogin(googleLoginRequest, new RepositoryCallback<TokenDto>() {
             @Override
             public void onSuccess(TokenDto data) {
                 uiState.setValue(new LoginUiState(

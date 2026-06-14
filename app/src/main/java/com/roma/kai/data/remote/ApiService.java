@@ -11,6 +11,7 @@ import com.roma.kai.model.dto.MeResponse;
 import com.roma.kai.model.dto.TokenDto;
 import com.roma.kai.model.dto.ValidateTokenResponse;
 import com.roma.kai.model.request.CompleteHabitRequest;
+import com.roma.kai.model.request.GoogleLoginRequest;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
 import com.roma.kai.model.request.SelectHabitRequest;
@@ -35,6 +36,9 @@ public interface ApiService {
     // --- Autenticación ---
     @POST("api/v1/auth/login")
     Call<ResponseData<TokenDto>> login(@Body LoginRequest loginRequest);
+
+    @POST("api/v1/auth/google")
+    Call<ResponseData<TokenDto>> googleLogin(@Body GoogleLoginRequest googleLoginRequest);
 
     @POST("api/v1/auth/register")
     Call<ResponseData<TokenDto>> register(@Body RegisterRequest registerRequest);

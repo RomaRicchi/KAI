@@ -58,6 +58,10 @@ dependencies {
     // Glide
     implementation(libs.glide)
     implementation(libs.legacy.support.v4)
+    implementation(libs.play.services.auth)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.googleid)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
