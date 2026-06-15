@@ -46,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
             if(uiState.isSuccess()) {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 intent.putExtra("messageTo", new UiMessage("Bienvenido", UiMessage.Type.SUCCESS));
+                intent.putExtra("authUser", uiState.getAuthUser());
                 startActivity(intent);
                 finish();
             }

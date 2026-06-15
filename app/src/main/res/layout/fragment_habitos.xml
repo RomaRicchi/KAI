@@ -23,7 +23,7 @@
         android:id="@+id/layout_habitos_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <!-- Contenedor del Header -->
 

@@ -24,6 +24,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.roma.kai.R;
 import com.roma.kai.databinding.ActivityMainBinding;
+import com.roma.kai.model.dto.AuthUserResponse;
 import com.roma.kai.session.SessionManager;
 import com.roma.kai.ui.login.LoginActivity;
 import com.roma.kai.utils.UiMessage;
@@ -96,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
         verificarPermisosUbicacion();
         setupObservers();
         setupIntent();
-
-        mainVM.loadMe();
     }
 
     private void setupObservers() {
@@ -137,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
         if(intent == null) return;
 
         UiMessage uiMessage = (UiMessage) intent.getSerializableExtra("messageTo");
-        if(uiMessage != null) {
-            UiMessageHelper.showMessage(binding.getRoot(), MainActivity.this, uiMessage);
-        }
+        AuthUserResponse authUser = (AuthUserResponse) intent.getSerializableExtra("authUser");
+        if(uiMessage != null) UiMessageHelper.showMessage(binding.getRoot(), MainActivity.this, uiMessage);
+        if(authUser != null) mainVM.loadAuthUser(authUser);
     }
 
     private void showLogoutConfirmation() {

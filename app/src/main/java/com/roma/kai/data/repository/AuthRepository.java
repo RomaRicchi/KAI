@@ -2,14 +2,13 @@ package com.roma.kai.data.repository;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.ApiService;
 import com.roma.kai.data.remote.error.ApiErrorParser;
-import com.roma.kai.model.dto.TokenDto;
+import com.roma.kai.model.dto.AuthResponse;
+import com.roma.kai.model.dto.AuthUserResponse;
 import com.roma.kai.model.dto.ValidateTokenResponse;
+import com.roma.kai.model.request.GoogleLoginRequest;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
 import com.roma.kai.model.response.ResponseData;
@@ -27,11 +26,11 @@ public class AuthRepository {
         this.apiService = apiService;
     }
 
-    public void login(LoginRequest loginRequest, RepositoryCallback<TokenDto> callback) {
-        Call<ResponseData<TokenDto>> call = apiService.login(loginRequest);
-        call.enqueue(new Callback<ResponseData<TokenDto>>() {
+    public void login(LoginRequest loginRequest, RepositoryCallback<AuthResponse> callback) {
+        Call<ResponseData<AuthResponse>> call = apiService.login(loginRequest);
+        call.enqueue(new Callback<ResponseData<AuthResponse>>() {
             @Override
-            public void onResponse(Call<ResponseData<TokenDto>> call, Response<ResponseData<TokenDto>> response) {
+            public void onResponse(Call<ResponseData<AuthResponse>> call, Response<ResponseData<AuthResponse>> response) {
                 if(response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     sessionManager.saveToken(response.body().getData().getToken());
                     callback.onSuccess(response.body().getData());
@@ -43,18 +42,18 @@ public class AuthRepository {
             }
 
             @Override
-            public void onFailure(Call<ResponseData<TokenDto>> call, Throwable throwable) {
+            public void onFailure(Call<ResponseData<AuthResponse>> call, Throwable throwable) {
                 Log.e("AuthRepository", "Error de login: " + throwable.getMessage(), throwable);
                 callback.onError("Error de conexión: " + throwable.getMessage());
             }
         });
     }
 
-    public void register(RegisterRequest registerRequest, RepositoryCallback<TokenDto> callback) {
-        Call<ResponseData<TokenDto>> call = apiService.register(registerRequest);
-        call.enqueue(new Callback<ResponseData<TokenDto>>() {
+    public void register(RegisterRequest registerRequest, RepositoryCallback<AuthResponse> callback) {
+        Call<ResponseData<AuthResponse>> call = apiService.register(registerRequest);
+        call.enqueue(new Callback<ResponseData<AuthResponse>>() {
             @Override
-            public void onResponse(Call<ResponseData<TokenDto>> call, Response<ResponseData<TokenDto>> response) {
+            public void onResponse(Call<ResponseData<AuthResponse>> call, Response<ResponseData<AuthResponse>> response) {
                 if(response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     sessionManager.saveToken(response.body().getData().getToken());
                     callback.onSuccess(response.body().getData());
@@ -66,7 +65,7 @@ public class AuthRepository {
             }
 
             @Override
-            public void onFailure(Call<ResponseData<TokenDto>> call, Throwable throwable) {
+            public void onFailure(Call<ResponseData<AuthResponse>> call, Throwable throwable) {
                 Log.e("AuthRepository", "Error de registro: " + throwable.getMessage(), throwable);
                 callback.onError("Error de conexión: " + throwable.getMessage());
             }
@@ -82,6 +81,33 @@ public class AuthRepository {
                     sessionManager.saveToken(response.body().getData().getToken());
                     callback.onSuccess(response.body().getData());
                 } else if (response.isSuccessful()) {
+                    sessionManager.clearSession();
+                    callback.onError("La respuesta del servidor no contiene datos");
+                } else {
+                    sessionManager.clearSession();
+                    callback.onError(ApiErrorParser.parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<ValidateTokenResponse>> call, Throwable throwable) {
+                sessionManager.clearSession();
+                Log.e("AuthRepository", "Error de validación: " + throwable.getMessage(), throwable);
+                callback.onError("Error de conexión: " + throwable.getMessage());
+
+            }
+        });
+    }
+
+    public void googleLogin(GoogleLoginRequest googleLoginRequest, RepositoryCallback<AuthResponse> callback) {
+        Call<ResponseData<AuthResponse>> call = apiService.googleLogin(googleLoginRequest);
+        call.enqueue(new Callback<ResponseData<AuthResponse>>() {
+            @Override
+            public void onResponse(Call<ResponseData<AuthResponse>> call, Response<ResponseData<AuthResponse>> response) {
+                if(response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    sessionManager.saveToken(response.body().getData().getToken());
+                    callback.onSuccess(response.body().getData());
+                } else if (response.isSuccessful()) {
                     callback.onError("La respuesta del servidor no contiene datos");
                 } else {
                     callback.onError(ApiErrorParser.parseError(response));
@@ -89,8 +115,8 @@ public class AuthRepository {
             }
 
             @Override
-            public void onFailure(Call<ResponseData<ValidateTokenResponse>> call, Throwable throwable) {
-                Log.e("AuthRepository", "Error de validación: " + throwable.getMessage(), throwable);
+            public void onFailure(Call<ResponseData<AuthResponse>> call, Throwable throwable) {
+                Log.e("AuthRepository", "Error de login: " + throwable.getMessage(), throwable);
                 callback.onError("Error de conexión: " + throwable.getMessage());
             }
         });

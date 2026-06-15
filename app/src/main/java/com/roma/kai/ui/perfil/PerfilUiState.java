@@ -1,7 +1,6 @@
 package com.roma.kai.ui.perfil;
 
 import com.roma.kai.model.entity.UsuarioEntity;
-import com.roma.kai.utils.Event;
 
 public class PerfilUiState {
     private final boolean loading;
@@ -24,5 +23,13 @@ public class PerfilUiState {
 
     public UsuarioEntity getUsuario() {
         return usuario;
+    }
+
+    public static PerfilUiState loading() {
+        return new PerfilUiState(true, false, null);
+    }
+
+    public static PerfilUiState error() {
+        return new PerfilUiState(false, false, null);
     }
 }

@@ -1,14 +1,17 @@
 package com.roma.kai.ui.register;
 
+import com.roma.kai.model.dto.AuthUserResponse;
 import com.roma.kai.utils.Event;
 
 public class RegisterUiState {
     private final boolean loading;
     private final boolean success;
+    private final AuthUserResponse authUser;
 
-    public RegisterUiState(boolean loading, boolean success) {
+    public RegisterUiState(boolean loading, boolean success, AuthUserResponse authUser) {
         this.loading = loading;
         this.success = success;
+        this.authUser = authUser;
     }
 
     public boolean isLoading() {
@@ -17,5 +20,9 @@ public class RegisterUiState {
 
     public boolean isSuccess() {
         return success;
+    }
+
+    public AuthUserResponse getAuthUser() {
+        return authUser;
     }
 }

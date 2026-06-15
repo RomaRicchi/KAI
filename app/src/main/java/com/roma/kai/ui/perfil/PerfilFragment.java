@@ -59,11 +59,10 @@ public class PerfilFragment extends Fragment {
 
         setupObservers();
         setupListeners();
+        perfilVM.loadPerfil();
     }
 
     private void setupListeners() {
-        binding.btnLogout.setOnClickListener(v -> perfilVM.logout());
-        
         binding.cardAvatar.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
@@ -80,6 +79,12 @@ public class PerfilFragment extends Fragment {
 
     private void setupObservers() {
         perfilVM.getPerfilUiState().observe(getViewLifecycleOwner(), perfilUiState -> {
+            if(perfilUiState == null) return;
+
+            //loading
+            binding.progressBarPerfil.setVisibility(perfilUiState.isLoading() ? View.VISIBLE : View.GONE);
+            binding.layoutPerfilContent.setVisibility(perfilUiState.isLoading() ? View.INVISIBLE : View.VISIBLE);
+
             if(perfilUiState.isSuccess() && perfilUiState.getUsuario() != null) {
                 binding.tvPerfilNombre.setText(perfilUiState.getUsuario().getNombre());
                 binding.tvPerfilEmail.setText(perfilUiState.getUsuario().getEmail());

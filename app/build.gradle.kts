@@ -1,6 +1,11 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 }
+
+val localProperties = Properties()
+localProperties.load(rootProject.file("local.properties").inputStream())
 
 android {
     namespace = "com.roma.kai"
@@ -18,6 +23,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val googleClientId = localProperties.getProperty("GOOGLE_CLIENT_ID", "")
+
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"$googleClientId\"")
     }
 
     buildTypes {
@@ -35,6 +44,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -58,6 +68,10 @@ dependencies {
     // Glide
     implementation(libs.glide)
     implementation(libs.legacy.support.v4)
+    implementation(libs.googleid)
+    implementation(libs.credentials)
+    implementation(libs.credentials.play.services.auth)
+    implementation(libs.play.services.auth)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

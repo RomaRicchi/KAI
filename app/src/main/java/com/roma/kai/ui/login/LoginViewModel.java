@@ -1,7 +1,6 @@
 package com.roma.kai.ui.login;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -10,18 +9,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.repository.AuthRepository;
-import com.roma.kai.model.dto.TokenDto;
+import com.roma.kai.model.dto.AuthResponse;
+import com.roma.kai.model.dto.AuthUserResponse;
+import com.roma.kai.model.request.GoogleLoginRequest;
 import com.roma.kai.model.request.LoginRequest;
-import com.roma.kai.model.response.ResponseData;
-import com.roma.kai.data.remote.ApiService;
 import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.session.SessionManager;
 import com.roma.kai.utils.Event;
 import com.roma.kai.utils.UiMessage;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class LoginViewModel extends AndroidViewModel {
     private final AuthRepository authRepository;
@@ -44,14 +39,15 @@ public class LoginViewModel extends AndroidViewModel {
         //validar
 
         LoginRequest loginRequest = new LoginRequest(email, password);
-        uiState.setValue(new LoginUiState(true, false));
+        uiState.setValue(new LoginUiState(true, false, null));
 
-        authRepository.login(loginRequest, new RepositoryCallback<TokenDto>() {
+        authRepository.login(loginRequest, new RepositoryCallback<AuthResponse>() {
             @Override
-            public void onSuccess(TokenDto data) {
+            public void onSuccess(AuthResponse data) {
                 uiState.setValue(new LoginUiState(
                         false,
-                        true
+                        true,
+                        data.getUsuario()
                 ));
             }
 
@@ -59,7 +55,34 @@ public class LoginViewModel extends AndroidViewModel {
             public void onError(String error) {
                 uiState.setValue(new LoginUiState(
                         false,
-                        false
+                        false,
+                        null
+                ));
+                eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
+            }
+        });
+
+
+    }
+
+    public void googleLogin(String idToken) {
+        GoogleLoginRequest googleLoginRequest = new GoogleLoginRequest(idToken);
+        authRepository.googleLogin(googleLoginRequest, new RepositoryCallback<AuthResponse>() {
+            @Override
+            public void onSuccess(AuthResponse data) {
+                uiState.setValue(new LoginUiState(
+                        false,
+                        true,
+                        data.getUsuario()
+                ));
+            }
+
+            @Override
+            public void onError(String error) {
+                uiState.setValue(new LoginUiState(
+                        false,
+                        false,
+                        null
                 ));
                 eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
             }
