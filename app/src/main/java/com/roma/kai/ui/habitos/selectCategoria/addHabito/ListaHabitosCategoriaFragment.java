@@ -82,10 +82,8 @@ public class ListaHabitosCategoriaFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        adapter = new HabitosSeleccionAdapter(habitosList, (habito, isChecked) -> {
-            if (isChecked) {
-                listaHabitosVM.seleccionarHabito(habito.getId());
-            }
+        adapter = new HabitosSeleccionAdapter(habitosList, habito -> {
+            listaHabitosVM.seleccionarHabito(habito.getId());
         });
 
         binding.rvHabitosCategoria.setLayoutManager(new LinearLayoutManager(getContext()));

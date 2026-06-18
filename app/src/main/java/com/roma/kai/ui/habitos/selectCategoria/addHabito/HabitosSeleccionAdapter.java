@@ -16,7 +16,7 @@ public class HabitosSeleccionAdapter extends RecyclerView.Adapter<HabitosSelecci
     private final OnHabitoSelectedListener listener;
 
     public interface OnHabitoSelectedListener {
-        void onHabitoSelected(HabitoCatalogoDto habito, boolean isChecked);
+        void onHabitoSelected(HabitoCatalogoDto habito);
     }
 
     public HabitosSeleccionAdapter(List<HabitoCatalogoDto> habitos, OnHabitoSelectedListener listener) {
@@ -36,6 +36,7 @@ public class HabitosSeleccionAdapter extends RecyclerView.Adapter<HabitosSelecci
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         HabitoCatalogoDto habito = habitos.get(position);
         holder.binding.txtHabitoNombreSeleccion.setText(habito.getNombre());
+        holder.binding.txtHabitoDificultad.setText("Dificultad: " + habito.getDificultad());
         
         String categoryKey = habito.getCategoria();
         String imgData = habito.getImagenHabito();
@@ -54,11 +55,8 @@ public class HabitosSeleccionAdapter extends RecyclerView.Adapter<HabitosSelecci
         }
 
         // Evitar que el listener se dispare al scrollear
-        holder.binding.cbHabitoSeleccion.setOnCheckedChangeListener(null);
-        holder.binding.cbHabitoSeleccion.setChecked(false);
-
-        holder.binding.cbHabitoSeleccion.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            listener.onHabitoSelected(habito, isChecked);
+        holder.itemView.setOnClickListener(v -> {
+            listener.onHabitoSelected(habito);
         });
     }
 

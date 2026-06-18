@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp">
 
@@ -13,23 +16,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <CheckBox
-            android:id="@+id/cb_habito_seleccion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="#1B5E50"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/img_habito_seleccion_icon"
             android:layout_width="72dp"
             android:layout_height="59dp"
-            android:layout_marginStart="12dp"
             android:src="@drawable/ic_gallery_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cb_habito_seleccion"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -43,9 +36,26 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/img_habito_seleccion_icon"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.272"
             tools:text="Hábito de ejemplo" />
+
+        <TextView
+            android:id="@+id/txt_habito_dificultad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="#1B5E50"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/txt_habito_nombre_seleccion"
+            app:layout_constraintStart_toEndOf="@+id/img_habito_seleccion_icon"
+            app:layout_constraintTop_toBottomOf="@+id/txt_habito_nombre_seleccion"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="Dificultad: facil" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
