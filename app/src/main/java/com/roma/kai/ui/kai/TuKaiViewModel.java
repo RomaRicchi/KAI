@@ -60,9 +60,12 @@ public class TuKaiViewModel extends AndroidViewModel {
                         data.getProgresoDiario()
                 ));
 
-                // Iniciar animación de Kai (Incluyendo luciérnaga para esta vista)
+                // Iniciar animación de Kai (Usando el nuevo motor de animaciones)
                 if (data.getEstadoKai() != null) {
-                    animationKai.startAnimation(data.getEstadoKai().getEstadoActual(), true);
+                    animationKai.startAnimation(
+                            data.getEstadoKai().getEstadoActual(), 
+                            AnimationKai.AnimationType.TUKAI
+                    );
                 }
             }
 

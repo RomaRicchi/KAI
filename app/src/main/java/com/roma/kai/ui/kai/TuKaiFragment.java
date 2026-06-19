@@ -1,6 +1,5 @@
 package com.roma.kai.ui.kai;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,6 @@ public class TuKaiFragment extends Fragment {
 
     private FragmentTuKaiBinding binding;
     private TuKaiViewModel tuKaiVM;
-    private MediaPlayer mediaPlayer;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,12 +64,6 @@ public class TuKaiFragment extends Fragment {
 
         tuKaiVM.getFireflyTranslationY().observe(getViewLifecycleOwner(), y -> {
             if (y != null) binding.imgFirefly.setTranslationY(y * getResources().getDisplayMetrics().density);
-        });
-
-        tuKaiVM.getPlaySoundEvent().observe(getViewLifecycleOwner(), event -> {
-            if (event.obtenerContenidoSiNoManejado() != null) {
-                playSound();
-            }
         });
 
         tuKaiVM.getTuKaiUiState().observe(getViewLifecycleOwner(), state -> {
@@ -148,25 +140,9 @@ public class TuKaiFragment extends Fragment {
         });
     }
 
-    private void playSound() {
-        try {
-            if (mediaPlayer != null) {
-                mediaPlayer.release();
-            }
-            mediaPlayer = MediaPlayer.create(getContext(), R.raw.prueba1);
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
         binding = null;
     }
 }

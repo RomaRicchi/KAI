@@ -66,8 +66,8 @@ public class InicioViewModel extends AndroidViewModel {
                         data.getHabitosDiarios()
                 ));
                 
-                // Iniciamos la animación delegando en AnimationKai
-                animationKai.startAnimation(kaiKey);
+                // Iniciamos la animación delegando en el nuevo motor
+                animationKai.startAnimation(kaiKey, AnimationKai.AnimationType.HOME);
             }
 
             @Override

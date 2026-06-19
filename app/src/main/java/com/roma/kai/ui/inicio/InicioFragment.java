@@ -46,7 +46,7 @@ public class InicioFragment extends Fragment {
             if (mediaPlayer != null) {
                 mediaPlayer.release();
             }
-            mediaPlayer = MediaPlayer.create(getContext(), R.raw.prueba1);
+            mediaPlayer = MediaPlayer.create(getContext(), R.raw.gatito);
             mediaPlayer.start();
         } catch (Exception e) {
             e.printStackTrace();
