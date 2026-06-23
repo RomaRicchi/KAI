@@ -82,6 +82,41 @@ public class InicioFragment extends Fragment {
             }
         });
 
+        inicioVM.getKaiScale().observe(getViewLifecycleOwner(), scale -> {
+            if (binding != null && scale != null) {
+                binding.imgKaiHome.setScaleX(scale);
+                binding.imgKaiHome.setScaleY(scale);
+            }
+        });
+
+        // Observadores de Luciérnagas (Añadidos para ver EVOLUTION_1)
+        inicioVM.getFireflyImageResource().observe(getViewLifecycleOwner(), resId -> {
+            if (binding != null && resId != null) binding.imgFirefly.setImageResource(resId);
+        });
+        inicioVM.getFireflyVisibility().observe(getViewLifecycleOwner(), visibility -> {
+            if (binding != null && visibility != null) binding.imgFirefly.setVisibility(visibility);
+        });
+        inicioVM.getFireflyTranslationX().observe(getViewLifecycleOwner(), x -> {
+            if (binding != null && x != null) binding.imgFirefly.setTranslationX(x * getResources().getDisplayMetrics().density);
+        });
+        inicioVM.getFireflyTranslationY().observe(getViewLifecycleOwner(), y -> {
+            if (binding != null && y != null) binding.imgFirefly.setTranslationY(y * getResources().getDisplayMetrics().density);
+        });
+
+        // Segunda Luciérnaga (Evolución)
+        inicioVM.getFirefly2ImageResource().observe(getViewLifecycleOwner(), resId -> {
+            if (binding != null && resId != null) binding.imgFirefly2.setImageResource(resId);
+        });
+        inicioVM.getFirefly2Visibility().observe(getViewLifecycleOwner(), visibility -> {
+            if (binding != null && visibility != null) binding.imgFirefly2.setVisibility(visibility);
+        });
+        inicioVM.getFirefly2TranslationX().observe(getViewLifecycleOwner(), x -> {
+            if (binding != null && x != null) binding.imgFirefly2.setTranslationX(x * getResources().getDisplayMetrics().density);
+        });
+        inicioVM.getFirefly2TranslationY().observe(getViewLifecycleOwner(), y -> {
+            if (binding != null && y != null) binding.imgFirefly2.setTranslationY(y * getResources().getDisplayMetrics().density);
+        });
+
         // Observamos el evento para disparar el sonido
         inicioVM.getPlaySoundEvent().observe(getViewLifecycleOwner(), event -> {
             Boolean shouldPlay = event.obtenerContenidoSiNoManejado();

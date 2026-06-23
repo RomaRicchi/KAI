@@ -22,7 +22,8 @@ public class AnimationKai {
         RECOVERY,
         SLEEP,
         REFLECTION,
-        EVOLUTION
+        EVOLUTION_1,
+        EVOLUTION_2
     }
 
     // --- LIVEDATA ---
@@ -33,11 +34,19 @@ public class AnimationKai {
     private final MutableLiveData<Float> fireflyTranslationY = new MutableLiveData<>();
     private final MutableLiveData<Integer> fireflyVisibility = new MutableLiveData<>();
 
+    // --- LIVEDATA PARA SEGUNDA LUCIÉRNAGA (EVOLUCIÓN) ---
+    private final MutableLiveData<Integer> firefly2ImageResource = new MutableLiveData<>();
+    private final MutableLiveData<Float> firefly2TranslationX = new MutableLiveData<>();
+    private final MutableLiveData<Float> firefly2TranslationY = new MutableLiveData<>();
+    private final MutableLiveData<Integer> firefly2Visibility = new MutableLiveData<>();
+
+    // --- LIVEDATA PARA ESCALA DE KAI ---
+    private final MutableLiveData<Float> kaiScale = new MutableLiveData<>(1.0f);
+
     // --- CONTROL ---
     private final Handler handler = new Handler(Looper.getMainLooper());
     private AnimationType currentAnimation = AnimationType.HOME;
     private String lastKaiKey = null;
-    private boolean isFirstRun = true;
 
     // --- BUCLE PRINCIPAL (DISPATCHER) ---
     private final Runnable mainAnimationLoop = new Runnable() {
@@ -56,6 +65,15 @@ public class AnimationKai {
                 case SLEEP:
                     cycleDuration = executeSleepAnimation();
                     break;
+                case EVOLUTION_1:
+                    // La evolución es una TRANSICIÓN, no un bucle.
+                    executeEvolution1Animation();
+                    executeEvolutionFireflies(1200); // 4 frames * 300ms
+                    return;
+                case EVOLUTION_2:
+                    executeEvolution2Animation();
+                    executeEvolutionFireflies(900); // 3 frames * 300ms hasta kai5
+                    return;
                 case HOME:
                 default:
                     cycleDuration = executeHomeAnimation();
@@ -79,22 +97,22 @@ public class AnimationKai {
     public LiveData<Float> getFireflyTranslationY() { return fireflyTranslationY; }
     public LiveData<Integer> getFireflyVisibility() { return fireflyVisibility; }
 
+    // --- GETTERS SEGUNDA LUCIÉRNAGA ---
+    public LiveData<Integer> getFirefly2ImageResource() { return firefly2ImageResource; }
+    public LiveData<Float> getFirefly2TranslationX() { return firefly2TranslationX; }
+    public LiveData<Float> getFirefly2TranslationY() { return firefly2TranslationY; }
+    public LiveData<Integer> getFirefly2Visibility() { return firefly2Visibility; }
+
+    public LiveData<Float> getKaiScale() { return kaiScale; }
+
     // --- API PÚBLICA ---
 
-    /**
-     * Inicia una animación específica.
-     * @param initialKey Clave de imagen base (opcional).
-     * @param type Tipo de animación a ejecutar.
-     */
     public void startAnimation(String initialKey, AnimationType type) {
-        stopAnimation(); // Limpieza absoluta de callbacks anteriores
+        stopAnimation(); 
         this.lastKaiKey = initialKey;
         this.currentAnimation = type;
 
-        // Estado visual inicial inmediato
         setupInitialFrame(type);
-
-        // Disparo del loop
         handler.postDelayed(mainAnimationLoop, 500);
     }
 
@@ -102,22 +120,15 @@ public class AnimationKai {
         startAnimation(null, type);
     }
 
-    /**
-     * @deprecated Usar startAnimation(String, AnimationType)
-     */
-    @Deprecated
-    public void startAnimation(String initialKey, boolean isTuKai) {
-        startAnimation(initialKey, isTuKai ? AnimationType.TUKAI : AnimationType.HOME);
-    }
-
     public void stopAnimation() {
         handler.removeCallbacksAndMessages(null);
         fireflyVisibility.setValue(View.GONE);
+        firefly2Visibility.setValue(View.GONE);
+        kaiScale.setValue(1.0f);
     }
 
     public void updateBaseImage(String key) {
         this.lastKaiKey = key;
-        // Solo actualizamos si estamos en HOME (donde los estados afectan a la base)
         if (currentAnimation == AnimationType.HOME && key != null) {
             kaiImageResource.setValue(ImageUi.getDrawable(key));
         }
@@ -126,46 +137,43 @@ public class AnimationKai {
     private void setupInitialFrame(AnimationType type) {
         if (type == AnimationType.TUKAI) {
             kaiImageResource.setValue(ImageUi.getDrawable("anim1"));
+        } else if (type == AnimationType.EVOLUTION_1) {
+            kaiImageResource.setValue(ImageUi.getDrawable("kai1"));
+        } else if (type == AnimationType.EVOLUTION_2) {
+            kaiImageResource.setValue(ImageUi.getDrawable("kai8"));
         } else {
             kaiImageResource.setValue(ImageUi.getDrawable("kai_base"));
         }
     }
 
     // =========================================================================
-    // IMPLEMENTACIÓN DE ANIMACIONES (AISLADAS)
+    // IMPLEMENTACIÓN DE ANIMACIONES
     // =========================================================================
 
     /**
-     * Animación HOME: Comportamiento de mascota virtual.
-     * Secuencia: Quieto -> Parpadeo -> Abre boca/Miau -> Cierra boca -> Quieto.
+     * HOME: Comportamiento de mascota virtual (Bucle).
      */
     private long executeHomeAnimation() {
         final int baseFrame = ImageUi.getDrawable("kai_base");
         final int eyesClosedFrame = ImageUi.getDrawable("kai_ojos_cerrados");
         final int mouthOpenFrame = ImageUi.getDrawable("kai_boca_abierta");
         
-        final long blinkDur = 100; // Parpadeo más rápido
+        final long blinkDur = 100;
         final long meowDur = 800; 
-        final long startDelay = 100; // Inicio casi inmediato
+        final long startDelay = 100;
 
-        // 1. Pose Inicial
         kaiImageResource.setValue(baseFrame);
         
-        // 2. Parpadeo rápido
         handler.postDelayed(() -> kaiImageResource.setValue(eyesClosedFrame), startDelay);
         handler.postDelayed(() -> kaiImageResource.setValue(baseFrame), startDelay + blinkDur);
 
-        // 3. Apertura de boca y Maullido
-        // El sonido se dispara un poco antes de la imagen para compensar la latencia del hardware
         long startAction = startDelay + blinkDur + 50; 
         
         handler.postDelayed(() -> {
-            // Disparar el audio un instante antes de cambiar el frame
             playSoundEvent.setValue(new Event<>(true));
             handler.postDelayed(() -> kaiImageResource.setValue(mouthOpenFrame), 30);
         }, startAction);
 
-        // 4. Cierre de boca y vuelta al estado normal con protección anti-imagen rota
         long endAction = startAction + meowDur;
         handler.postDelayed(() -> {
             int finalRes = baseFrame;
@@ -182,8 +190,7 @@ public class AnimationKai {
     }
 
     /**
-     * Animación TUKAI: Secuencia de frames de movimiento con luciérnaga.
-     * @return Duración exacta de la secuencia para loop infinito.
+     * TUKAI: Secuencia de movimiento con luciérnaga (Bucle).
      */
     private long executeTuKaiAnimation() {
         final long frameTime = 220;
@@ -205,11 +212,125 @@ public class AnimationKai {
             }, i * frameTime);
         }
 
-        return frames.length * frameTime; // Retorno exacto para loop sin pausas
+        return frames.length * frameTime;
+    }
+
+    /**
+     * EVOLUTION_1: Transición de Kai bebé a Kai joven (SIN BUCLE).
+     */
+    private void executeEvolution1Animation() {
+        final long frameTime = 300; 
+        final String[] evolutionFrames = {"kai1", "kai2", "kai3", "kai4", "kai5", "kai6", "kai7", "kai8"};
+        
+        fireflyVisibility.setValue(View.GONE);
+        firefly2Visibility.setValue(View.GONE);
+        kaiScale.setValue(1.0f);
+
+        for (int i = 0; i < evolutionFrames.length; i++) {
+            final int idx = i;
+            handler.postDelayed(() -> {
+                kaiImageResource.setValue(ImageUi.getDrawable(evolutionFrames[idx]));
+                
+                // Efecto de EXPLOSIÓN para kai5
+                if ("kai5".equals(evolutionFrames[idx])) {
+                    final long explosionDur = 200; 
+                    for (int step = 0; step <= 5; step++) {
+                        float progress = step / 5f;
+                        float scale = 0.2f + (0.9f * progress); 
+                        handler.postDelayed(() -> kaiScale.setValue(scale), step * (explosionDur / 5));
+                    }
+                    handler.postDelayed(() -> kaiScale.setValue(1.0f), explosionDur + 50);
+                } else if (idx < 4) {
+                    kaiScale.setValue(1.0f);
+                }
+                
+                if (idx == evolutionFrames.length - 1) {
+                    lastKaiKey = evolutionFrames[idx]; 
+                }
+            }, i * frameTime);
+        }
+    }
+
+    /**
+     * EVOLUTION_2: Transición de Kai joven a Kai adulto (SIN BUCLE).
+     */
+    private void executeEvolution2Animation() {
+        final long frameTime = 300;
+        final String[] evolutionFrames = {"kai8", "kai9", "kai6", "kai5", "kai10", "kai11", "kai12"};
+        
+        fireflyVisibility.setValue(View.GONE);
+        firefly2Visibility.setValue(View.GONE);
+        kaiScale.setValue(1.0f);
+
+        for (int i = 0; i < evolutionFrames.length; i++) {
+            final int idx = i;
+            handler.postDelayed(() -> {
+                kaiImageResource.setValue(ImageUi.getDrawable(evolutionFrames[idx]));
+                
+                // Efecto de EXPLOSIÓN (Mismo efecto que EVOLUTION_1)
+                if ("kai5".equals(evolutionFrames[idx])) {
+                    final long explosionDur = 200;
+                    for (int step = 0; step <= 5; step++) {
+                        float progress = step / 5f;
+                        float scale = 0.2f + (0.9f * progress); 
+                        handler.postDelayed(() -> kaiScale.setValue(scale), step * (explosionDur / 5));
+                    }
+                    handler.postDelayed(() -> kaiScale.setValue(1.0f), explosionDur + 50);
+                } else if (idx < 3) {
+                    kaiScale.setValue(1.0f);
+                }
+                
+                if (idx == evolutionFrames.length - 1) {
+                    lastKaiKey = evolutionFrames[idx]; 
+                }
+            }, i * frameTime);
+        }
+    }
+
+    /**
+     * Secuencia mágica de luciérnagas para la Evolución.
+     * @param totalDuration Tiempo hasta que aparezca el destello (kai5).
+     */
+    private void executeEvolutionFireflies(long totalDuration) {
+        final long fireflySpeed = 100;
+        final int totalSteps = (int) (totalDuration / fireflySpeed);
+        
+        fireflyVisibility.setValue(View.VISIBLE);
+
+        for (int i = 0; i < totalSteps; i++) {
+            final int step = i;
+            handler.postDelayed(() -> {
+                // Cálculo de trayectoria circular que desciende
+                double angle = step * 0.5; // Velocidad de rotación
+                double radius = 60 * (1.0 - (double) step / totalSteps) + 20; // Radio que se achica
+                float x = (float) (Math.cos(angle) * radius);
+                float y = (float) (Math.sin(angle) * radius * 0.5) - 90 + (90 * (float) step / totalSteps);
+
+                // Luciérnaga 1
+                fireflyImageResource.setValue(ImageUi.getDrawable(step % 2 == 0 ? "firefly_a" : "firefly_b"));
+                fireflyTranslationX.setValue(x);
+                fireflyTranslationY.setValue(y - 20);
+
+                // Luciérnaga 2 (Aparece a mitad de camino y gira al revés)
+                if (step > totalSteps / 4) {
+                    firefly2Visibility.setValue(View.VISIBLE);
+                    firefly2ImageResource.setValue(ImageUi.getDrawable(step % 2 == 0 ? "firefly_b" : "firefly_a"));
+                    firefly2TranslationX.setValue(-x);
+                    firefly2TranslationY.setValue(y - 10);
+                }
+
+                // Desvanecimiento final
+                if (step == totalSteps - 1) {
+                    handler.postDelayed(() -> {
+                        fireflyVisibility.setValue(View.GONE);
+                        firefly2Visibility.setValue(View.GONE);
+                    }, fireflySpeed);
+                }
+            }, i * fireflySpeed);
+        }
     }
 
     private long executeCelebrationAnimation() {
-        // Futura implementación
         return 3000;
     }
 

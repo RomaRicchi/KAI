@@ -70,6 +70,18 @@
                     android:visibility="gone"
                     app:srcCompat="@drawable/firefly_a"
                     tools:visibility="visible" />
+
+                <!-- Segunda Luciérnaga (Evolución) -->
+                <ImageView
+                    android:id="@+id/img_firefly_2"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_gravity="center"
+                    android:translationX="0dp"
+                    android:translationY="0dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/firefly_b"
+                    tools:visibility="visible" />
             </FrameLayout>
 
             <!-- Energy Meter Card -->

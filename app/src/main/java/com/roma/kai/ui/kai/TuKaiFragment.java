@@ -50,6 +50,13 @@ public class TuKaiFragment extends Fragment {
             }
         });
 
+        tuKaiVM.getKaiScale().observe(getViewLifecycleOwner(), scale -> {
+            if (scale != null) {
+                binding.imgKaiBig.setScaleX(scale);
+                binding.imgKaiBig.setScaleY(scale);
+            }
+        });
+
         tuKaiVM.getFireflyImageResource().observe(getViewLifecycleOwner(), resId -> {
             if (resId != null) binding.imgFirefly.setImageResource(resId);
         });
@@ -64,6 +71,20 @@ public class TuKaiFragment extends Fragment {
 
         tuKaiVM.getFireflyTranslationY().observe(getViewLifecycleOwner(), y -> {
             if (y != null) binding.imgFirefly.setTranslationY(y * getResources().getDisplayMetrics().density);
+        });
+
+        // Observadores Segunda Luciérnaga (Evolución)
+        tuKaiVM.getFirefly2ImageResource().observe(getViewLifecycleOwner(), resId -> {
+            if (resId != null) binding.imgFirefly2.setImageResource(resId);
+        });
+        tuKaiVM.getFirefly2Visibility().observe(getViewLifecycleOwner(), visibility -> {
+            if (visibility != null) binding.imgFirefly2.setVisibility(visibility);
+        });
+        tuKaiVM.getFirefly2TranslationX().observe(getViewLifecycleOwner(), x -> {
+            if (x != null) binding.imgFirefly2.setTranslationX(x * getResources().getDisplayMetrics().density);
+        });
+        tuKaiVM.getFirefly2TranslationY().observe(getViewLifecycleOwner(), y -> {
+            if (y != null) binding.imgFirefly2.setTranslationY(y * getResources().getDisplayMetrics().density);
         });
 
         tuKaiVM.getTuKaiUiState().observe(getViewLifecycleOwner(), state -> {

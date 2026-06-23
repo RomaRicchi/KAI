@@ -43,6 +43,13 @@ public class TuKaiViewModel extends AndroidViewModel {
     public LiveData<Float> getFireflyTranslationY() { return animationKai.getFireflyTranslationY(); }
     public LiveData<Integer> getFireflyVisibility() { return animationKai.getFireflyVisibility(); }
 
+    // Getters para la segunda luciérnaga (Evolución)
+    public LiveData<Integer> getFirefly2ImageResource() { return animationKai.getFirefly2ImageResource(); }
+    public LiveData<Float> getFirefly2TranslationX() { return animationKai.getFirefly2TranslationX(); }
+    public LiveData<Float> getFirefly2TranslationY() { return animationKai.getFirefly2TranslationY(); }
+    public LiveData<Integer> getFirefly2Visibility() { return animationKai.getFirefly2Visibility(); }
+    public LiveData<Float> getKaiScale() { return animationKai.getKaiScale(); }
+
     public void loadTuKaiData() {
         tuKaiUiState.setValue(TuKaiUiState.loading());
 

@@ -47,6 +47,20 @@ public class ImageUi {
         resourceMap.put("anim7", R.drawable.anim7);
         resourceMap.put("firefly_a", R.drawable.firefly_a);
         resourceMap.put("firefly_b", R.drawable.firefly_b);
+
+        // --- Animación #3: Evolución1 ---
+        resourceMap.put("kai1", R.drawable.kai1);
+        resourceMap.put("kai2", R.drawable.kai2);
+        resourceMap.put("kai3", R.drawable.kai3);
+        resourceMap.put("kai4", R.drawable.kai4);
+        resourceMap.put("kai5", R.drawable.kai5);
+        resourceMap.put("kai6", R.drawable.kai6);
+        resourceMap.put("kai7", R.drawable.kai7);
+        resourceMap.put("kai8", R.drawable.kai8);
+        resourceMap.put("kai9", R.drawable.kai9);
+        resourceMap.put("kai10", R.drawable.kai10);
+        resourceMap.put("kai11", R.drawable.kai11);
+        resourceMap.put("kai12", R.drawable.kai12);
     }
 
     /**

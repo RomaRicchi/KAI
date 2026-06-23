@@ -61,17 +61,41 @@
                 tools:text="Mensaje motivacional de prueba" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Mascota Kai -->
-        <ImageView
-            android:id="@+id/img_kai_home"
-            android:layout_width="250dp"
-            android:layout_height="200dp"
+        <!-- Mascota Kai y Luciérnagas -->
+        <FrameLayout
+            android:id="@+id/layout_kai_container"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
             android:layout_marginTop="16dp"
-            android:contentDescription="@string/app_name"
-            android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_message" />
+            app:layout_constraintTop_toBottomOf="@+id/card_message">
+
+            <ImageView
+                android:id="@+id/img_kai_home"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitCenter" />
+
+            <!-- Luciérnaga 1 -->
+            <ImageView
+                android:id="@+id/img_firefly"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:srcCompat="@drawable/firefly_a" />
+
+            <!-- Luciérnaga 2 (Evolución) -->
+            <ImageView
+                android:id="@+id/img_firefly_2"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:srcCompat="@drawable/firefly_b" />
+        </FrameLayout>
 
         <!-- Status Cards -->
         <LinearLayout
@@ -84,7 +108,7 @@
             android:paddingHorizontal="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_kai_home">
+            app:layout_constraintTop_toBottomOf="@+id/layout_kai_container">
 
             <!-- Card Experiencia -->
             <com.google.android.material.card.MaterialCardView
