@@ -6,6 +6,7 @@ import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.ApiService;
 import com.roma.kai.data.remote.error.ApiErrorParser;
 import com.roma.kai.model.dto.CategoriaDto;
+import com.roma.kai.model.dto.CompleteHabitResponse;
 import com.roma.kai.model.dto.HabitoCatalogoDto;
 import com.roma.kai.model.dto.HabitDetailResponse;
 import com.roma.kai.model.dto.HabitsViewResponse;
@@ -146,21 +147,21 @@ public class HabitosRepository {
         });
     }
 
-    public void completeHabit(String habitUserId, RepositoryCallback<Void> callback) {
+    public void completeHabit(String habitUserId, RepositoryCallback<CompleteHabitResponse> callback) {
         // Enviamos "" en lugar de null por si el backend de Go espera un string y no un puntero
-        Call<ResponseData<Object>> call = apiService.completeHabit(habitUserId, new CompleteHabitRequest(""));
-        call.enqueue(new Callback<ResponseData<Object>>() {
+        Call<ResponseData<CompleteHabitResponse>> call = apiService.completeHabit(habitUserId, new CompleteHabitRequest(""));
+        call.enqueue(new Callback<ResponseData<CompleteHabitResponse>>() {
             @Override
-            public void onResponse(Call<ResponseData<Object>> call, Response<ResponseData<Object>> response) {
-                if(response.isSuccessful()) {
-                    callback.onSuccess(null);
+            public void onResponse(Call<ResponseData<CompleteHabitResponse>> call, Response<ResponseData<CompleteHabitResponse>> response) {
+                if(response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body().getData());
                 } else {
                     callback.onError(ApiErrorParser.parseError(response));
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseData<Object>> call, Throwable throwable) {
+            public void onFailure(Call<ResponseData<CompleteHabitResponse>> call, Throwable throwable) {
                 callback.onError("Error de conexión: " + throwable.getMessage());
             }
         });

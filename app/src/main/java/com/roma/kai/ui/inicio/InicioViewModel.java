@@ -13,6 +13,7 @@ import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.data.repository.InicioRepository;
 import com.roma.kai.model.dto.HomeResponse;
 import com.roma.kai.model.dto.KaiHomeSummary;
+import com.roma.kai.session.SessionManager;
 import com.roma.kai.utils.AnimationKai;
 import com.roma.kai.utils.Event;
 import com.roma.kai.utils.UiMessage;
@@ -58,9 +59,11 @@ public class InicioViewModel extends AndroidViewModel {
                 String racha = data.getRachaActual() + " Días";
                 
                 String kaiKey = null;
+                String etapaActual = "cachorro";
                 KaiHomeSummary kai = data.getEstadoKai();
                 if (kai != null) {
                     kaiKey = (kai.getImageKai() != null) ? kai.getImageKai() : kai.getEstadoActual();
+                    etapaActual = kai.getEtapaActual();
                 }
 
                 inicioUiState.setValue(new InicioUiState(
@@ -73,8 +76,21 @@ public class InicioViewModel extends AndroidViewModel {
                         data.getHabitosDiarios()
                 ));
                 
-                // Iniciamos la animación HOME (comportamiento normal de mascota)
-                animationKai.startAnimation(kaiKey, AnimationKai.AnimationType.HOME);
+                // --- Lógica de Evolución ---
+                SessionManager session = SessionManager.getInstance(getApplication());
+                String pending = session.getPendingEvolution();
+
+                if (pending != null) {
+                    // Si hay una evolución pendiente, disparamos la animación especial
+                    AnimationKai.AnimationType type = "adulto".equalsIgnoreCase(pending) ? 
+                            AnimationKai.AnimationType.EVOLUTION_2 : AnimationKai.AnimationType.EVOLUTION_1;
+                    
+                    animationKai.startAnimation(type);
+                    session.clearPendingEvolution(); // Limpiar para que no se repita
+                } else {
+                    // Comportamiento normal: animación cíclica (solo si es cachorro)
+                    animationKai.startAnimation(kaiKey, etapaActual, AnimationKai.AnimationType.HOME);
+                }
             }
 
             @Override

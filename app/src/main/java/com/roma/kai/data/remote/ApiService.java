@@ -2,6 +2,7 @@ package com.roma.kai.data.remote;
 
 import com.roma.kai.model.dto.AuthResponse;
 import com.roma.kai.model.dto.CategoriaDto;
+import com.roma.kai.model.dto.CompleteHabitResponse;
 import com.roma.kai.model.dto.HabitDetailResponse;
 import com.roma.kai.model.dto.HabitoCatalogoDto;
 import com.roma.kai.model.dto.HabitsViewResponse;
@@ -77,7 +78,7 @@ public interface ApiService {
     Call<ResponseData<Object>> deactivateHabit(@Path("habitUserId") String habitUserId);
 
     @POST("api/v1/habits/{habitUserId}/complete")
-    Call<ResponseData<Object>> completeHabit(@Path("habitUserId") String habitUserId, @Body CompleteHabitRequest request);
+    Call<ResponseData<CompleteHabitResponse>> completeHabit(@Path("habitUserId") String habitUserId, @Body CompleteHabitRequest request);
 
     // --- Perfil e Imagen ---
     @Multipart

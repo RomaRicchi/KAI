@@ -25,14 +25,16 @@ public class ImageUi {
         
         // Mapeo de Estados de Kai (Usando versiones frontales para evitar saltos)
         resourceMap.put("dormido", R.drawable.bb_dormido);
+        resourceMap.put("cachorro_dormido", R.drawable.bb_dormido);
         resourceMap.put("enojado", R.drawable.bb_enojado);
+        resourceMap.put("cachorro_enojado", R.drawable.bb_enojado);
         resourceMap.put("feliz", R.drawable.kai1);
         resourceMap.put("atento", R.drawable.kai1);
         resourceMap.put("curioso", R.drawable.kai1);
         resourceMap.put("divertido", R.drawable.kai1);
         resourceMap.put("jugueton", R.drawable.kai1);
 
-        // Claves específicas para la animación de AnimationKai
+        // --- Animación #1: Kai y maulla ---
         resourceMap.put("kai_base", R.drawable.kai1);
         resourceMap.put("kai_ojos_cerrados", R.drawable.cerrado_frente);
         resourceMap.put("kai_boca_abierta", R.drawable.boca_frente);
@@ -48,7 +50,7 @@ public class ImageUi {
         resourceMap.put("firefly_a", R.drawable.firefly_a);
         resourceMap.put("firefly_b", R.drawable.firefly_b);
 
-        // --- Animación #3: Evolución1 ---
+        // --- Animación #3: Evolución ---
         resourceMap.put("kai1", R.drawable.kai1);
         resourceMap.put("kai2", R.drawable.kai2);
         resourceMap.put("kai3", R.drawable.kai3);

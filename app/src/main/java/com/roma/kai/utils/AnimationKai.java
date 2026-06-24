@@ -47,12 +47,20 @@ public class AnimationKai {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private AnimationType currentAnimation = AnimationType.HOME;
     private String lastKaiKey = null;
+    private String currentStage = null; // Se inicializa al recibir datos reales
 
     // --- BUCLE PRINCIPAL (DISPATCHER) ---
     private final Runnable mainAnimationLoop = new Runnable() {
         @Override
         public void run() {
             long cycleDuration;
+
+            // Si no es cachorro, desactivamos animaciones cíclicas (HOME/TUKAI) y mostramos imagen estática
+            if (!"cachorro".equalsIgnoreCase(currentStage) && (currentAnimation == AnimationType.HOME || currentAnimation == AnimationType.TUKAI)) {
+                int resId = "adulto".equalsIgnoreCase(currentStage) ? ImageUi.getDrawable("kai12") : ImageUi.getDrawable("kai8");
+                kaiImageResource.setValue(resId);
+                return; // Detener el bucle
+            }
 
             // Despacho de la animación activa
             switch (currentAnimation) {
@@ -107,9 +115,10 @@ public class AnimationKai {
 
     // --- API PÚBLICA ---
 
-    public void startAnimation(String initialKey, AnimationType type) {
+    public void startAnimation(String initialKey, String stage, AnimationType type) {
         stopAnimation(); 
         this.lastKaiKey = initialKey;
+        this.currentStage = (stage != null) ? stage.toLowerCase() : "cachorro";
         this.currentAnimation = type;
 
         setupInitialFrame(type);
@@ -117,7 +126,7 @@ public class AnimationKai {
     }
 
     public void startAnimation(AnimationType type) {
-        startAnimation(null, type);
+        startAnimation(null, null, type);
     }
 
     public void stopAnimation() {
@@ -135,6 +144,14 @@ public class AnimationKai {
     }
 
     private void setupInitialFrame(AnimationType type) {
+        // Si ya ha evolucionado y es una animación cíclica (HOME/TUKAI), forzar imagen estática desde el primer frame
+        if (currentStage != null && !"cachorro".equalsIgnoreCase(currentStage) && 
+            (type == AnimationType.HOME || type == AnimationType.TUKAI)) {
+            int resId = "adulto".equalsIgnoreCase(currentStage) ? ImageUi.getDrawable("kai12") : ImageUi.getDrawable("kai8");
+            kaiImageResource.setValue(resId);
+            return;
+        }
+
         if (type == AnimationType.TUKAI) {
             kaiImageResource.setValue(ImageUi.getDrawable("anim1"));
         } else if (type == AnimationType.EVOLUTION_1) {
@@ -216,7 +233,7 @@ public class AnimationKai {
     }
 
     /**
-     * EVOLUTION_1: Transición de Kai bebé a Kai joven (SIN BUCLE).
+     * EVOLUTION_1: Transición de Kai cachorro a Kai joven (SIN BUCLE).
      */
     private void executeEvolution1Animation() {
         final long frameTime = 300; 
@@ -335,7 +352,7 @@ public class AnimationKai {
     }
 
     private long executeSleepAnimation() {
-        kaiImageResource.setValue(ImageUi.getDrawable("bb_dormido"));
+        kaiImageResource.setValue(ImageUi.getDrawable("cachorro_dormido"));
         return 5000;
     }
 }

@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.data.repository.HabitosRepository;
+import com.roma.kai.model.dto.CompleteHabitResponse;
+import com.roma.kai.session.SessionManager;
 import com.roma.kai.model.dto.HabitDetail;
 import com.roma.kai.model.dto.HabitDetailResponse;
 import com.roma.kai.model.dto.HabitRecord;
@@ -105,11 +107,18 @@ public class DetalleHabitoViewModel extends AndroidViewModel {
     public void completeHabit(String habitUserId) {
         uiState.setValue(copyStateWithLoading(true));
 
-        habitosRepository.completeHabit(habitUserId, new RepositoryCallback<Void>() {
+        habitosRepository.completeHabit(habitUserId, new RepositoryCallback<CompleteHabitResponse>() {
             @Override
-            public void onSuccess(Void data) {
+            public void onSuccess(CompleteHabitResponse result) {
                 loadHabitDetail(habitUserId); // Refresh data
-                eventUiMessage.setValue(new Event<>(new UiMessage("¡Hábito completado!", UiMessage.Type.SUCCESS)));
+
+                if (result.isEvoluciono()) {
+                    // Guardamos la evolución pendiente en el SessionManager
+                    SessionManager.getInstance(getApplication()).setPendingEvolution(result.getEtapaActual());
+                    eventUiMessage.setValue(new Event<>(new UiMessage("¡KAI HA EVOLUCIONADO!", UiMessage.Type.SUCCESS)));
+                } else {
+                    eventUiMessage.setValue(new Event<>(new UiMessage("¡Hábito completado! +" + result.getXpGanada() + " XP", UiMessage.Type.SUCCESS)));
+                }
             }
 
             @Override

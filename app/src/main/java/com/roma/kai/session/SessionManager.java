@@ -61,6 +61,18 @@ public class SessionManager {
         return currentConfig;
     }
 
+    public void setPendingEvolution(String stage) {
+        prefs.edit().putString("pending_evolution", stage).apply();
+    }
+
+    public String getPendingEvolution() {
+        return prefs.getString("pending_evolution", null);
+    }
+
+    public void clearPendingEvolution() {
+        prefs.edit().remove("pending_evolution").apply();
+    }
+
     private void loadSession() {
 
         String userJson = prefs.getString("user", null);

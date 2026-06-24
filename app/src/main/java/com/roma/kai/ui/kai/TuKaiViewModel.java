@@ -71,6 +71,7 @@ public class TuKaiViewModel extends AndroidViewModel {
                 if (data.getEstadoKai() != null) {
                     animationKai.startAnimation(
                             data.getEstadoKai().getEstadoActual(), 
+                            data.getEstadoKai().getEtapaActual(),
                             AnimationKai.AnimationType.TUKAI
                     );
                 }
