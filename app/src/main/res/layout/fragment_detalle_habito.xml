@@ -93,48 +93,85 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                            <TextView
+                            <ImageView
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:background="@drawable/circle_dot"
+                                android:backgroundTint="#E8F5E9"
+                                android:padding="10dp"
+                                android:src="@drawable/calendar" />
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/label_dias_exitosos"
-                                android:textColor="#757575"
-                                android:textSize="11sp" />
+                                android:layout_marginStart="8dp"
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/txt_detalle_exitosos"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="#0D332B"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                tools:text="0 Días" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/label_dias_exitosos"
+                                    android:textColor="#757575"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/txt_detalle_exitosos"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#0D332B"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    tools:text="1 Días" />
+                            </LinearLayout>
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="4dp"
+                            android:background="#E0E0E0" />
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+                            android:layout_marginStart="12dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
 
-                            <TextView
+                            <ImageView
+                                android:layout_width="45dp"
+                                android:layout_height="45dp"
+                                android:background="@drawable/circle_dot"
+                                android:backgroundTint="#FFF3E0"
+                                android:padding="10dp"
+                                android:src="@drawable/fire" />
+
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/label_racha_actual"
-                                android:textColor="#757575"
-                                android:textSize="11sp" />
+                                android:layout_marginStart="8dp"
+                                android:orientation="vertical">
 
-                            <TextView
-                                android:id="@+id/txt_detalle_racha"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="#0D332B"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                tools:text="0 Días" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/label_racha_actual"
+                                    android:textColor="#757575"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/txt_detalle_racha"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#0D332B"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    tools:text="1 Días" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

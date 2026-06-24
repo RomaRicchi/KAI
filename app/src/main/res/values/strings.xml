@@ -51,6 +51,8 @@
     <string name="label_racha">Racha</string>
     <string name="valor_xp_default">120 XP</string>
     <string name="valor_racha_default">6 Días</string>
+    <string name="label_sigue_creciendo">Sigue creciendo</string>
+    <string name="label_sigue_asi">¡Sigue así!</string>
     <string name="habito_leer">Leer</string>
     <string name="habito_agua">Tomar agua</string>
     <string name="habito_caminar">Caminar</string>

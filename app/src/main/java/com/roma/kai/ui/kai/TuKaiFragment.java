@@ -98,7 +98,13 @@ public class TuKaiFragment extends Fragment {
                 binding.radarChart.setVisibility(View.VISIBLE);
                 binding.layoutRadarFooter.setVisibility(View.VISIBLE);
 
-                binding.txtKaiStage.setText(state.getEstadoKai().getEtapaActual());
+                String etapa = state.getEstadoKai().getEtapaActual();
+                if (etapa != null && !etapa.isEmpty()) {
+                    String capitalizedEtapa = etapa.substring(0, 1).toUpperCase() + etapa.substring(1).toLowerCase();
+                    binding.txtKaiStage.setText(capitalizedEtapa);
+                } else {
+                    binding.txtKaiStage.setText(state.getEstadoKai().getEtapaActual());
+                }
                 
                 // Energía
                 binding.progressVigorCircle.setProgress(state.getEstadoKai().getEnergia());
