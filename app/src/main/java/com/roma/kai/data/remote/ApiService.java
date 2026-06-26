@@ -13,9 +13,11 @@ import com.roma.kai.model.dto.MeResponse;
 import com.roma.kai.model.dto.AuthUserResponse;
 import com.roma.kai.model.dto.ValidateTokenResponse;
 import com.roma.kai.model.request.CompleteHabitRequest;
+import com.roma.kai.model.request.ForgotPasswordRequest;
 import com.roma.kai.model.request.GoogleLoginRequest;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
+import com.roma.kai.model.request.ResetPasswordRequest;
 import com.roma.kai.model.request.SelectHabitRequest;
 import com.roma.kai.model.response.ResponseData;
 
@@ -44,6 +46,12 @@ public interface ApiService {
 
     @POST("api/v1/auth/google")
     Call<ResponseData<AuthResponse>> googleLogin(@Body GoogleLoginRequest googleLoginRequest);
+
+    @POST("auth/forgot-password")
+    Call<ResponseData<Object>> forgotPassword(@Body ForgotPasswordRequest request);
+
+    @POST("auth/reset-password")
+    Call<ResponseData<Object>> resetPassword(@Body ResetPasswordRequest request);
 
 
     @GET("api/v1/auth/validate")

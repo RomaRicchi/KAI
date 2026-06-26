@@ -90,6 +90,11 @@ public class LoginActivity extends AppCompatActivity {
             );
         });
 
+        binding.txtForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+            startActivity(intent);
+        });
+
         binding.btnRegistrarse.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);

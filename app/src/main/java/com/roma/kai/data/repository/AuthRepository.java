@@ -8,9 +8,11 @@ import com.roma.kai.data.remote.error.ApiErrorParser;
 import com.roma.kai.model.dto.AuthResponse;
 import com.roma.kai.model.dto.AuthUserResponse;
 import com.roma.kai.model.dto.ValidateTokenResponse;
+import com.roma.kai.model.request.ForgotPasswordRequest;
 import com.roma.kai.model.request.GoogleLoginRequest;
 import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
+import com.roma.kai.model.request.ResetPasswordRequest;
 import com.roma.kai.model.response.ResponseData;
 import com.roma.kai.session.SessionManager;
 
@@ -121,4 +123,43 @@ public class AuthRepository {
             }
         });
     }
+
+    public void forgotPassword(ForgotPasswordRequest request, RepositoryCallback<Void> callback) {
+        Call<ResponseData<Object>> call = apiService.forgotPassword(request);
+        call.enqueue(new Callback<ResponseData<Object>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Object>> call, Response<ResponseData<Object>> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onError(ApiErrorParser.parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Object>> call, Throwable t) {
+                callback.onError("Error de conexión: " + t.getMessage());
+            }
+        });
+    }
+
+    public void resetPassword(ResetPasswordRequest request, RepositoryCallback<Void> callback) {
+        Call<ResponseData<Object>> call = apiService.resetPassword(request);
+        call.enqueue(new Callback<ResponseData<Object>>() {
+            @Override
+            public void onResponse(Call<ResponseData<Object>> call, Response<ResponseData<Object>> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(null);
+                } else {
+                    callback.onError(ApiErrorParser.parseError(response));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseData<Object>> call, Throwable t) {
+                callback.onError("Error de conexión: " + t.getMessage());
+            }
+        });
+    }
 }
+
