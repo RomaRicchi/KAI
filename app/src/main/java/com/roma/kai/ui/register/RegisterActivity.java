@@ -43,6 +43,12 @@ public class RegisterActivity extends AppCompatActivity {
         registerVM.getUiState().observe(this, uiState -> {
             binding.btnCrearCuenta.setEnabled(!uiState.isLoading());
 
+            // Mostrar errores en los campos correspondientes
+            binding.tilNombre.setError(uiState.getNameError());
+            binding.tilEmail.setError(uiState.getEmailError());
+            binding.tilPassword.setError(uiState.getPasswordError());
+            binding.tilConfirmPassword.setError(uiState.getConfirmPasswordError());
+
             if(uiState.isSuccess()) {
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 intent.putExtra("messageTo", new UiMessage("Bienvenido", UiMessage.Type.SUCCESS));

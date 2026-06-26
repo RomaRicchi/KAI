@@ -48,66 +48,73 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="493dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="24dp">
 
                 <!-- Nombre Completo -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_nombre"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="4dp"
                     android:hint="@string/label_nombre"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="#1B5E50"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null"
                     app:hintTextColor="#1B5E50"
-                    app:startIconDrawable="@drawable/ic_gallery_black_24dp"
-                    app:startIconTint="#757575">
+                    app:startIconDrawable="@drawable/ic_user_vector"
+                    app:startIconTint="#1B5E50">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_nombre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:text="@string/hint_nombre"
-                        android:textColor="#757575" />
+                        android:textColor="#0D332B"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Correo Electrónico -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_email"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="4dp"
                     android:hint="@string/label_email"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="#1B5E50"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null"
                     app:hintTextColor="#1B5E50"
-                    app:startIconDrawable="@drawable/ic_gallery_black_24dp"
-                    app:startIconTint="#757575">
+                    app:startIconDrawable="@drawable/ic_email_vector"
+                    app:startIconTint="#1B5E50">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_email_register"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"
-                        android:text="@string/hint_email"
-                        android:textColor="#757575" />
+                        android:textColor="#0D332B"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Contraseña -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_password"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="4dp"
                     android:hint="@string/label_password"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
@@ -115,25 +122,28 @@
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="#1B5E50"
                     app:endIconMode="password_toggle"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null"
                     app:hintTextColor="#1B5E50"
                     app:startIconDrawable="@drawable/ic_settings_black_24dp"
-                    app:startIconTint="#757575">
+                    app:startIconTint="#1B5E50">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_password_register"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
-                        android:text="@string/hint_password"
-                        android:textColor="#757575" />
+                        android:textColor="#0D332B"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Confirmar Contraseña -->
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_confirm_password"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
+                    android:layout_marginBottom="12dp"
                     android:hint="@string/label_confirmar_password"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
@@ -141,17 +151,19 @@
                     app:boxCornerRadiusTopStart="12dp"
                     app:boxStrokeColor="#1B5E50"
                     app:endIconMode="password_toggle"
+                    app:errorEnabled="true"
+                    app:errorIconDrawable="@null"
                     app:hintTextColor="#1B5E50"
                     app:startIconDrawable="@drawable/ic_settings_black_24dp"
-                    app:startIconTint="#757575">
+                    app:startIconTint="#1B5E50">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_confirm_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
-                        android:text="@string/hint_password"
-                        android:textColor="#757575" />
+                        android:textColor="#0D332B"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button

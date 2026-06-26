@@ -34,7 +34,36 @@ public class RegisterViewModel extends AndroidViewModel {
     public LiveData<Event<UiMessage>> getEventUiMessage() { return eventUiMessage; }
 
     public void registrar(String nombre, String email, String password, String passwordConfirmed) {
-        //validar y utilizar el EventUiMessage para mostrar si se necesita
+        boolean hasError = false;
+        String nameError = null;
+        String emailError = null;
+        String passwordError = null;
+        String confirmPasswordError = null;
+
+        if (nombre == null || nombre.trim().isEmpty()) {
+            nameError = "El nombre es obligatorio";
+            hasError = true;
+        }
+
+        if (email == null || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            emailError = "Ingrese un correo válido";
+            hasError = true;
+        }
+
+        if (password == null || password.length() < 6) {
+            passwordError = "La contraseña debe tener al menos 6 caracteres";
+            hasError = true;
+        }
+
+        if (passwordConfirmed == null || !passwordConfirmed.equals(password)) {
+            confirmPasswordError = "Las contraseñas no coinciden";
+            hasError = true;
+        }
+
+        if (hasError) {
+            uiState.setValue(RegisterUiState.error(nameError, emailError, passwordError, confirmPasswordError));
+            return;
+        }
 
         RegisterRequest registerRequest = new RegisterRequest(nombre, email, password);
         uiState.setValue(new RegisterUiState(true, false, null));

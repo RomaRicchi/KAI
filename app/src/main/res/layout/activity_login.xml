@@ -61,15 +61,16 @@
                 app:boxCornerRadiusTopStart="12dp"
                 app:boxStrokeColor="#1B5E50"
                 app:hintTextColor="#1B5E50"
-                app:startIconDrawable="@drawable/ic_gallery_black_24dp"
-                app:startIconTint="#757575">
+                app:startIconDrawable="@drawable/ic_email_vector"
+                app:startIconTint="#1B5E50">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
-                    android:textColor="#757575" />
+                    android:textColor="#0D332B"
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Password Field -->
@@ -87,14 +88,15 @@
                 app:endIconMode="password_toggle"
                 app:hintTextColor="#1B5E50"
                 app:startIconDrawable="@drawable/ic_settings_black_24dp"
-                app:startIconTint="#757575">
+                app:startIconTint="#1B5E50">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:textColor="#757575" />
+                    android:textColor="#0D332B"
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
