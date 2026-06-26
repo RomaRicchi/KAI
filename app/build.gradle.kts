@@ -9,16 +9,12 @@ localProperties.load(rootProject.file("local.properties").inputStream())
 
 android {
     namespace = "com.roma.kai"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.roma.kai"
         minSdk = 31
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 

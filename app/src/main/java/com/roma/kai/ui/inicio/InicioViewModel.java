@@ -18,6 +18,9 @@ import com.roma.kai.utils.AnimationKai;
 import com.roma.kai.utils.Event;
 import com.roma.kai.utils.UiMessage;
 
+import java.util.Collections;
+import java.util.List;
+
 public class InicioViewModel extends AndroidViewModel {
     private final InicioRepository inicioRepository;
     private final MutableLiveData<InicioUiState> inicioUiState = new MutableLiveData<>();
@@ -64,6 +67,12 @@ public class InicioViewModel extends AndroidViewModel {
                 if (kai != null) {
                     kaiKey = (kai.getImageKai() != null) ? kai.getImageKai() : kai.getEstadoActual();
                     etapaActual = kai.getEtapaActual();
+                }
+
+                // Ordenar hábitos: No completados primero
+                if (data.getHabitosDiarios() != null) {
+                    Collections.sort(data.getHabitosDiarios(), (h1, h2) -> 
+                        Boolean.compare(h1.isCompletado(), h2.isCompletado()));
                 }
 
                 inicioUiState.setValue(new InicioUiState(
