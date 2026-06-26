@@ -47,10 +47,10 @@ public interface ApiService {
     @POST("api/v1/auth/google")
     Call<ResponseData<AuthResponse>> googleLogin(@Body GoogleLoginRequest googleLoginRequest);
 
-    @POST("auth/forgot-password")
+    @POST("api/v1/auth/forgot-password")
     Call<ResponseData<Object>> forgotPassword(@Body ForgotPasswordRequest request);
 
-    @POST("auth/reset-password")
+    @POST("api/v1/auth/reset-password")
     Call<ResponseData<Object>> resetPassword(@Body ResetPasswordRequest request);
 
 
