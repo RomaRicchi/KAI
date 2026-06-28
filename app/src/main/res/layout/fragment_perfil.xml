@@ -30,18 +30,10 @@
             <ImageView
                 android:layout_width="112dp"
                 android:layout_height="52dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="60dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/logo_verde_removebg" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_title"
-                android:textColor="@color/kai_text_main"
-                android:textSize="26sp"
-                android:textStyle="bold" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_avatar"
@@ -181,6 +173,13 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_marginBottom="4dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/icons8_shine" />
+
                             <TextView
                                 android:id="@+id/tv_perfil_xp"
                                 android:layout_width="wrap_content"
@@ -210,6 +209,13 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_marginBottom="4dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/fire" />
+
                             <TextView
                                 android:id="@+id/tv_perfil_streak"
                                 android:layout_width="wrap_content"
@@ -238,6 +244,13 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_marginBottom="4dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/reloj" />
 
                             <TextView
                                 android:id="@+id/tv_perfil_inactive"

@@ -64,6 +64,14 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        // Listener para refrescar el nombre cuando se abre el drawer
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                refreshHeaderName();
+            }
+        });
+
         // Forzar iconos personalizados en el Toolbar
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             if (mAppBarConfiguration.getTopLevelDestinations().contains(destination.getId())) {
@@ -109,18 +117,9 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
 
-        //USAR CUANDO SE NECESITE!!
         mainVM.getMainUiState().observe(this, mainUiState -> {
             if (mainUiState.isSuccess() && mainUiState.getUsuario() != null) {
-                View headerView = binding.navView.getHeaderView(0);
-                TextView tvName = headerView.findViewById(R.id.tv_nav_user_name);
-                TextView tvLevel = headerView.findViewById(R.id.tv_nav_user_level);
-                TextView tvXp = headerView.findViewById(R.id.tv_nav_user_xp);
-
-                tvName.setText(mainUiState.getUsuario().getNombre());
-                // Por ahora nivel y xp base, se puede mejorar con mas datos del backend
-                tvLevel.setText("Nivel 1"); 
-                tvXp.setText("0 XP");
+                refreshHeaderName();
             }
         });
 
@@ -129,6 +128,19 @@ public class MainActivity extends AppCompatActivity {
             if(uiMessage == null) return;
             UiMessageHelper.showMessage(binding.getRoot(), MainActivity.this, uiMessage);
         });
+
+        // Cargar datos iniciales desde la sesión si están disponibles
+        refreshHeaderName();
+    }
+
+    private void refreshHeaderName() {
+        if (sessionManager.getUser() != null) {
+            View headerView = binding.navView.getHeaderView(0);
+            TextView tvName = headerView.findViewById(R.id.tv_nav_user_name);
+            if (tvName != null) {
+                tvName.setText(sessionManager.getUser().getNombre());
+            }
+        }
     }
 
     public void setupIntent() {

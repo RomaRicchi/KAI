@@ -18,11 +18,16 @@ import com.roma.kai.utils.Event;
 import com.roma.kai.utils.UiMessage;
 
 public class MainViewModel extends AndroidViewModel {
+    private final MainRepository mainRepository;
     private final MutableLiveData<MainUiState> mainUiState = new MutableLiveData<>();
     private final MutableLiveData<Event<UiMessage>> eventUiMessage = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+        mainRepository = new MainRepository(
+                SessionManager.getInstance(application),
+                RetrofitClient.getService(application)
+        );
     }
 
     public LiveData<MainUiState> getMainUiState() { return mainUiState; }
@@ -34,7 +39,19 @@ public class MainViewModel extends AndroidViewModel {
                 false,
                 true,
                 usuario
-
         ));
+    }
+
+    public void refreshUserData() {
+        mainRepository.loadMe(new RepositoryCallback<MeResponse>() {
+            @Override
+            public void onSuccess(MeResponse data) {
+                // El repositorio ya guarda en sessionManager
+            }
+
+            @Override
+            public void onError(String error) {
+            }
+        });
     }
 }
