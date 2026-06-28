@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.roma.kai.databinding.ActivityForgotPasswordBinding;
+import com.roma.kai.utils.OnSafeClickListener;
 import com.roma.kai.utils.UiMessage;
 import com.roma.kai.utils.UiMessageHelper;
 
@@ -25,18 +26,29 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        binding.toolbarForgot.setNavigationOnClickListener(v -> finish());
-
-        binding.btnSendCode.setOnClickListener(v -> {
-            String email = binding.etEmailForgot.getText().toString();
-            viewModel.requestResetCode(email);
+        binding.toolbarForgot.setNavigationOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                finish();
+            }
         });
 
-        binding.btnResetPassword.setOnClickListener(v -> {
-            String email = binding.etEmailForgot.getText().toString();
-            String code = binding.etCode.getText().toString();
-            String password = binding.etNewPassword.getText().toString();
-            viewModel.resetPassword(email, code, password);
+        binding.btnSendCode.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                String email = binding.etEmailForgot.getText().toString();
+                viewModel.requestResetCode(email);
+            }
+        });
+
+        binding.btnResetPassword.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                String email = binding.etEmailForgot.getText().toString();
+                String code = binding.etCode.getText().toString();
+                String password = binding.etNewPassword.getText().toString();
+                viewModel.resetPassword(email, code, password);
+            }
         });
     }
 

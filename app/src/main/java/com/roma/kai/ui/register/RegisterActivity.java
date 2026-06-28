@@ -2,6 +2,7 @@ package com.roma.kai.ui.register;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.roma.kai.databinding.ActivityRegisterBinding;
 import com.roma.kai.ui.main.MainActivity;
 import com.roma.kai.ui.login.LoginActivity;
+import com.roma.kai.utils.OnSafeClickListener;
 import com.roma.kai.utils.UiMessage;
 import com.roma.kai.utils.UiMessageHelper;
 
@@ -45,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             // Mostrar errores en los campos correspondientes
             binding.tilNombre.setError(uiState.getNameError());
+            binding.tilUsername.setError(uiState.getUsernameError());
             binding.tilEmail.setError(uiState.getEmailError());
             binding.tilPassword.setError(uiState.getPasswordError());
             binding.tilConfirmPassword.setError(uiState.getConfirmPasswordError());
@@ -72,25 +75,35 @@ public class RegisterActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        binding.toolbarRegister.setNavigationOnClickListener(v -> {
-            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+        binding.toolbarRegister.setNavigationOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
-        binding.btnCrearCuenta.setOnClickListener(v -> {
-            registerVM.registrar(
-                    binding.etNombre.getText().toString(),
-                    binding.etEmailRegister.getText().toString(),
-                    binding.etPasswordRegister.getText().toString(),
-                    binding.etConfirmPassword.getText().toString()
-            );
+        binding.btnCrearCuenta.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                registerVM.registrar(
+                        binding.etNombre.getText().toString(),
+                        binding.etUsername.getText().toString(),
+                        binding.etEmailRegister.getText().toString(),
+                        binding.etPasswordRegister.getText().toString(),
+                        binding.etConfirmPassword.getText().toString()
+                );
+            }
         });
 
-        binding.txtBackToLogin.setOnClickListener(v -> {
-            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
+        binding.txtBackToLogin.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 }

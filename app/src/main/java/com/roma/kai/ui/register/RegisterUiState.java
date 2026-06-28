@@ -8,27 +8,29 @@ public class RegisterUiState {
     private final AuthUserResponse authUser;
     
     private final String nameError;
+    private final String usernameError;
     private final String emailError;
     private final String passwordError;
     private final String confirmPasswordError;
 
     public RegisterUiState(boolean loading, boolean success, AuthUserResponse authUser) {
-        this(loading, success, authUser, null, null, null, null);
+        this(loading, success, authUser, null, null, null, null, null);
     }
 
     public RegisterUiState(boolean loading, boolean success, AuthUserResponse authUser, 
-                          String nameError, String emailError, String passwordError, String confirmPasswordError) {
+                          String nameError, String usernameError, String emailError, String passwordError, String confirmPasswordError) {
         this.loading = loading;
         this.success = success;
         this.authUser = authUser;
         this.nameError = nameError;
+        this.usernameError = usernameError;
         this.emailError = emailError;
         this.passwordError = passwordError;
         this.confirmPasswordError = confirmPasswordError;
     }
 
-    public static RegisterUiState error(String nameError, String emailError, String passwordError, String confirmPasswordError) {
-        return new RegisterUiState(false, false, null, nameError, emailError, passwordError, confirmPasswordError);
+    public static RegisterUiState error(String nameError, String usernameError, String emailError, String passwordError, String confirmPasswordError) {
+        return new RegisterUiState(false, false, null, nameError, usernameError, emailError, passwordError, confirmPasswordError);
     }
 
     public boolean isLoading() {
@@ -45,6 +47,10 @@ public class RegisterUiState {
 
     public String getNameError() {
         return nameError;
+    }
+
+    public String getUsernameError() {
+        return usernameError;
     }
 
     public String getEmailError() {

@@ -28,7 +28,17 @@
         android:id="@+id/nav_perfil"
         android:name="com.roma.kai.ui.perfil.PerfilFragment"
         android:label="@string/menu_perfil"
-        tools:layout="@layout/fragment_perfil" />
+        tools:layout="@layout/fragment_perfil">
+        <action
+            android:id="@+id/action_nav_perfil_to_nav_configuration"
+            app:destination="@id/nav_configuration" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_configuration"
+        android:name="com.roma.kai.ui.perfil.ConfigurationFragment"
+        android:label="@string/configuration_title"
+        tools:layout="@layout/fragment_configuration" />
 
     <fragment
         android:id="@+id/nav_inicio"

@@ -2,13 +2,17 @@ package com.roma.kai.model.request;
 
 public class UpdateProfileRequest {
     private String nombre;
-    private String email;
+    private String username;
+    @com.google.gson.annotations.SerializedName("perfil_base")
+    private String perfilBase;
 
-    public UpdateProfileRequest(String nombre, String email) {
+    public UpdateProfileRequest(String nombre, String username, String perfilBase) {
         this.nombre = nombre;
-        this.email = email;
+        this.username = username;
+        this.perfilBase = perfilBase;
     }
 
     public String getNombre() { return nombre; }
-    public String getEmail() { return email; }
+    public String getUsername() { return username; }
+    public String getPerfilBase() { return perfilBase; }
 }

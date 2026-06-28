@@ -7,206 +7,350 @@
     android:background="@drawable/bg_gradient_light_green"
     tools:context=".ui.perfil.PerfilFragment">
 
-    <!-- ProgressBar de carga -->
-    <ProgressBar
-        android:id="@+id/progress_bar_perfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/layout_perfil_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="28dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Header Logo -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_perfil_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
-
-        <ImageView
-            android:id="@+id/img_logo_perfil"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="88dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/logo_verde_removebg"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_avatar"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="40dp"
-            app:cardCornerRadius="60dp"
-            app:cardElevation="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_logo_perfil">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/img_perfil_avatar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/avatar_desc"
-                android:padding="20dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_camera_black_24dp"
-                app:tint="#1B5E50" />
-        </com.google.android.material.card.MaterialCardView>
+                android:layout_width="112dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/logo_verde_removebg" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_user_info"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            app:cardBackgroundColor="#F5FDFB"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_avatar">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_title"
+                android:textColor="@color/kai_text_main"
+                android:textSize="26sp"
+                android:textStyle="bold" />
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_avatar"
+                android:layout_width="108dp"
+                android:layout_height="108dp"
+                android:layout_marginTop="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardCornerRadius="54dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/kai_accent"
+                app:strokeWidth="2dp">
+
+                <ImageView
+                    android:id="@+id/img_perfil_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/avatar_desc"
+                    android:padding="22dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_user_vector"
+                    app:tint="@color/kai_primary" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/profile_photo_hint"
+                android:textColor="@color/kai_text_secondary"
+                android:textSize="12sp" />
+
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="24dp">
-
-                <TextView
-                    android:id="@+id/tv_perfil_nombre"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#0D332B"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="Juan Pérez" />
-
-                <TextView
-                    android:id="@+id/tv_perfil_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="#546E7A"
-                    android:textSize="16sp"
-                    tools:text="juan@ejemplo.com" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="#E0E0E0" />
+                android:layout_marginTop="18dp"
+                app:cardBackgroundColor="@color/kai_card_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="18dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_experiencia"
-                            android:textColor="#757575"
-                            android:textSize="12sp" />
+                            android:layout_weight="1"
+                            android:text="@string/profile_personal_info"
+                            android:textColor="@color/kai_text_main"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_perfil_xp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#1B5E50"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:text="2450 XP" />
+                        <ImageButton
+                            android:id="@+id/btn_edit_profile"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/btn_editar_perfil"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_edit_24"
+                            app:tint="@color/kai_primary" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/tv_perfil_nombre"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/kai_text_main"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        tools:text="Lucía Rodríguez" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/label_nivel"
-                            android:textColor="#757575"
-                            android:textSize="12sp" />
+                    <TextView
+                        android:id="@+id/tv_perfil_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/kai_accent"
+                        android:textSize="14sp"
+                        tools:text="@luciar" />
 
-                        <TextView
-                            android:id="@+id/tv_perfil_nivel"
-                            android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/tv_perfil_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="3dp"
+                        android:textColor="@color/kai_text_secondary"
+                        android:textSize="14sp"
+                        tools:text="lucia@kai.com" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:cardBackgroundColor="@color/kai_card_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_progress"
+                        android:textColor="@color/kai_text_main"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:textColor="#1B5E50"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:text="Nivel 15" />
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_perfil_xp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/kai_primary"
+                                android:textSize="21sp"
+                                android:textStyle="bold"
+                                tools:text="12.500" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/profile_total_xp"
+                                android:textColor="@color/kai_text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="44dp"
+                            android:background="@color/divider_color" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_perfil_streak"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/warning"
+                                android:textSize="21sp"
+                                android:textStyle="bold"
+                                tools:text="45 días" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/profile_current_streak"
+                                android:textColor="@color/kai_text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="44dp"
+                            android:background="@color/divider_color" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_perfil_inactive"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/kai_text_main"
+                                android:textSize="21sp"
+                                android:textStyle="bold"
+                                tools:text="0" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/profile_inactive_days"
+                                android:textColor="@color/kai_text_secondary"
+                                android:textSize="12sp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/btn_edit_profile"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/btn_editar_perfil"
-            android:textAllCaps="false"
-            android:textColor="#1B5E50"
-            app:cornerRadius="28dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/card_user_info"
-            app:strokeColor="#1B5E50" />
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/row_configuration"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/kai_card_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="1dp">
 
-        <Button
-            android:id="@+id/btn_change_password"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:text="@string/btn_cambiar_password"
-            android:textAllCaps="false"
-            android:textColor="#1B5E50"
-            app:cornerRadius="28dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_edit_profile"
-            app:strokeColor="#1B5E50" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp">
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_logout"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="56dp"-->
-<!--            android:backgroundTint="#E05656"-->
-<!--            android:text="@string/menu_logout"-->
-<!--            android:textAllCaps="false"-->
-<!--            app:cornerRadius="28dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/btn_change_password" />-->
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_settings_black_24dp"
+                        app:tint="@color/kai_primary" />
 
-    <!-- Profile Picture / Avatar -->
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:text="@string/profile_account_settings"
+                        android:textColor="@color/kai_text_main"
+                        android:textSize="16sp" />
 
-    <!-- User Info Card -->
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_chevron_right_24"
+                        app:tint="@color/kai_primary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-    <!-- Actions Buttons -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/row_logout"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/kai_card_bg"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_logout_black_24dp"
+                        app:tint="@color/kai_logout_red" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_weight="1"
+                        android:text="@string/menu_logout"
+                        android:textColor="@color/kai_logout_red"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar_perfil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

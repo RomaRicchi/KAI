@@ -36,6 +36,8 @@
     <string name="titulo_registro">Crear cuenta</string>
     <string name="label_nombre">Nombre completo</string>
     <string name="hint_nombre">Juan Pérez</string>
+    <string name="label_username">Nombre de usuario</string>
+    <string name="hint_username">juanperez123</string>
     <string name="label_confirmar_password">Confirmar contraseña</string>
     <string name="btn_crear_cuenta">CREAR CUENTA</string>
     <string name="volver_login">Ya tengo una cuenta. Volver al Login.</string>
@@ -89,6 +91,35 @@
     <string name="btn_editar_perfil">Editar Perfil</string>
     <string name="btn_cambiar_password">Cambiar Contraseña</string>
     <string name="avatar_desc">Foto de perfil</string>
+    <string name="profile_title">Mi perfil</string>
+    <string name="profile_photo_hint">Toca la imagen para cambiarla</string>
+    <string name="profile_personal_info">Información personal</string>
+    <string name="profile_progress">Progreso global</string>
+    <string name="profile_total_xp">Experiencia total</string>
+    <string name="profile_current_streak">Racha global</string>
+    <string name="profile_inactive_days">Días inactivo</string>
+    <string name="profile_account_settings">Configuración de cuenta</string>
+    <string name="profile_edit_title">Editar perfil</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_save">Guardar</string>
+    <string name="logout_confirmation_title">Cerrar sesión</string>
+    <string name="logout_confirmation_message">¿Quieres cerrar tu sesión actual?</string>
+
+    <!-- Pantalla Configuración -->
+    <string name="configuration_title">Configuración</string>
+    <string name="configuration_subtitle">Personaliza cómo Kai te acompaña.</string>
+    <string name="configuration_experience">EXPERIENCIA</string>
+    <string name="configuration_kai">KAI Y RECORDATORIOS</string>
+    <string name="config_notifications">Notificaciones</string>
+    <string name="config_sounds">Sonidos</string>
+    <string name="config_show_streaks">Mostrar rachas</string>
+    <string name="config_emotional_messages">Mensajes emocionales</string>
+    <string name="config_discrete_mode">Modo discreto</string>
+    <string name="config_lock_pin">Bloquear con PIN</string>
+    <string name="config_kai_intensity">Intensidad de Kai</string>
+    <string name="config_reminder_time">Elegir horario de recordatorio</string>
+    <string name="config_reminder_value">Recordatorio: %1$s</string>
+    <string name="config_save">Guardar configuración</string>
 
     <!-- Pantalla Detalle Hábito -->
     <string name="titulo_detalle">Detalle: %1$s</string>

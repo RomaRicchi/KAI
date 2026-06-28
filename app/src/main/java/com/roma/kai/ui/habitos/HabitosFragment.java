@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentHabitosBinding;
+import com.roma.kai.utils.OnSafeClickListener;
 import com.roma.kai.utils.UiMessage;
 import com.roma.kai.utils.UiMessageHelper;
 
@@ -32,9 +33,12 @@ public class HabitosFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         habitosVM = new ViewModelProvider(this).get(HabitosViewModel.class);
 
-        binding.fabAddHabito.setOnClickListener(v -> 
-            Navigation.findNavController(v).navigate(R.id.action_nav_habitos_to_nav_seleccion_habitos)
-        );
+        binding.fabAddHabito.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_nav_habitos_to_nav_seleccion_habitos);
+            }
+        });
 
         setupRecyclerView();
         setupObservers();
@@ -57,9 +61,6 @@ public class HabitosFragment extends Fragment {
                 if (!state.isEmpty()) {
                     habitosAdapter.submitList(state.getHabitosUsuario());
                 }
-                
-                // Aquí podrías mostrar el progreso si tuvieras un TextView para ello
-                // binding.txtProgreso.setText(state.getFormattedProgress());
             }
         });
 

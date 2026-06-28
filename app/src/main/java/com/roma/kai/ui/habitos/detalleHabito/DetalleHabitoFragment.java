@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.roma.kai.R;
 import com.roma.kai.databinding.FragmentDetalleHabitoBinding;
 import com.roma.kai.utils.ImageUi;
+import com.roma.kai.utils.OnSafeClickListener;
 import com.roma.kai.utils.UiMessage;
 import com.roma.kai.utils.UiMessageHelper;
 
@@ -162,29 +163,49 @@ public class DetalleHabitoFragment extends Fragment {
     }
 
     private void setupListeners() {
-        binding.btnDarBajaHabito.setOnClickListener(v -> {
-            if (habitUserId != null) {
-                new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                        .setTitle("¿Dar de baja hábito?")
-                        .setMessage("Esta acción desactivará el hábito y ya no aparecerá en tu lista diaria.")
-                        .setPositiveButton("Confirmar", (dialog, which) -> {
-                            viewModel.deactivateHabit(habitUserId);
-                        })
-                        .setNegativeButton("Cancelar", null)
-                        .show();
+        binding.btnDarBajaHabito.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                if (habitUserId != null) {
+                    new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("¿Dar de baja hábito?")
+                            .setMessage("Esta acción desactivará el hábito y ya no aparecerá en tu lista diaria.")
+                            .setPositiveButton("Confirmar", (dialog, which) -> {
+                                viewModel.deactivateHabit(habitUserId);
+                            })
+                            .setNegativeButton("Cancelar", null)
+                            .show();
+                }
             }
         });
 
-        binding.btnVerCatalogoDesdeDetalle.setOnClickListener(v ->
-            Navigation.findNavController(v).navigate(R.id.action_nav_detalle_habito_to_nav_seleccion_habitos)
-        );
+        binding.btnVerCatalogoDesdeDetalle.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_nav_detalle_habito_to_nav_seleccion_habitos);
+            }
+        });
 
-        binding.btnPrevWeek.setOnClickListener(v -> viewModel.moveMonth(-1));
-        binding.btnNextWeek.setOnClickListener(v -> viewModel.moveMonth(1));
+        binding.btnPrevWeek.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                viewModel.moveMonth(-1);
+            }
+        });
 
-        binding.btnCompletarHoyDetalle.setOnClickListener(v -> {
-            if (habitUserId != null) {
-                viewModel.completeHabit(habitUserId);
+        binding.btnNextWeek.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                viewModel.moveMonth(1);
+            }
+        });
+
+        binding.btnCompletarHoyDetalle.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                if (habitUserId != null) {
+                    viewModel.completeHabit(habitUserId);
+                }
             }
         });
     }

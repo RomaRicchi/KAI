@@ -6,6 +6,7 @@ public class UsuarioEntity {
     private String id;
     private String nombre;
     private String email;
+    private String username;
     @SerializedName("fecha_registro")
     private String fechaRegistro;
     @SerializedName("perfil_base")
@@ -32,6 +33,14 @@ public class UsuarioEntity {
     }
 
     public UsuarioEntity() {}
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public String getFotoPerfil() {
         return fotoPerfil;

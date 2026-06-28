@@ -2,6 +2,7 @@ package com.roma.kai.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import com.roma.kai.BuildConfig;
 import com.roma.kai.databinding.ActivityLoginBinding;
 import com.roma.kai.ui.main.MainActivity;
 import com.roma.kai.ui.register.RegisterActivity;
+import com.roma.kai.utils.OnSafeClickListener;
 import com.roma.kai.utils.UiMessage;
 import com.roma.kai.utils.UiMessageHelper;
 
@@ -83,25 +85,37 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        binding.btnIniciarSesion.setOnClickListener(v -> {
-            loginVM.login(
-                    binding.etEmail.getText().toString(),
-                    binding.etPassword.getText().toString()
-            );
+        binding.btnIniciarSesion.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                loginVM.login(
+                        binding.etEmail.getText().toString(),
+                        binding.etPassword.getText().toString()
+                );
+            }
         });
 
-        binding.txtForgotPassword.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
-            startActivity(intent);
+        binding.txtForgotPassword.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+                startActivity(intent);
+            }
         });
 
-        binding.btnRegistrarse.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-            startActivity(intent);
+        binding.btnRegistrarse.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
         });
 
-        binding.btnGoogle.setOnClickListener(v -> {
-            startGoogleLogin();
+        binding.btnGoogle.setOnClickListener(new OnSafeClickListener() {
+            @Override
+            public void onSafeClick(View v) {
+                startGoogleLogin();
+            }
         });
     }
 

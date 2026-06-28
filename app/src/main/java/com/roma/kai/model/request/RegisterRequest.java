@@ -2,11 +2,13 @@ package com.roma.kai.model.request;
 
 public class RegisterRequest {
     private String nombre;
+    private String username;
     private String email;
     private String password;
 
-    public RegisterRequest(String nombre, String email, String password) {
+    public RegisterRequest(String nombre, String username, String email, String password) {
         this.nombre = nombre;
+        this.username = username;
         this.email = email;
         this.password = password;
     }
@@ -19,6 +21,14 @@ public class RegisterRequest {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

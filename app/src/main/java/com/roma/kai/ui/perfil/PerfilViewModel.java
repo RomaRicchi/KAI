@@ -11,8 +11,9 @@ import com.roma.kai.data.callback.RepositoryCallback;
 import com.roma.kai.data.remote.RetrofitClient;
 import com.roma.kai.data.repository.PerfilRepository;
 import com.roma.kai.model.dto.ImageResponse;
-import com.roma.kai.model.dto.MeResponse;
+import com.roma.kai.model.dto.ProfileResponse;
 import com.roma.kai.model.entity.UsuarioEntity;
+import com.roma.kai.model.request.UpdateProfileRequest;
 import com.roma.kai.session.SessionManager;
 import com.roma.kai.utils.Event;
 import com.roma.kai.utils.UiMessage;
@@ -32,94 +33,161 @@ public class PerfilViewModel extends AndroidViewModel {
         );
     }
 
-    public LiveData<PerfilUiState> getPerfilUiState() { return perfilUiState; }
+    public LiveData<PerfilUiState> getPerfilUiState() {
+        return perfilUiState;
+    }
 
-    public LiveData<Event<UiMessage>> getEventUiMessage() { return eventUiMessage; }
+    public LiveData<Event<UiMessage>> getEventUiMessage() {
+        return eventUiMessage;
+    }
 
     public void loadPerfil() {
-        perfilUiState.setValue(PerfilUiState.loading());
+        ProfileResponse current = currentProfile();
+        perfilUiState.setValue(PerfilUiState.loading(current));
 
-        perfilRepository.loadMe(new RepositoryCallback<MeResponse>() {
+        perfilRepository.loadProfile(new RepositoryCallback<ProfileResponse>() {
             @Override
-            public void onSuccess(MeResponse data) {
-                perfilUiState.setValue(new PerfilUiState(
-                        false,
-                        true,
-                        data.getUsuario()
-                ));
+            public void onSuccess(ProfileResponse data) {
+                perfilUiState.setValue(PerfilUiState.success(data));
             }
 
             @Override
             public void onError(String error) {
-                perfilUiState.setValue(PerfilUiState.error());
-                eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
+                perfilUiState.setValue(PerfilUiState.error(current));
+                emitError(error);
             }
         });
     }
 
-    public void uploadProfileImage(MultipartBody.Part image) {
-        PerfilUiState uiStateValue = perfilUiState.getValue();
-        if(uiStateValue == null) return;
+    public void updateProfile(String name, String username) {
+        ProfileResponse current = currentProfile();
+        if (current == null || current.getUsuario() == null) {
+            return;
+        }
 
-        perfilUiState.setValue(new PerfilUiState(true, false, uiStateValue.getUsuario()));
-        
+        String cleanName = name == null ? "" : name.trim();
+        String cleanUsername = username == null ? "" : username.trim();
+        if (cleanName.length() < 2) {
+            emitError("El nombre debe tener al menos 2 caracteres");
+            return;
+        }
+        if (!cleanUsername.isEmpty() && cleanUsername.length() < 3) {
+            emitError("El username debe tener al menos 3 caracteres");
+            return;
+        }
+
+        UsuarioEntity user = current.getUsuario();
+        String changedName = cleanName.equals(user.getNombre()) ? null : cleanName;
+        String currentUsername = user.getUsername() == null ? "" : user.getUsername();
+        if (cleanUsername.isEmpty() && !currentUsername.isEmpty()) {
+            emitError("El username no puede quedar vacío");
+            return;
+        }
+        String changedUsername = cleanUsername.equals(currentUsername) ? null : cleanUsername;
+
+        if (changedName == null && changedUsername == null) {
+            eventUiMessage.setValue(new Event<>(new UiMessage(
+                    "No hay cambios para guardar",
+                    UiMessage.Type.INFO
+            )));
+            return;
+        }
+
+        perfilUiState.setValue(PerfilUiState.saving(current));
+        perfilRepository.updateProfile(
+                new UpdateProfileRequest(changedName, changedUsername, null),
+                new RepositoryCallback<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        reloadAfterUpdate("Perfil actualizado correctamente");
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        perfilUiState.setValue(PerfilUiState.success(current));
+                        emitError(error);
+                    }
+                }
+        );
+    }
+
+    public void uploadProfileImage(MultipartBody.Part image) {
+        ProfileResponse current = currentProfile();
+        if (current == null) return;
+        perfilUiState.setValue(PerfilUiState.saving(current));
+
         perfilRepository.uploadImage(image, new RepositoryCallback<ImageResponse>() {
             @Override
             public void onSuccess(ImageResponse data) {
-                UsuarioEntity user = uiStateValue.getUsuario();
-                if (user != null) {
-                    user.setFotoPerfil(data.getFotoPerfil());
+                if (current.getUsuario() != null) {
+                    current.getUsuario().setFotoPerfil(data.getFotoPerfil());
                 }
-                perfilUiState.setValue(new PerfilUiState(
-                        false,
-                        true,
-                        user
-                ));
-                eventUiMessage.setValue(new Event<>(new UiMessage("Imagen actualizada", UiMessage.Type.SUCCESS)));
+                perfilUiState.setValue(PerfilUiState.success(current));
+                eventUiMessage.setValue(new Event<>(new UiMessage(
+                        "Imagen actualizada",
+                        UiMessage.Type.SUCCESS
+                )));
             }
 
             @Override
             public void onError(String error) {
-                perfilUiState.setValue(new PerfilUiState(
-                        false,
-                        false,
-                        uiStateValue.getUsuario()
-                ));
-                eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
+                perfilUiState.setValue(PerfilUiState.success(current));
+                emitError(error);
             }
         });
     }
 
     public void deleteProfileImage() {
-        PerfilUiState uiStateValue = perfilUiState.getValue();
-        if(uiStateValue == null) return;
-
-        perfilUiState.setValue(new PerfilUiState(true, false, uiStateValue.getUsuario()));
+        ProfileResponse current = currentProfile();
+        if (current == null) return;
+        perfilUiState.setValue(PerfilUiState.saving(current));
 
         perfilRepository.deleteImage(new RepositoryCallback<Object>() {
             @Override
             public void onSuccess(Object data) {
-                UsuarioEntity user = uiStateValue.getUsuario();
-                if (user != null) {
-                    user.setFotoPerfil(null);
+                if (current.getUsuario() != null) {
+                    current.getUsuario().setFotoPerfil(null);
                 }
-                perfilUiState.setValue(new PerfilUiState(
-                        false,
-                        true,
-                        user
-                ));
-                eventUiMessage.setValue(new Event<>(new UiMessage("Imagen eliminada", UiMessage.Type.SUCCESS)));
+                perfilUiState.setValue(PerfilUiState.success(current));
+                eventUiMessage.setValue(new Event<>(new UiMessage(
+                        "Imagen eliminada",
+                        UiMessage.Type.SUCCESS
+                )));
             }
 
             @Override
             public void onError(String error) {
-                perfilUiState.setValue(new PerfilUiState(
-                        false,
-                        false,
-                        uiStateValue.getUsuario()
-                ));
-                eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
+                perfilUiState.setValue(PerfilUiState.success(current));
+                emitError(error);
             }
         });
+    }
+
+    private void reloadAfterUpdate(String successMessage) {
+        perfilRepository.loadProfile(new RepositoryCallback<ProfileResponse>() {
+            @Override
+            public void onSuccess(ProfileResponse data) {
+                perfilUiState.setValue(PerfilUiState.success(data));
+                eventUiMessage.setValue(new Event<>(new UiMessage(
+                        successMessage,
+                        UiMessage.Type.SUCCESS
+                )));
+            }
+
+            @Override
+            public void onError(String error) {
+                perfilUiState.setValue(PerfilUiState.error(currentProfile()));
+                emitError(error);
+            }
+        });
+    }
+
+    private ProfileResponse currentProfile() {
+        PerfilUiState state = perfilUiState.getValue();
+        return state == null ? null : state.getProfile();
+    }
+
+    private void emitError(String error) {
+        eventUiMessage.setValue(new Event<>(new UiMessage(error, UiMessage.Type.ERROR)));
     }
 }

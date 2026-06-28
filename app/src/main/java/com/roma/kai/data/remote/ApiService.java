@@ -10,6 +10,7 @@ import com.roma.kai.model.dto.HomeResponse;
 import com.roma.kai.model.dto.ImageResponse;
 import com.roma.kai.model.dto.KaiDashboarResponse;
 import com.roma.kai.model.dto.MeResponse;
+import com.roma.kai.model.dto.ProfileResponse;
 import com.roma.kai.model.dto.AuthUserResponse;
 import com.roma.kai.model.dto.ValidateTokenResponse;
 import com.roma.kai.model.request.CompleteHabitRequest;
@@ -19,6 +20,8 @@ import com.roma.kai.model.request.LoginRequest;
 import com.roma.kai.model.request.RegisterRequest;
 import com.roma.kai.model.request.ResetPasswordRequest;
 import com.roma.kai.model.request.SelectHabitRequest;
+import com.roma.kai.model.request.UpdateConfigurationRequest;
+import com.roma.kai.model.request.UpdateProfileRequest;
 import com.roma.kai.model.response.ResponseData;
 
 import java.util.List;
@@ -60,6 +63,15 @@ public interface ApiService {
     // Usuario y config del sistema
     @GET("api/v1/users/me")
     Call<ResponseData<MeResponse>> getMe();
+
+    @GET("api/v1/users/profile")
+    Call<ResponseData<ProfileResponse>> getProfile();
+
+    @PUT("api/v1/users/profile")
+    Call<ResponseData<String>> updateProfile(@Body UpdateProfileRequest request);
+
+    @PUT("api/v1/users/configuration")
+    Call<ResponseData<String>> updateProfileConfiguration(@Body UpdateConfigurationRequest request);
 
     //api para la vista home "InicioFragment"
     @GET("api/v1/home")

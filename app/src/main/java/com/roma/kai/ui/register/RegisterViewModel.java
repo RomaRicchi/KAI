@@ -33,15 +33,24 @@ public class RegisterViewModel extends AndroidViewModel {
 
     public LiveData<Event<UiMessage>> getEventUiMessage() { return eventUiMessage; }
 
-    public void registrar(String nombre, String email, String password, String passwordConfirmed) {
+    public void registrar(String nombre, String username, String email, String password, String passwordConfirmed) {
         boolean hasError = false;
         String nameError = null;
+        String usernameError = null;
         String emailError = null;
         String passwordError = null;
         String confirmPasswordError = null;
 
         if (nombre == null || nombre.trim().isEmpty()) {
             nameError = "El nombre es obligatorio";
+            hasError = true;
+        }
+
+        if (username == null || username.trim().isEmpty()) {
+            usernameError = "El nombre de usuario es obligatorio";
+            hasError = true;
+        } else if (username.length() < 3) {
+            usernameError = "El nombre de usuario debe tener al menos 3 caracteres";
             hasError = true;
         }
 
@@ -61,11 +70,11 @@ public class RegisterViewModel extends AndroidViewModel {
         }
 
         if (hasError) {
-            uiState.setValue(RegisterUiState.error(nameError, emailError, passwordError, confirmPasswordError));
+            uiState.setValue(RegisterUiState.error(nameError, usernameError, emailError, passwordError, confirmPasswordError));
             return;
         }
 
-        RegisterRequest registerRequest = new RegisterRequest(nombre, email, password);
+        RegisterRequest registerRequest = new RegisterRequest(nombre, username, email, password);
         uiState.setValue(new RegisterUiState(true, false, null));
 
         authRepository.register(registerRequest, new RepositoryCallback<AuthResponse>() {
